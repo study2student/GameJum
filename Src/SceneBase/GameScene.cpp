@@ -91,7 +91,7 @@ void GameScene::Draw(void)
 	{
 		// ƒvƒŒƒCƒ„[•`‰æ
 		player_[i]->Draw();
-
+		player_[i]->DrawHP(i);
 	}
 }
 

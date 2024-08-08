@@ -164,7 +164,6 @@ void Player::Draw(void)
 		break;
 	}
 
-	DrawHP();
 }
 
 void Player::Release(void)
@@ -340,13 +339,14 @@ void Player::DrawDebug(void)
 	DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
 }
 
-void Player::DrawHP(void)
+void Player::DrawHP(int playerNum)
 {
 	int scX = Application::SCREEN_SIZE_X;
 	int scY = Application::SCREEN_SIZE_Y;
-	for (int i = 0; i < 240; i += 80)
+	for (int i = 0; i <  80 * hp_; i += 80)
 	{
-		DrawRotaGraphFastF(0 + 35 + i, 35, 0.1f, 0.0f, imgHp_, true);
+		DrawRotaGraphFastF(0 + 35 + i, 35 + 70 * playerNum, 0.1f, 0.0f, imgHp_, true);
+
 	}
 
 }
@@ -624,6 +624,11 @@ void Player::CollisionSide(void)
 
 	//}
 
+	InputManager& ins = InputManager::GetInstance();
+	if (ins.IsTrgDown(KEY_INPUT_Z))
+	{
+		hp_--;
+	}
 }
 
 Vector2 Player::GetColPos(COL_LR lr, COL_TD td)
