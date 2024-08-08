@@ -83,7 +83,7 @@ public:
 
 	~Enemy(void);
 
-	void Init(GameScene* scene_, Player*player1, Player* player2);		// ‰Šú‰»ˆ—
+	void Init(GameScene* scene_);		// ‰Šú‰»ˆ—
 
 	void Update(void);		// XVˆ—
 

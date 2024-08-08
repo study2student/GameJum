@@ -15,11 +15,10 @@ Enemy::~Enemy(void)
 {
 }
 
-void Enemy::Init(GameScene* scene_,Player*player1, Player* player2)
+void Enemy::Init(GameScene* scene_)
 {
 	gameScene_ = scene_;
-	player1_ = player1;
-	player2_ = player2;
+
 
 	std::string basePath = Application::PATH_IMAGE;
 

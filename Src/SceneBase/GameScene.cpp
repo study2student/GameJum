@@ -28,7 +28,12 @@ void GameScene::Init(void)
 	//player_ = new Player();
 	//player_->Init();
 
-
+	// “G‚Ì‰Šú‰»
+	if (enemy_ == nullptr)
+	{
+		enemy_ = new Enemy();
+	}
+	enemy_->Init(this);
 
 	player_[0] = new Player();
 	Player::KEY_CONFIG keyP1 = {
@@ -61,14 +66,8 @@ void GameScene::Init(void)
 	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2, padP2, InputManager::JOYPAD_NO::PAD2);
 >>>>>>> Stashed changes
 }
-
-	// “G‚Ì‰Šú‰»
-	if (enemy_ == nullptr)
-	{
-		enemy_ = new Enemy();
-	}
-	enemy_->Init(this, player_[0], player_[1]);
 }
+
 
 void GameScene::Update(void)
 {
