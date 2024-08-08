@@ -95,6 +95,24 @@ public:
 		int JUMP;
 	};
 
+	enum class JoypadButton {
+		UP = PAD_INPUT_UP,
+		DOWN = PAD_INPUT_DOWN,
+		LEFT = PAD_INPUT_LEFT,
+		RIGHT = PAD_INPUT_RIGHT,
+		ACTION = PAD_INPUT_6
+	};
+
+	// プレイヤーごとの入力マッピング
+	struct PlayerInput {
+		int padId;
+		JoypadButton up;
+		JoypadButton down;
+		JoypadButton left;
+		JoypadButton right;
+		JoypadButton action;
+	};
+
 	// コンストラクタ
 	Player(void);
 
@@ -109,8 +127,14 @@ public:
 	// ダメージを与える処理
 	void Damage(int damage);
 
+	// 体力描画
+	void DrawHP(int playerNum);
+
 	// HPの取得（ゲッター）
 	int GetHp_(void);
+
+	// 座標の取得(ゲッター)
+	Vector2F GetPos(void);
 
 	// 生存判定（ゲッター）
 	bool IsAlive_(void);
@@ -187,9 +211,6 @@ private:
 
 	// デバッグ用の描画
 	void DrawDebug(void);
-
-	// 体力描画
-	void DrawHP(void);
 
 	// プレイヤーの移動操作
 	void ProcessMove(void);

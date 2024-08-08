@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include <cmath> 
+#include "Common/Vector2.h"
 #include "Application.h"
 #include "Enemy.h"
 
@@ -56,14 +57,17 @@ void Enemy::Init(void)
 	// 敵の移動量
 	movePow_ = 0.5f;
 
-	speed = 2.0f;
-	bulletRadius = 5.0f;
-
 	// 衝突判定用：中心座標（pos_からの相対座標）
-	hitPos_ = { 0, 8 };
+	hitPos_ = { 3, 3};
 
 	// 衝突判定用：範囲
-	hitBox_ = { 16, 24 };
+	hitBox_ = { 72, 72 };
+
+	// ランダム用
+	blink_ = 0;
+	rand_ = 0;
+
+	stateRand_ = false;
 }
 
 void Enemy::Update(void)
@@ -73,50 +77,52 @@ void Enemy::Update(void)
 	Debug();
 
 	Move();
+	RandState();
 
-	switch (state_)
-	{
-	case ANIM_STATE::IDLE:
-		animNum_ = static_cast<int>(
-			static_cast<float>(cntAnim_) * speedAnim_)
-			% IDLE_ANIM_NUM;
+	//switch (state_)
+	//{
+	//case ANIM_STATE::IDLE:
+	//	animNum_ = static_cast<int>(
+	//		static_cast<float>(cntAnim_) * speedAnim_)
+	//		% IDLE_ANIM_NUM;
 
-		break;
+	//	break;
 
-	case ANIM_STATE::WALK:
-		animNum_ = static_cast<int>(
-			static_cast<float>(cntAnim_) * speedAnim_)
-			% WALK_ANIM_NUM;
+	//case ANIM_STATE::WALK:
+	//	animNum_ = static_cast<int>(
+	//		static_cast<float>(cntAnim_) * speedAnim_)
+	//		% WALK_ANIM_NUM;
 
-		break;	
-	
-	case ANIM_STATE::KICK:
-		animNum_ = static_cast<int>(
-			static_cast<float>(cntAnim_) * speedAnim_)
-			% KICK_ANIM_NUM;
-		if (animNum_ == 3) {
-			state_ = ANIM_STATE::IDLE;
-			break;
-		}
+	//	break;	
+	//
+	//case ANIM_STATE::KICK:
+	//	animNum_ = static_cast<int>(
+	//		static_cast<float>(cntAnim_) * speedAnim_)
+	//		% KICK_ANIM_NUM;
+	//	if (animNum_ == 3) {
+	//		state_ = ANIM_STATE::IDLE;
+	//		break;
+	//	}
 
-	case ANIM_STATE::HIT:
-		animNum_ = static_cast<int>(
-			static_cast<float>(cntAnim_) * speedAnim_)
-			% HIT_ANIM_NUM;
-		break;
+	//case ANIM_STATE::HIT:
+	//	animNum_ = static_cast<int>(
+	//		static_cast<float>(cntAnim_) * speedAnim_)
+	//		% HIT_ANIM_NUM;
+	//	break;
 
-	case ANIM_STATE::RUN:
-		animNum_ = static_cast<int>(
-			static_cast<float>(cntAnim_) * speedAnim_)
-			% RUN_ANIM_NUM;
+	//case ANIM_STATE::RUN:
+	//	animNum_ = static_cast<int>(
+	//		static_cast<float>(cntAnim_) * speedAnim_)
+	//		% RUN_ANIM_NUM;
 
-		break;
+	//	break;
 
-	default:
-		break;
-	}
+	//default:
+	//	break;
+	//}
 
-	//攻撃
+
+	//攻撃(未実装)
 	atkState_ = ATK_STATE::NONE;		//基本は攻撃していない
 	if (CheckHitKey(KEY_INPUT_N))
 	{
@@ -133,6 +139,8 @@ void Enemy::Draw(void)
 	{
 		BulletDraw();
 	}
+
+	DrawDebug();
 	
 }
 
@@ -149,13 +157,16 @@ void Enemy::Release(void)
 
 void Enemy::EnemyDraw(void)
 {
+	// 座標変換
+	Vector2 pos = pos_.ToVector2();
+
 	if (dir_ == DIR::RIGHT)
 	{
 		// 中心座標で描画
 		DrawRotaGraph(
-			pos_.x,
-			pos_.y,
-			3.0f,		// 拡大
+			pos.x,
+			pos.y,
+			5.0f,		// 拡大
 			0.0f,		// 回転
 			imgsDino_[static_cast<int>(state_)][animNum_],
 			true,
@@ -165,9 +176,9 @@ void Enemy::EnemyDraw(void)
 	{
 		// 中心座標で描画
 		DrawRotaGraph(
-			pos_.x,
-			pos_.y,
-			3.0f,		// 拡大
+			pos.x,
+			pos.y,
+			5.0f,		// 拡大
 			0.0f,		// 回転
 			imgsDino_[static_cast<int>(state_)][animNum_],
 			true,
@@ -236,38 +247,15 @@ void Enemy::BulletDraw(void)
 void Enemy::Walk(void)
 {
 	pos_.x += movePow_;
-
-	// 移動制御（左右に行ったり来たり）
-	if (pos_.x > Application::SCREEN_SIZE_X / 2 + 10)
-	{
-		movePow_ *= -1;
-		dir_ = DIR::LEFT;
-	}
-	else if (pos_.x < Application::SCREEN_SIZE_X / 2 - 10)
-	{
-		movePow_ *= -1;
-		dir_ = DIR::RIGHT;
-	}
 }
 
 // 移動処理（走る）
 void Enemy::Run(void)
 {
 	pos_.x += movePow_ * 2;
-
-	// 移動制御（左右に行ったり来たり）
-	if (pos_.x > Application::SCREEN_SIZE_X / 2 + 10)
-	{
-		movePow_ *= -1;
-		dir_ = DIR::LEFT;
-	}
-	else if (pos_.x < Application::SCREEN_SIZE_X / 2 - 10)
-	{
-		movePow_ *= -1;
-		dir_ = DIR::RIGHT;
-	}
 }
 
+// 移動処理
 void Enemy::Move(void)
 {
 	if (state_ == ANIM_STATE::WALK)
@@ -277,6 +265,18 @@ void Enemy::Move(void)
 	else if (state_ == ANIM_STATE::RUN)
 	{
 		Run();
+	}
+
+	// 移動制御（左右に行ったり来たり）
+	if (pos_.x > Application::SCREEN_SIZE_X / 2 + 30)
+	{
+		movePow_ *= -1;
+		dir_ = DIR::LEFT;
+	}
+	else if (pos_.x < Application::SCREEN_SIZE_X / 2 - 30)
+	{
+		movePow_ *= -1;
+		dir_ = DIR::RIGHT;
 	}
 }
 
@@ -305,6 +305,7 @@ void Enemy::Shot(void)
 
 }
 
+// キーを押下すると状態切り替え
 void Enemy::Debug(void)
 {
 	if (CheckHitKey(KEY_INPUT_1))
@@ -457,37 +458,144 @@ Vector2 Enemy::GetColPos(COL_LR lr, COL_TD td)
 
 void Enemy::DrawDebug(void)
 {
-	//DrawFormatString(0, 0, 0x000000, "プレイヤー座標(%.2f, %.f)", pos_.x, pos_.y);
+	DrawFormatString(700, 0, 0x000000, "エネミー座標(%.f, %.f)", pos_.x, pos_.y);
+	DrawFormatString(800, 20, 0x000000, "radom(%d)", rand_);
 
-	//DrawFormatString(0, 20, 0x000000, "移動速度(%.2f)", moveSpeed_);
 
-	//DrawFormatString(0, 40, 0x000000, "ジャンプ力(%.2f)", jumpPow_);
+	Vector2 pos = pos.ToVector2F();
 
-	////Vector2 pos = pos.ToVector2F();
+	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
 
-	//DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
-
-	//DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
 
 	//DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
 
-	//// オレンジ
-	//int color = 0xff8c00;
+	// オレンジ
+	int color = 0xff0000;
 
-	//// デバッグ用：足元衝突判定
-	//Vector2 footPos = pos;
-	//footPos.y += (8 + 24);
+	// デバッグ用：足元衝突判定
+	Vector2 footPos = pos;
+	footPos.y += 12;
 
-	//// 足元：中央
-	//DrawBox(footPos.x - 3, footPos.y - 3, footPos.x + 3, footPos.y + 3, color, true);
+	// 足元：中央
+	DrawBox(footPos.x - 3, footPos.y - 3, footPos.x + 3, footPos.y + 3, color, true);
 
 
-	//DrawBox(footPos.x - 3 - 16, footPos.y - 3, footPos.x + 3 - 16, footPos.y + 3, color, true);
+	DrawBox(footPos.x - 3 - 16, footPos.y - 3, footPos.x + 3 - 16, footPos.y + 3, color, true);
 
-	//// デバッグ用：頭の衝突判定
-	//Vector2 headPos = pos;
-	//headPos.y += (8 - 24);
+	// デバッグ用：頭の衝突判定
+	Vector2 headPos = pos;
+	headPos.y += (8 - 24);
 
-	//// 頭：中央
-	//DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
+	// 頭：中央
+	DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
+}
+
+// ランダムに状態が切り替わる
+void Enemy::RandState(void)
+{
+	int time = GetTime();
+
+	if ((time / 1000) % 3 == 0)
+	{
+
+		if (!stateRand_)
+		{
+			rand_ = GetRand(100);
+		}
+		stateRand_ = true;
+	}
+	else
+	{
+		stateRand_ = false;
+	}
+
+	if (rand_ > 90)
+	{
+		state_ = ANIM_STATE::IDLE;
+	}
+	else if (rand_ > 60)
+	{
+		state_ = ANIM_STATE::WALK;
+	}
+	else if(rand_ > 30)
+	{
+		state_ = ANIM_STATE::KICK;
+	}
+	else
+	{
+		state_ = ANIM_STATE::RUN;
+	}
+
+	switch (state_)
+	{
+	case ANIM_STATE::IDLE:
+		animNum_ = static_cast<int>(
+			static_cast<float>(cntAnim_) * speedAnim_)
+			% IDLE_ANIM_NUM;
+		cntAnim_++;
+
+		blink_ = 0;
+		break;
+
+	case ANIM_STATE::WALK:
+		animNum_ = static_cast<int>(
+			static_cast<float>(cntAnim_) * speedAnim_)
+			% WALK_ANIM_NUM;
+
+		cntAnim_++;
+
+		if (animNum_ > 5)
+		{
+			rand_ = 100;
+			state_ = ANIM_STATE::IDLE;
+		}
+
+		break;
+
+	case ANIM_STATE::KICK:
+		animNum_ = static_cast<int>(
+			static_cast<float>(cntAnim_) * speedAnim_)
+			% KICK_ANIM_NUM;
+		if (animNum_ == 3) {
+			state_ = ANIM_STATE::IDLE;
+			break;
+		}
+
+	case ANIM_STATE::HIT:
+		animNum_ = static_cast<int>(
+			static_cast<float>(cntAnim_) * speedAnim_)
+			% HIT_ANIM_NUM;
+
+		cntAnim_++;
+
+		break;
+
+	case ANIM_STATE::RUN:
+		animNum_ = static_cast<int>(
+			static_cast<float>(cntAnim_) * speedAnim_)
+			% RUN_ANIM_NUM;
+
+		if (animNum_ == 0)
+		{
+			blink_++;
+		}
+		if (blink_ > 4 && animNum_ == 6)
+		{
+			rand_ = 100;
+			state_ = ANIM_STATE::IDLE;
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
+// 経過時間を返す
+int Enemy::GetTime(void)
+{
+	elapsedTime = (GetNowCount() - startTime);
+
+	return elapsedTime;
 }

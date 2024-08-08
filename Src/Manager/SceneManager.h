@@ -45,6 +45,9 @@ public:
 	// カメラの取得
 	Camera* GetCamera(void) const;
 
+	void SetAliveTimeP1(float aliveTimeP1);
+	void SetAliveTimeP2(float aliveTimeP2);
+
 private:
 
 	// 静的インスタンス
@@ -68,6 +71,10 @@ private:
 	// デルタタイム
 	std::chrono::system_clock::time_point preTime_;
 	float deltaTime_;
+
+	// 生存時間
+	float aliveTimeP1_;
+	float aliveTimeP2_;
 
 	// デフォルトコンストラクタをprivateにして、
 	// 外部から生成できない様にする

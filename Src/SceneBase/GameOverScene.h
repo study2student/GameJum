@@ -1,15 +1,15 @@
 #pragma once
-
 #include "SceneBase.h"
-class TitleScene : public SceneBase
+class GameOverScene : public SceneBase
 {
 
 public:
+
 	// コンストラクタ
-	TitleScene(void);
+	GameOverScene(void);
 
 	// デストラクタ
-	~TitleScene(void);
+	~GameOverScene(void);
 
 	void Init(void) override;
 	void Update(void) override;
@@ -19,4 +19,3 @@ public:
 private:
 
 };
-
