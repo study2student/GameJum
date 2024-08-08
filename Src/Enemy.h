@@ -105,8 +105,8 @@ public:
 	void Shot(void);
 
 	// デバッグ用
-	void Debug(void);
-	void DrawDebug(void);
+	void Debug(void);		// キーを押下すると状態切り替え
+	void DrawDebug(void);	// DrawStringまとめ
 
 private:
 
@@ -172,5 +172,18 @@ private:
 	// 衝突座標を取得する
 	Vector2 GetColPos(COL_LR lr, COL_TD td);
 
+	// ランダムに状態が切り替わる
+	void RandState(void);
+
+	// 経過時間を返す
+	int GetTime(void);
+
+	int blink_;
+	int rand_;
+
+	bool stateRand_;
+
+	int startTime;
+	int elapsedTime;
 };
 
