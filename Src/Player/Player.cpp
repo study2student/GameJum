@@ -373,8 +373,7 @@ void Player::Move(void)
 }
 
 void Player::Accele(float speed)
-{
-
+{  
 	moveSpeed_ += speed;
 
 	// ‘¬“x§ŒÀ(‰E•ûŒü)

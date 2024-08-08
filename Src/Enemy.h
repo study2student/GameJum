@@ -52,6 +52,23 @@ public:
 		LEFT
 	};
 
+	// 衝突座標（左右）
+	enum class COL_LR
+	{
+		C, // 中央
+		L, // 左
+		R  // 右
+	};
+
+	// 衝突座標（上下）
+	enum class COL_TD
+	{
+		C, // 中央
+		T, // 上
+		D  // 下
+	};
+
+	// 弾
 	struct Bullet {
 		Vector2 pos;		// 座標
 		float angle;
@@ -72,19 +89,29 @@ public:
 		
 	void Release(void);		// 解放処理
 
-	void EnemyDraw(void);
-	void BulletDraw(void);
+	void EnemyDraw(void);	// 敵の描画
+	void BulletDraw(void);	// 弾の描画
 
 	// 移動処理
+	void Move(void);
 	void Walk(void);		// 移動処理（歩く）
 	void Run(void);			// 移動処理（走る）
+
+	//当たり判定
+	void CollisionRight(void);
+	void CollisionLeft(void);
 
 	// 発射処理
 	void Shot(void);
 
+	// デバッグ用
 	void Debug(void);
+	void DrawDebug(void);
 
 private:
+
+	// キャラ用-------------------------------------------------------------------
+	
 	// 画像格納領域
 	int imgsDino_[ANIM_MAX_NUM_Y][ANIM_MAX_NUM_X];
 
@@ -112,7 +139,7 @@ private:
 	// アニメーションスピード
 	float speedAnim_;
 
-	// 
+	// 弾--------------------------------------------------------------
 	Bullet bullets[256];
 
 	// 弾の画像
@@ -125,6 +152,25 @@ private:
 	float bulletRadius;
 
 	Vector2 bulletPos_;
+
+	// -------------------------------------------------------------------
+
+	// 当たり判定用-------------------------------------------------------
+	
+	// 衝突判定用：中心座標（pos_からの相対座標）
+	Vector2 hitPos_;
+
+	// 衝突判定用：範囲
+	Vector2 hitBox_;
+
+	// 頭の衝突判定
+	void CollisionHead(void);
+
+	// 左右の衝突判定
+	void CollisionSide(void);
+
+	// 衝突座標を取得する
+	Vector2 GetColPos(COL_LR lr, COL_TD td);
 
 };
 

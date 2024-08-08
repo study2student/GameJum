@@ -15,6 +15,7 @@ void Enemy::Init(void)
 {
 	std::string basePath = Application::PATH_IMAGE;
 
+	// 弾画像の読み込み
 	imgBullet_ = LoadGraph((basePath + "Enemy/bullet.png").c_str());
 	if (imgBullet_ == -1)
 	{
@@ -40,21 +41,29 @@ void Enemy::Init(void)
 		return;
 	}
 
+	// アニメーション用
 	cntAnim_ = 0;
 	speedAnim_ = 0.1f;
 	animNum_ = 0;
+
+	// 敵の座標
 	pos_ = { Application::SCREEN_SIZE_X /2,Application::SCREEN_SIZE_Y /2};
+	// 敵の状態
 	state_ = ANIM_STATE::IDLE;
 	atkState_ = ATK_STATE::NONE;
 	dir_ = DIR::RIGHT;
+
+	// 敵の移動量
 	movePow_ = 0.5f;
 
 	speed = 2.0f;
 	bulletRadius = 5.0f;
 
-	bullets->isbullet = false;
-	bullets->accel = { 0.0f,0.0f };
-	
+	// 衝突判定用：中心座標（pos_からの相対座標）
+	hitPos_ = { 0, 8 };
+
+	// 衝突判定用：範囲
+	hitBox_ = { 16, 24 };
 }
 
 void Enemy::Update(void)
@@ -62,6 +71,8 @@ void Enemy::Update(void)
 	cntAnim_++;
 
 	Debug();
+
+	Move();
 
 	switch (state_)
 	{
@@ -77,15 +88,16 @@ void Enemy::Update(void)
 			static_cast<float>(cntAnim_) * speedAnim_)
 			% WALK_ANIM_NUM;
 
-		Walk();
-
 		break;	
 	
 	case ANIM_STATE::KICK:
 		animNum_ = static_cast<int>(
 			static_cast<float>(cntAnim_) * speedAnim_)
 			% KICK_ANIM_NUM;
-		break;
+		if (animNum_ == 3) {
+			state_ = ANIM_STATE::IDLE;
+			break;
+		}
 
 	case ANIM_STATE::HIT:
 		animNum_ = static_cast<int>(
@@ -97,8 +109,6 @@ void Enemy::Update(void)
 		animNum_ = static_cast<int>(
 			static_cast<float>(cntAnim_) * speedAnim_)
 			% RUN_ANIM_NUM;
-
-		Run();
 
 		break;
 
@@ -258,28 +268,40 @@ void Enemy::Run(void)
 	}
 }
 
+void Enemy::Move(void)
+{
+	if (state_ == ANIM_STATE::WALK)
+	{
+		Walk();
+	}
+	else if (state_ == ANIM_STATE::RUN)
+	{
+		Run();
+	}
+}
+
 // 発射処理
 void Enemy::Shot(void)
 {
-	//放射状弾
-	float angle = 0.0f;
-	constexpr int dir_count = 8;
-	int count = dir_count;
-	for (auto& b : bullets) {
-		if (!b.isbullet) {
-			b.pos = pos_;
-			angle += (2.0f * DX_PI_F) / (float)dir_count;
-			b.vel = { cos(angle),sin(angle) };
-			b.vel.x *= speed;
-			b.vel.y *= speed;
-			b.accel = { 0.0f,0.0f };
-			b.isbullet = true;
-			--count;
-			if (count == 0) {
-				break;
-			}
-		}
-	}
+	////放射状弾
+	//float angle = 0.0f;
+	//constexpr int dir_count = 8;
+	//int count = dir_count;
+	//for (auto& b : bullets) {
+	//	if (!b.isbullet) {
+	//		b.pos = pos_;
+	//		angle += (2.0f * DX_PI_F) / (float)dir_count;
+	//		b.vel = { cos(angle),sin(angle) };
+	//		b.vel.x *= speed;
+	//		b.vel.y *= speed;
+	//		b.accel = { 0.0f,0.0f };
+	//		b.isbullet = true;
+	//		--count;
+	//		if (count == 0) {
+	//			break;
+	//		}
+	//	}
+	//}
 
 }
 
@@ -318,4 +340,154 @@ void Enemy::Debug(void)
 	{
 		dir_ = DIR::LEFT;
 	}
+}
+
+void Enemy::CollisionHead(void)
+{
+	// 頭の衝突判定（足元の衝突判定）
+
+	// 頭の座標座標
+	Vector2 headPosC = GetColPos(COL_LR::C, COL_TD::T);
+
+
+	// 頭の座標（左）
+	Vector2 headPosL = GetColPos(COL_LR::L, COL_TD::T);
+
+
+	// 頭の座標（右）
+	Vector2 headPosR = GetColPos(COL_LR::R, COL_TD::T);
+
+
+	//if (gameScene_->IsCollisionStage(headPosC)
+	//	|| gameScene_->IsCollisionStage(headPosL)
+	//	|| gameScene_->IsCollisionStage(headPosR)
+	//	)
+	//{
+	//	Vector2 mapPos = gameScene_->World2MapPos(headPosC);
+	//	pos_.y = static_cast<float>(mapPos.y * Stage::CHIP_SIZE_Y + Stage::CHIP_SIZE_Y + SIZE_Y / 2 + hitPos_.y - hitBox_.y);
+
+	//	SetJumpPow(0.0f);
+	//}
+
+}
+
+void Enemy::CollisionSide(void)
+{
+	// 左右の衝突判定（左右の衝突判定）
+
+	// 左の座標
+	Vector2 headPosL = GetColPos(COL_LR::L, COL_TD::T);
+	// 左の座標
+	Vector2 corePosL = GetColPos(COL_LR::L, COL_TD::C);
+	// 足元座標（左）
+	Vector2 footPosL = GetColPos(COL_LR::L, COL_TD::D);
+
+	/*if (gameScene_->IsCollisionStage(headPosL)
+		|| gameScene_->IsCollisionStage(footPosL)
+		|| gameScene_->IsCollisionStage(corePosL)
+		)
+	{
+		Vector2 mapPos = gameScene_->World2MapPos(headPosL);
+		pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
+			+ Stage::CHIP_SIZE_X + hitBox_.x);
+
+	}
+
+	if (pos_.x > pos_.x + SIZE_X)
+	{
+		Vector2 mapPos = gameScene_->World2MapPos(headPosL);
+		pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
+			+ Stage::CHIP_SIZE_X + hitBox_.x);
+
+	}*/
+
+
+	// 右の座標
+	Vector2 headPosR = GetColPos(COL_LR::R, COL_TD::T);
+	// 右の座標
+	Vector2 corePosR = GetColPos(COL_LR::R, COL_TD::C);
+	// 足元座標（右）
+	Vector2 footPosR = GetColPos(COL_LR::R, COL_TD::D);
+
+	//if (gameScene_->IsCollisionStage(headPosR)
+	//	|| gameScene_->IsCollisionStage(footPosR)
+	//	|| gameScene_->IsCollisionStage(corePosR)
+	//	)
+	//{
+	//	Vector2 mapPos = gameScene_->World2MapPos(headPosR);
+	//	pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
+	//		- 1 - hitBox_.x);
+
+	//}
+
+}
+
+Vector2 Enemy::GetColPos(COL_LR lr, COL_TD td)
+{
+	Vector2 ret = pos_.ToVector2();
+
+	// 相対座標を足す
+	ret.x += hitPos_.x;
+	ret.y += hitPos_.y;
+
+	// 左右
+	switch (lr)
+	{
+	case Enemy::COL_LR::L:
+		ret.x -= hitBox_.x;
+		break;
+	case Enemy::COL_LR::R:
+		ret.x += hitBox_.x;
+		break;
+	}
+
+	// 上下
+	switch (td)
+	{
+	case Enemy::COL_TD::T:
+		ret.y -= hitBox_.y;
+		break;
+	case Enemy::COL_TD::D:
+		ret.y += hitBox_.y;
+		break;
+	}
+
+	return ret;
+}
+
+void Enemy::DrawDebug(void)
+{
+	//DrawFormatString(0, 0, 0x000000, "プレイヤー座標(%.2f, %.f)", pos_.x, pos_.y);
+
+	//DrawFormatString(0, 20, 0x000000, "移動速度(%.2f)", moveSpeed_);
+
+	//DrawFormatString(0, 40, 0x000000, "ジャンプ力(%.2f)", jumpPow_);
+
+	////Vector2 pos = pos.ToVector2F();
+
+	//DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+
+	//DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+
+	//DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+
+	//// オレンジ
+	//int color = 0xff8c00;
+
+	//// デバッグ用：足元衝突判定
+	//Vector2 footPos = pos;
+	//footPos.y += (8 + 24);
+
+	//// 足元：中央
+	//DrawBox(footPos.x - 3, footPos.y - 3, footPos.x + 3, footPos.y + 3, color, true);
+
+
+	//DrawBox(footPos.x - 3 - 16, footPos.y - 3, footPos.x + 3 - 16, footPos.y + 3, color, true);
+
+	//// デバッグ用：頭の衝突判定
+	//Vector2 headPos = pos;
+	//headPos.y += (8 - 24);
+
+	//// 頭：中央
+	//DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
 }
