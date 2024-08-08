@@ -64,7 +64,6 @@ void GameScene::Init(void)
 	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2, padP2, InputManager::JOYPAD_NO::PAD2);
 
 }
-}
 
 
 void GameScene::Update(void)
@@ -202,7 +201,7 @@ void GameScene::BulletCollision(void)
 		Vector2 playerPos = player_[i]->GetPos().ToVector2();
 		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
 
-		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
+		if (IsCollisionRectCenter(bulletPos, eHitBox, playerPos, pHitBox))
 		{
 			enemy_->ShotActive();
 		}
