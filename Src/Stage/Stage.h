@@ -9,8 +9,8 @@ public:
 
 #pragma region 画像関連
 	//画像サイズ
-	static constexpr int IMG_SIZE_X = 768;
-	static constexpr int IMG_SIZE_Y = 384;
+	static constexpr int IMG_SIZE_X = 384;
+	static constexpr int IMG_SIZE_Y = 192;
 
 	//画像分割数
 	static constexpr int DIVISION_NUM_X = 12;
@@ -37,7 +37,7 @@ public:
 	static constexpr int STAGE_SIZE_Y = 4;
 
 	//穴(末尾から次の地面描画までの幅)
-	static constexpr int HOLE_SIZE_X_ = 4;
+	static constexpr int HOLE_SIZE_X_ = 10;
 #pragma endregion 
 	
 #pragma region 地面用構造体
@@ -56,6 +56,9 @@ public:
 
 		//行(横幅)
 		int col_;
+
+		//地面サイズ
+		GROUND_SIZE type_;
 
 		//ステージ配列
 		std::vector<std::vector<int>> stageChips_;
@@ -78,7 +81,9 @@ public:
 
 
 	//足場の幅の設定
-	int SetStageSizeX();
+	GROUND_SIZE RandGroundType();
+
+	int SetCol(GROUND_SIZE type);
 
 	//CSVデータの読み込み
 	void LoadCsvData(int cnt);
@@ -90,9 +95,6 @@ private:
 
 	//画像格納
 	int imgStageChip_[DIVISION_ALL_NUM];
-
-	//チップ用配列
-	int chipNum_[DIVISION_NUM_Y][DIVISION_NUM_X];	
 	
 	//地面
 	Ground grounds_[CREATE_MAX];

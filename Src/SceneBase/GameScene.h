@@ -23,6 +23,7 @@ public:
 	void Update(void) override;
 	void Draw(void) override;
 	void Release(void) override;
+
 private:
 
 	// ’e‚ÌƒMƒ~ƒbƒN
