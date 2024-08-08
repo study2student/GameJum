@@ -40,6 +40,9 @@ private:
 	// 衝突判定
 	void GimmickCollision(void);
 
+	// ステージとの衝突判定
+	void StageCollision(void);
+
 	// 衝突判定
 	bool IsCollisionRect(Vector2 stPos1, Vector2 edPos1, Vector2 stPos2, Vector2 edPos2);
 

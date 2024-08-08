@@ -103,7 +103,7 @@ void Player::Update(void)
 	ProcessJump();
 
 	// d—Í‚ğí‚É‚©‚¯‚é
-	//AddGravity();
+	AddGravity();
 
 	// ƒWƒƒƒ“ƒv
 	Jump();

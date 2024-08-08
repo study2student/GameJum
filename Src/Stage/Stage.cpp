@@ -57,6 +57,8 @@ void Stage::Draw()
 			}
 		}
 	}
+
+	DebagDraw();
 }
 
 void Stage::Release()
@@ -98,31 +100,31 @@ void Stage::Reset()
 		//ç¿ïW
 		ground.pos_ = {static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X),
 							static_cast<float>(Application::SCREEN_SIZE_Y - (SIZE_Y * row_)) };
+
+		//ëÂÇ´Ç≥
+		ground.size_ = { SIZE_X * col_,
+							SIZE_Y * row_ };
+
 		grounds_.push_back(ground);
 	}
 }
 
-//Stage::GROUND_SIZE Stage::RandGroundType()
-//{
-//	int num = rand() % static_cast<int>(GROUND_SIZE::MAX);
-//	GROUND_SIZE type;
-//
-//	if (num == 0) { type = GROUND_SIZE::LONG; }
-//	else if (num == 1) { type = GROUND_SIZE::MIDDLE; }
-//	else if (num == 2) { type = GROUND_SIZE::NORMAL; }
-//
-//	return type;
-//}
-
-void Stage::ClearUsedGround(int cnt)
+void Stage::DebagDraw()
 {
-	for (int y = 0; y < row_; y++)
+	for (auto& ground : grounds_)
 	{
-		for (int x = 0; x < col_; x++)
-		{
-			stageChips_[y][x] = -1;
-		}
+		Vector2 stageCecter = { static_cast<int>(ground.pos_.x + (ground.size_.x / 2)),
+									static_cast<int>(ground.pos_.y + ground.size_.y / 2) };
+
+		DrawBox(ground.pos_.x, ground.pos_.y,
+			ground.pos_.x + ground.size_.x,
+			ground.pos_.y + ground.size_.y,
+			0x00ff00,
+			false);
+
+		DrawCircle(stageCecter.x, stageCecter.y, 10, 0xff00ff, true);
 	}
+
 }
 
 std::vector<Stage::Ground> Stage::GetGround()

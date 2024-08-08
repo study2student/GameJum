@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "../Common/Vector2.h"
 #include "../Common/Vector2F.h"
 
 class Stage
@@ -20,6 +21,8 @@ public:
 	{
 		//始点座標
 		Vector2F pos_;
+
+		Vector2 size_;
 	};
 #pragma endregion 
 
@@ -45,9 +48,9 @@ public:
 	static constexpr int CREATE_MAX = static_cast<int>(GROUND_SIZE::MAX);
 
 	//幅
-	static constexpr int STAGE_SIZE_X_LONG = 24;
-	static constexpr int STAGE_SIZE_X_NORMAL = 16;
-	static constexpr int STAGE_SIZE_X_MIDDLE = 12;
+	static constexpr int STAGE_SIZE_X_LONG = 16;
+	static constexpr int STAGE_SIZE_X_NORMAL = 12;
+	static constexpr int STAGE_SIZE_X_MIDDLE = 8;
 
 	//高さ(固定)
 	static constexpr int STAGE_SIZE_Y = 4;
@@ -57,7 +60,7 @@ public:
 #pragma endregion 
 
 #pragma region スクロール関連
-	static constexpr float SCROLL_SPEED = 1.5f;
+	static constexpr float SCROLL_SPEED = 1.2f;
 #pragma endregion 
 
 	Stage();
@@ -71,11 +74,11 @@ public:
 	void Load();
 	void Reset();
 
+	//デバッグ描画
+	void DebagDraw();
+
 	//CSVデの読み込み
 	void LoadCsvData();
-	
-	//初期化処理
-	void ClearUsedGround(int cnt);
 
 	//ポインタの取得
 	std::vector<Ground> GetGround();

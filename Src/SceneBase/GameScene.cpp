@@ -83,6 +83,9 @@ void GameScene::Update(void)
 	// 飛んでくる弾との衝突判定
 	GimmickCollision();
 
+	// ステージとの衝突判定
+	StageCollision();
+
 	InputManager& ins = InputManager::GetInstance();
 	if (ins.IsTrgDown(KEY_INPUT_SPACE))
 	{
@@ -133,6 +136,25 @@ void GameScene::GimmickCollision(void)
 				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE }))
 			{
 				player_[i]->Damage(1);
+			}
+		}
+	}
+}
+
+void GameScene::StageCollision(void)
+{
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		for (auto& ground : stage_->GetGround())
+		{
+			auto data = stage_->GetGround();
+			Vector2 stageCecter = { static_cast<int>(ground.pos_.x + ground.size_.x / 2),
+									static_cast<int>(ground.pos_.y + ground.size_.y / 2) };
+
+			if (IsCollisionRectCenter(player_[i]->GetPos(), { player_[i]->SIZE_X,player_[i]->SIZE_Y },
+				stageCecter, ground.size_))
+			{
+				//プレイヤーの座標をずらす処理
 			}
 		}
 	}
