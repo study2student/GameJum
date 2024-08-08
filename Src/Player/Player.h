@@ -17,7 +17,7 @@ public:
 	static constexpr int SPEED_DEFAULT = 5;
 
 	// アニメーションスピード
-	static constexpr float ANIM_SPEED = 0.1f;
+	static constexpr float ANIM_SPEED = 0.3f;
 
 	// 移動速度の最大値
 	static constexpr float MAX_MOVE_SPEED = 3.5f;

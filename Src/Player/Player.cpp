@@ -78,7 +78,7 @@ void Player::Init(GameScene* scene_, TYPE type, KEY_CONFIG config, PAD_CONFIG pa
 	hitPos_ = { 0, 8 };
 
 	// 衝突判定用：範囲
-	hitBox_ = { 16, 24 };
+	hitBox_ = { 16, 24};
 
 	// ショットの硬直時間
 	stepShotDelay_ = 0.0f;
@@ -108,7 +108,7 @@ void Player::Update(void)
 	ProcessJump();
 
 	// 重力を常にかける
-	//AddGravity();
+	AddGravity();
 
 	// ジャンプ
 	Jump();
@@ -306,9 +306,9 @@ void Player::DrawDebug(void)
 
 	Vector2 pos = pos.ToVector2F();
 
-	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0xffffff, false);
 
-	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+	//DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0xffffff, false);
 
 	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
 
