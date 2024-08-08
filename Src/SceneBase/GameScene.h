@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 class Player;
+class BulletGimmick;
 
 class GameScene : public SceneBase
 {
@@ -17,6 +18,11 @@ public:
 	void Draw(void) override;
 
 private:
+
 	std::shared_ptr<Player> player_;
+
+	// ’e‚ÌƒMƒ~ƒbƒN
+	BulletGimmick* bulletGimmick_;
+
 };
 
