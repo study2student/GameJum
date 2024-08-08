@@ -6,6 +6,7 @@ class Enemy;
 
 class Player;
 class BulletGimmick;
+class Stage;
 
 class GameScene : public SceneBase
 {
@@ -32,6 +33,9 @@ private:
 
 	// プレイヤークラスのポインタ
 	Player* player_[GAME_PLAYER_NUM];
+
+	//ステージ
+	Stage* stage_;
 
 };
 

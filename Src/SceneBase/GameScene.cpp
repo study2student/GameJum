@@ -4,10 +4,12 @@
 #include "GameScene.h"
 #include "../Player/Player.h"
 #include "../BulletGimmick.h"
+#include "../Stage/Stage.h"
 
 GameScene::GameScene(void)
 {
 	enemy_ = nullptr;
+	stage_ = nullptr;
 }
 
 GameScene::~GameScene(void)
@@ -43,6 +45,10 @@ void GameScene::Init(void)
 		KEY_INPUT_D, KEY_INPUT_LCONTROL, KEY_INPUT_LSHIFT
 	};
 	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2);
+
+	//ステージの読み込み
+	stage_ = new Stage();
+	stage_->Init();
 }
 
 void GameScene::Update(void)
@@ -59,10 +65,13 @@ void GameScene::Update(void)
 		player_[i]->Update();
 	}
 
+	stage_->Update();
+
 }
 
 void GameScene::Draw(void)
 {
+	stage_->Draw();
 	enemy_->Draw();
 	DrawFormatString(100, 100, 0xff0000, "Game");
 	bulletGimmick_->Draw();
@@ -78,6 +87,9 @@ void GameScene::Draw(void)
 
 void GameScene::Release(void)
 {
+	//ステージの解放
+	stage_->Release();
+
 	// プレイヤー達の解放
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{

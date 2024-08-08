@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "../Common/Vector2F.h"
+
 class Stage
 {
 public:
@@ -75,8 +76,6 @@ public:
 	void Load();
 	void Reset();
 
-	//‰Šú‚Ì‘«ê‚ÌŠm•Û
-	void SetFirstStage();
 
 	//‘«ê‚Ì•‚Ìİ’è
 	int SetStageSizeX();

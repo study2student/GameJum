@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "../Application.h"
+#include "../Utility/AsoUtility.h"
 #include "Stage.h"
 
 Stage::Stage()
@@ -18,7 +19,10 @@ void Stage::Init()
 	
 	Load();
 
-	SetFirstStage();
+	for (int i = 0; i < CREATE_MAX; i++)
+	{
+		LoadCsvData(i);
+	}
 }
 
 void Stage::Update()
@@ -72,10 +76,7 @@ void Stage::Reset()
 	groundCsv_[static_cast<int>(GROUND_SIZE::MIDDLE)] = "Data/MiddleGroundCsvData.csv";
 	groundCsv_[static_cast<int>(GROUND_SIZE::NORMAL)] = "Data/NormalGroundCsvData.csv";
 	groundCsv_[static_cast<int>(GROUND_SIZE::LONG)] = "Data/LongGroundCsvData.csv";
-}
 
-void Stage::SetFirstStage()
-{
 	for (int i = 0; i < CREATE_MAX; i++)
 	{
 		//列
@@ -85,8 +86,8 @@ void Stage::SetFirstStage()
 		grounds_[i].col_ = SetStageSizeX();
 
 		//座標
-		grounds_[i].pos_ = { i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X,
-							Application::SCREEN_SIZE_Y - (SIZE_Y * grounds_[i].row_) };
+		grounds_[i].pos_ = { static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X),
+							static_cast<float>(Application::SCREEN_SIZE_Y - (SIZE_Y * grounds_[i].row_)) };
 
 		//ステージチップの設定
 		//要素の定義
@@ -108,35 +109,35 @@ int Stage::SetStageSizeX()
 
 void Stage::LoadCsvData(int cnt)
 {
-	////ファイルの準備
-	//std::ifstream ifs = std::ifstream(groundCsv_[cnt]);
-	//if (!ifs)
-	//{
-	//	OutputDebugString("ステージのifstream準備失敗\n");
-	//	return;
-	//}
+	//ファイルの準備
+	std::ifstream ifs = std::ifstream(groundCsv_[cnt]);
+	if (!ifs)
+	{
+		OutputDebugString("ステージのifstream準備失敗\n");
+		return;
+	}
 
-	////二次元配列の場所を指定用
-	//int x = 0;
-	//int y = 0;
+	//二次元配列の場所を指定用
+	int x = 0;
+	int y = 0;
 
-	//std::string line;					//1行のデータを格納する領域
-	//while (getline(ifs, line))
-	//{
-	//	//Split関数の戻り値受け取り用変数
-	//	std::vector<std::string> strSplit; // 1行を1文字の動的配列に分割
-	//	strSplit = AsoUtility::Split(line, ',');
+	std::string line;					//1行のデータを格納する領域
+	while (getline(ifs, line))
+	{
+		//Split関数の戻り値受け取り用変数
+		std::vector<std::string> strSplit; // 1行を1文字の動的配列に分割
+		strSplit = AsoUtility::Split(line, ',');
 
-	//	int chipNo;
+		int chipNo;
 
-	//	//分割したデータをマップ配列に格納する
-	//	for (int x = 0; x < strSplit.size(); x++)
-	//	{
-	//		chipNo = stoi(strSplit[x]);
-	//		grounds_[cnt].stageChips_[ y][x] = chipNo;
-	//	}
-	//	y++;
-	//}
+		//分割したデータをマップ配列に格納する
+		for (int x = 0; x < strSplit.size(); x++)
+		{
+			chipNo = stoi(strSplit[x]);
+			grounds_[cnt].stageChips_[ y][x] = chipNo;
+		}
+		y++;
+	}
 }
 
 void Stage::ClearUsedGround(int cnt)
