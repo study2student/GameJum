@@ -22,8 +22,6 @@ public:
 private:
 	std::shared_ptr<Player> player_;
 
-private:
-
 	// Enemy用ポインタ
 	Enemy* enemy_;
 };

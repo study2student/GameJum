@@ -16,6 +16,7 @@ void GameScene::Init(void)
 {
 	player_ = std::make_shared<Player>();
 	player_->Init();
+
 	// “G‚Ì‰Šú‰»
 	if (enemy_ == nullptr)
 	{
@@ -32,7 +33,7 @@ void GameScene::Update(void)
 
 void GameScene::Draw(void)
 {
-	enemy_->Draw();
 	DrawFormatString(100, 100, 0xff0000, "Game");
+	enemy_->Draw();
 	player_->Draw();
 }
