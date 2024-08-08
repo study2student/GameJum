@@ -1,4 +1,6 @@
 #include <DxLib.h>
+#include "../Manager/SceneManager.h"
+#include "../Manager/InputManager.h"
 #include "../Player/Player.h"
 #include "../Enemy.h"
 #include "GameScene.h"
@@ -59,6 +61,22 @@ void GameScene::Update(void)
 		player_[i]->Update();
 	}
 
+	if (player_[0]->GetHp_() <= 0)
+	{
+		SceneManager::GetInstance().SetAliveTimeP1(aliveTimeP1_);
+	}
+
+	if (player_[1]->GetHp_() <= 0)
+	{
+		SceneManager::GetInstance().SetAliveTimeP2(aliveTimeP2_);
+	}
+
+	InputManager& ins = InputManager::GetInstance();
+	if (ins.IsTrgDown(KEY_INPUT_SPACE))
+	{
+		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
+	}
+
 }
 
 void GameScene::Draw(void)
@@ -73,7 +91,7 @@ void GameScene::Draw(void)
 	{
 		// プレイヤー描画
 		player_[i]->Draw();
-
+		player_[i]->DrawHP(i);
 	}
 }
 
@@ -85,5 +103,72 @@ void GameScene::Release(void)
 		player_[i]->Release();
 		delete player_[i];
 	}
+
+}
+
+void GameScene::GimmickCollision(void)
+{
+
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		for (auto bullet : bulletGimmick_->GetBulletData())
+		{
+			if (IsCollisionRectCenter(player_[i]->GetPos(), { player_[i]->SIZE_X,player_[i]->SIZE_Y },
+				bullet.pos, { bulletGimmick_->IMAGE_X_SIZE,bulletGimmick_->IMAGE_Y_SIZE }))
+			{
+				player_[i]->Damage(1);
+			}
+		}
+	}
+}
+
+bool GameScene::IsCollisionRect(Vector2 stPos1, Vector2 edPos1, Vector2 stPos2, Vector2 edPos2)
+{
+
+	// 矩形同士の衝突判定
+	// 矩形１の左よりも、矩形２の右が大きい
+	// 矩形２の左よりも、矩形１の右が大きい
+	if (stPos1.x < edPos2.x
+		&& stPos2.x < edPos1.x
+		&& stPos1.y < edPos2.y
+		&& stPos2.y < edPos1.y)
+	{
+		return true;
+	}
+	return false;
+
+}
+
+bool GameScene::IsCollisionRectCenter(Vector2 centerPos1, Vector2 size1, Vector2 centerPos2, Vector2 size2)
+{
+
+	// 矩形1(左上座標、右上座標)
+	Vector2 stPos1 = centerPos1;
+	Vector2 edPos1 = centerPos1;
+	Vector2 hSize1 = { size1.x / 2, size1.y / 2 };
+
+	stPos1.x -= hSize1.x;
+	stPos1.y -= hSize1.y;
+	edPos1.x += hSize1.x;
+	edPos1.y += hSize1.y;
+
+	// 矩形２(左上座標、右上座標)
+	Vector2 stPos2 = centerPos2;
+	Vector2 edPos2 = centerPos2;
+	Vector2 hSize2 = { size2.x / 2, size2.y / 2 };
+
+	stPos2.x -= hSize2.x;
+	stPos2.y -= hSize2.y;
+	edPos2.x += hSize2.x;
+	edPos2.y += hSize2.y;
+
+	// 矩形同士の衝突判定
+	// 矩形１の左よりも、矩形２の右が大きい
+	// 矩形２の左よりも、矩形１の右が大きい
+	if (IsCollisionRect(stPos1, edPos1, stPos2, edPos2))
+	{
+		return true;
+	}
+	return false;
 
 }

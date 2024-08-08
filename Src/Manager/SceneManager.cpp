@@ -4,6 +4,7 @@
 #include "../Common/Fader.h"
 #include "../SceneBase/TitleScene.h"
 #include "../SceneBase/GameScene.h"
+#include "../SceneBase/GameOverScene.h"
 #include "SceneManager.h"
 
 SceneManager* SceneManager::instance_ = nullptr;
@@ -36,40 +37,8 @@ void SceneManager::Init(void)
 	// デルタタイム
 	preTime_ = std::chrono::system_clock::now();
 
-	// 3D用の設定
-	Init3D();
-
 	// 初期シーンの設定
 	DoChangeScene(SCENE_ID::TITLE);
-
-}
-
-void SceneManager::Init3D(void)
-{
-
-	// 背景色設定
-	SetBackgroundColor(255, 255, 0);
-
-	// Zバッファを有効にする
-	SetUseZBuffer3D(true);
-
-	// Zバッファへの書き込みを有効にする
-	SetWriteZBuffer3D(true);
-
-	// バックカリングを有効にする
-	SetUseBackCulling(true);
-
-	// ライトの設定
-	SetUseLighting(true);
-
-	// ライトの設定
-	ChangeLightTypeDir({ 0.3f, -0.7f, 0.8f });
-
-
-	// フォグ設定
-	SetFogEnable(true);
-	SetFogColor(5, 5, 5);
-	SetFogStartEnd(10000.0f, 20000.0f);
 
 }
 
@@ -175,6 +144,16 @@ Camera* SceneManager::GetCamera(void) const
 	return camera_;
 }
 
+void SceneManager::SetAliveTimeP1(float aliveTimeP1)
+{
+	aliveTimeP1_ = aliveTimeP1;
+}
+
+void SceneManager::SetAliveTimeP2(float aliveTimeP2)
+{
+	aliveTimeP2_ = aliveTimeP2;
+}
+
 SceneManager::SceneManager(void)
 {
 
@@ -218,6 +197,9 @@ void SceneManager::DoChangeScene(SCENE_ID sceneId)
 		break;
 	case SCENE_ID::GAME:
 		scene_ = new GameScene();
+		break;
+	case SCENE_ID::GAMEOVER:
+		scene_ = new GameOverScene();
 		break;
 	}
 
