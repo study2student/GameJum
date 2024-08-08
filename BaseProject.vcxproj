@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Common\Fader.cpp" />
     <ClCompile Include="Src\Common\Vector2.cpp" />
     <ClCompile Include="Src\Common\Vector2F.cpp" />
     <ClCompile Include="Src\Enemy.cpp" />
@@ -26,11 +27,15 @@
     <ClCompile Include="Src\BulletGimmick.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Manager\InputManager.cpp" />
+    <ClCompile Include="Src\Manager\SceneManager.cpp" />
+    <ClCompile Include="Src\Player\Player.cpp" />
     <ClCompile Include="Src\SceneBase\GameScene.cpp" />
     <ClCompile Include="Src\SceneBase\SceneBase.cpp" />
+    <ClCompile Include="Src\SceneBase\TitleScene.cpp" />
     <ClCompile Include="Src\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Common\Fader.h" />
     <ClInclude Include="Src\Common\Vector2.h" />
     <ClInclude Include="Src\Common\Vector2F.h" />
     <ClInclude Include="Src\Enemy.h" />
@@ -38,9 +43,12 @@
     <ClInclude Include="Src\BulletGimmick.h" />
     <ClInclude Include="Src\main.h" />
     <ClInclude Include="Src\Manager\InputManager.h" />
+    <ClInclude Include="Src\Manager\SceneManager.h" />
+    <ClInclude Include="Src\Player\Player.h" />
     <ClInclude Include="Src\SceneBase\GameScene.h" />
     <ClInclude Include="Src\SceneBase\SceneBase.h" />
     <ClInclude Include="Src\Stage.h" />
+    <ClInclude Include="Src\SceneBase\TitleScene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

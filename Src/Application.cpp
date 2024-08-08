@@ -1,5 +1,7 @@
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
+#include "Manager/InputManager.h"
+#include "Manager/SceneManager.h"
 #include "Application.h"
 
 Application* Application::instance_ = nullptr;
@@ -46,15 +48,24 @@ void Application::Init(void)
 
 	// キー制御初期化
 	SetUseDirectInputFlag(true);
+	InputManager::CreateInstance();
 
+	// シーン管理初期化
+	SceneManager::CreateInstance();
 }
 
 void Application::Run(void)
 {
+	auto& inputManager = InputManager::GetInstance();
+	auto& sceneManager = SceneManager::GetInstance();
 
 	// ゲームループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
+		inputManager.Update();
+		sceneManager.Update();
+
+		sceneManager.Draw();
 
 		ScreenFlip();
 
@@ -64,6 +75,8 @@ void Application::Run(void)
 
 void Application::Destroy(void)
 {
+	InputManager::GetInstance().Destroy();
+	SceneManager::GetInstance().Destroy();
 
 	// Effekseerを終了する。
 	Effkseer_End();
