@@ -9,6 +9,8 @@ class Stage;
 class GameScene : public SceneBase
 {
 public:
+	static constexpr int BG_SIZE = 1047;
+
 	static constexpr int GAME_PLAYER_NUM = 2;
 
 	// コンストラクタ
@@ -56,5 +58,10 @@ private:
 	//ステージ
 	Stage* stage_;
 
+	// 背景関連
+	int bgImage;			// グラフィックハンドル
+	int bgPosX1;			// 1枚目の背景
+	int bgPosX2;			// 2枚目の背景
+	int bgSizeX;			// 背景の縦サイズ
 };
 

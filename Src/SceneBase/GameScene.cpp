@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "../Manager/SceneManager.h"
 #include "../Manager/InputManager.h"
+#include "../Application.h"
 #include "../Player/Player.h"
 #include "../Enemy.h"
 #include "GameScene.h"
@@ -63,11 +64,27 @@ void GameScene::Init(void)
 	};
 	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2, padP2, InputManager::JOYPAD_NO::PAD2);
 
+
+	// îwåiâÊëú
+	bgImage = LoadGraph("Data/Image/UI/sky.jpg");
+	bgPosX1 = 1;
+	bgPosX2 = BG_SIZE;
 }
 
 
 void GameScene::Update(void)
 {
+	// îwåiÉXÉNÉçÅ[Éã
+	bgPosX1 -= 5;
+	bgPosX2 -= 5;
+	if (bgPosX1 < -BG_SIZE)
+	{
+		bgPosX1 = bgPosX2 + 1200;
+	}
+	if (bgPosX2 < -BG_SIZE)
+	{
+		bgPosX2 = bgPosX1 + 1200;
+	}
 
 	enemy_->Update();
 
@@ -108,6 +125,9 @@ void GameScene::Update(void)
 
 void GameScene::Draw(void)
 {
+	DrawRotaGraph(bgPosX1, Application::SCREEN_SIZE_Y / 2, 1.8,0.0,bgImage, true);// îwåiÇÃï`âÊ
+	DrawRotaGraph(bgPosX2, Application::SCREEN_SIZE_Y / 2, 1.8, 0.0, bgImage, true);// îwåiÇÃï`âÊ
+
 	stage_->Draw();
 	enemy_->Draw();
 	DrawFormatString(100, 100, 0xff0000, "Game");
@@ -124,6 +144,8 @@ void GameScene::Draw(void)
 
 void GameScene::Release(void)
 {
+	DeleteGraph(bgImage);
+
 	//ÉXÉeÅ[ÉWÇÃâï˙
 	stage_->Release();
 

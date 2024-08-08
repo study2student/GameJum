@@ -457,7 +457,7 @@ void Player::ProcessJump(void)
 		isJump_ = true;
 		isPutJumpKey_ = true;
 	}
-	if (padConfig_.JUMP && !isJump_)
+	if (static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_A) && !isJump_)
 	{
 		isJump_ = true;
 		isPutJumpKey_ = true;
