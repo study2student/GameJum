@@ -74,9 +74,10 @@ void Enemy::Update(void)
 {
 	cntAnim_++;
 
-	Debug();
-
+	// 移動処理
 	Move();
+
+	// ランダムで状態を切り替え
 	RandState();
 
 	//switch (state_)
@@ -464,31 +465,8 @@ void Enemy::DrawDebug(void)
 
 	Vector2 pos = pos.ToVector2F();
 
-	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+	DrawBox(pos_.x - SIZE_X - 20, pos_.y - SIZE_Y - 20, pos_.x + SIZE_X + 20, pos_.y + SIZE_Y + 20, 0xff0000, false);
 
-	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
-
-	//DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
-
-	// オレンジ
-	int color = 0xff0000;
-
-	// デバッグ用：足元衝突判定
-	Vector2 footPos = pos;
-	footPos.y += 12;
-
-	// 足元：中央
-	DrawBox(footPos.x - 3, footPos.y - 3, footPos.x + 3, footPos.y + 3, color, true);
-
-
-	DrawBox(footPos.x - 3 - 16, footPos.y - 3, footPos.x + 3 - 16, footPos.y + 3, color, true);
-
-	// デバッグ用：頭の衝突判定
-	Vector2 headPos = pos;
-	headPos.y += (8 - 24);
-
-	// 頭：中央
-	DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
 }
 
 // ランダムに状態が切り替わる
