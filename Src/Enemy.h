@@ -10,6 +10,7 @@ public:
 	// IDLE
 	static constexpr int IDLE_ANIM_NUM = 4;
 
+	// RUN
 	static constexpr int RUN_ANIM_NUM = 7;
 
 private:
