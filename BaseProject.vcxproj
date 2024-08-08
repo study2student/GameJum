@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Bullet.cpp" />
     <ClCompile Include="Src\Common\Fader.cpp" />
     <ClCompile Include="Src\Common\Vector2.cpp" />
     <ClCompile Include="Src\Common\Vector2F.cpp" />
@@ -37,6 +38,7 @@
     <ClCompile Include="Src\Utility\AsoUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Bullet.h" />
     <ClInclude Include="Src\Common\Fader.h" />
     <ClInclude Include="Src\Common\Vector2.h" />
     <ClInclude Include="Src\Common\Vector2F.h" />

@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "Application.h"
 #include "BulletGimmick.h"
+#include "Bullet.h"
 
 BulletGimmick::BulletGimmick(void)
 {
@@ -12,69 +13,66 @@ BulletGimmick::~BulletGimmick(void)
 
 void BulletGimmick::Init(void)
 {
-
-	// íeÇÃì«Ç›çûÇ›
-	LoadDivGraph("Data/Image/Gimmick/Bullet/Bullet.png",
-		IMAGE_NUM,
-		IMAGE_X_NUM, IMAGE_Y_NUM,
-		IMAGE_X_SIZE, IMAGE_Y_SIZE,
-		&image_[0][0]);
-
-	animCnt_ = 0;
-
-	BulletData data;
 	for (int i = 0; i < 3; i++)
 	{
-		data.pos = { 0.0f,(float)Application::SCREEN_SIZE_Y / 2 };
-		bulletData_.push_back(data);
+		Bullet* shot = GetAvailableShot();
 	}
 }
 
 void BulletGimmick::Update(void)
 {
-
-	for (auto& bullet : bulletData_)
+	for (auto& bullet : bullet_)
 	{
-		if (bullet.isAlive)
+		if (bullet->GetBulletData().isAlive)
 		{
-			bullet.pos.x -= 10.0f;
+			bullet->Update();
 		}
 
-		if (bullet.pos.x <= -500.0f)
+		if (!bullet->GetBulletData().isAlive)
 		{
-			bullet.pos.x = Application::SCREEN_SIZE_X;
-			bullet.isAlive = false;
-		}
+			Bullet* shot = GetAvailableShot();
 
-		int rand = GetRand(100);
-
-		if (rand == 0 && !bullet.isAlive)
-		{
-			bullet.pos.y = GetRand(Application::SCREEN_SIZE_Y);
-			bullet.isAlive = true;
+			shot->CreateShot();
 		}
 	}
-
 }
 
 void BulletGimmick::Draw(void)
 {
-
-	animCnt_++;
-
-	for (auto& bullet : bulletData_)
+	for (auto& bullet : bullet_)
 	{
-		DrawRotaGraph(bullet.pos.x + IMAGE_X_SIZE * 3, bullet.pos.y, 3.0f, 0.0f, image_[(animCnt_ / 10) % IMAGE_NUM - 1][1], true);
+		bullet->Draw();
 	}
-
 }
 
 void BulletGimmick::Release(void)
 {
-	DeleteGraph(image_[IMAGE_X_NUM][IMAGE_Y_NUM]);
+	for (auto& bullet : bullet_)
+	{
+		bullet->Release();
+	}
 }
 
-std::vector<BulletGimmick::BulletData> BulletGimmick::GetBulletData(void)
+std::vector<Bullet*> BulletGimmick::GetBulletData(void)
 {
-	return bulletData_;
+	return bullet_;
+}
+
+Bullet* BulletGimmick::GetAvailableShot(void)
+{
+	// çƒóòópíTçı
+	for (auto& bullet : bullet_)
+	{
+		if (!bullet->GetBulletData().isAlive)
+		{
+			return bullet;
+		}
+	}
+
+	// Ç»Ç©Ç¡ÇΩèÍçáçÏê¨
+	Bullet* newBullet = new Bullet();
+
+	// íeÇÃä«óùîzóÒÇ…í«â¡
+	bullet_.push_back(newBullet);
+	return newBullet;
 }

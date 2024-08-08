@@ -6,6 +6,7 @@
 #include "GameScene.h"
 #include "../Player/Player.h"
 #include "../BulletGimmick.h"
+#include "../Bullet.h"
 
 GameScene::GameScene(void)
 {
@@ -71,6 +72,9 @@ void GameScene::Update(void)
 		SceneManager::GetInstance().SetAliveTimeP2(aliveTimeP2_);
 	}
 
+	// îÚÇÒÇ≈Ç≠ÇÈíeÇ∆ÇÃè’ìÀîªíË
+	GimmickCollision();
+
 	InputManager& ins = InputManager::GetInstance();
 	if (ins.IsTrgDown(KEY_INPUT_SPACE))
 	{
@@ -111,10 +115,11 @@ void GameScene::GimmickCollision(void)
 
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
-		for (auto bullet : bulletGimmick_->GetBulletData())
+		for (auto& bullet : bulletGimmick_->GetBulletData())
 		{
+			auto data = bullet->GetBulletData();
 			if (IsCollisionRectCenter(player_[i]->GetPos(), { player_[i]->SIZE_X,player_[i]->SIZE_Y },
-				bullet.pos, { bulletGimmick_->IMAGE_X_SIZE,bulletGimmick_->IMAGE_Y_SIZE }))
+				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE }))
 			{
 				player_[i]->Damage(1);
 			}
