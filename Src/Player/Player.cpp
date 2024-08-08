@@ -17,7 +17,7 @@ Player::~Player(void)
 {
 }
 
-void Player::Init(GameScene* scene_, TYPE type, KEY_CONFIG config)
+void Player::Init(GameScene* scene_, TYPE type, KEY_CONFIG config, PAD_CONFIG padConfig, InputManager::JOYPAD_NO padID)
 {
 	gameScene_ = scene_;
 
@@ -26,6 +26,11 @@ void Player::Init(GameScene* scene_, TYPE type, KEY_CONFIG config)
 
 	// キー設定
 	keyConfig_ = config;
+
+	// パッド設定
+	padConfig_ = padConfig;
+
+	padID_ = padID;
 
 	// 画像の読み込み
 	LoadImages();
@@ -238,7 +243,7 @@ void Player::LoadImages(void)
 
 	// ジャンプ
 	anim = static_cast<int>(ANIM_STATE::JUMP);
-	images_[anim][atkNone][0] = LoadGraph((basePath + "Player/Jump.png").c_str());
+	//images_[anim][atkNone][0] = LoadGraph((basePath + "Player/Jump.png").c_str());
 	LoadDivGraph(
 		(basePath + "Player/Jump.png").c_str(),
 		MAX_NUM_ANIM,
@@ -246,7 +251,6 @@ void Player::LoadImages(void)
 		SIZE_X, SIZE_Y,
 		&images_[anim][atkNone][0],
 		false);
-	images_[anim][atkShot][0] = LoadGraph((basePath + "Player/JumpShot.png").c_str());
 
 	// 被ダメージ
 	anim = static_cast<int>(ANIM_STATE::DAMAGED);
@@ -262,14 +266,6 @@ void Player::LoadImages(void)
 		MAX_NUM_ANIM, 1,
 		SIZE_X, SIZE_Y,
 		&images_[anim][atkNone][0],
-		false);
-
-	LoadDivGraph(
-		(basePath + "Player/RunShot.png").c_str(),
-		MAX_NUM_ANIM,
-		MAX_NUM_ANIM, 1,
-		SIZE_X, SIZE_Y,
-		&images_[anim][atkShot][0],
 		false);
 
 	// 弾画像
@@ -353,8 +349,10 @@ void Player::DrawHP(int playerNum)
 
 void Player::ProcessMove(void)
 {
+	auto& ins = InputManager::GetInstance();
+
 	// 左方向
-	if (InputManager::GetInstance().IsNew(keyConfig_.LEFT))
+	if (ins.IsNew(keyConfig_.LEFT))
 	{
 		animState_ = ANIM_STATE::RUN;
 
@@ -363,8 +361,20 @@ void Player::ProcessMove(void)
 		Accele(-MOVE_ACC);
 	}
 
+	if (ins.InputManager::GetJPadInputState(padID_).AKeyLX) {
+		animState_ = ANIM_STATE::RUN;
+		dir_ = AsoUtility::DIR::LEFT;
+		Accele(-MOVE_ACC);
+	}
+	
+	//if (p2 & padConfig_.LEFT) {
+	//	animState_ = ANIM_STATE::RUN;
+	//	dir_ = AsoUtility::DIR::LEFT;
+	//	Accele(-MOVE_ACC);
+	//}
+
 	// 右方向
-	if (InputManager::GetInstance().IsNew(keyConfig_.RIGHT))
+	if (ins.IsNew(keyConfig_.RIGHT))
 	{
 		animState_ = ANIM_STATE::RUN;
 
@@ -373,6 +383,14 @@ void Player::ProcessMove(void)
 		Accele(MOVE_ACC);
 	}
 
+	if (ins.InputManager::GetJPadInputState(padID_).AKeyRX)
+	{
+		animState_ = ANIM_STATE::RUN;
+
+		dir_ = AsoUtility::DIR::RIGHT;
+		// 加速
+		Accele(MOVE_ACC);
+	}
 }
 
 void Player::Move(void)
@@ -439,7 +457,11 @@ void Player::ProcessJump(void)
 		isJump_ = true;
 		isPutJumpKey_ = true;
 	}
-
+	if (padConfig_.JUMP && !isJump_)
+	{
+		isJump_ = true;
+		isPutJumpKey_ = true;
+	}
 	// 入力時間に応じてジャンプ量を変更する
 	if (ins.IsNew(keyConfig_.JUMP)
 		&& cntJumpInput_ < INPUT_JUMP_FRAME
@@ -474,18 +496,18 @@ void Player::Jump(void)
 {
 	pos_.y += jumpPow_;
 
-	//// 仮の接地（衝突）判定
-	//if (pos_.y > 380.0f)
-	//{
-	//	pos_.y = 380.0f;
+	// 仮の接地（衝突）判定
+	if (pos_.y > 380.0f)
+	{
+		pos_.y = 380.0f;
 
-	//	// 地面についたのでジャンプをリセット
-	//	isJump_ = false;
-	//	SetJumpPow(0.0f);
+		// 地面についたのでジャンプをリセット
+		isJump_ = false;
+		SetJumpPow(0.0f);
 
-	//	// 設置したら
-	//	cntJumpInput_ = 0;
-	//}
+		// 設置したら
+		cntJumpInput_ = 0;
+	}
 }
 
 void Player::SetJumpPow(float pow)

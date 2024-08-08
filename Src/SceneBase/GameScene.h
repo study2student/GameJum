@@ -4,6 +4,7 @@ class Enemy;
 class Vector2;
 class Player;
 class BulletGimmick;
+class Stage;
 
 class GameScene : public SceneBase
 {
@@ -51,6 +52,9 @@ private:
 
 	// 衝突判定
 	bool IsCollisionRectCenter(Vector2 centerPos1, Vector2 size1, Vector2 centerPos2, Vector2 size2);
+
+	//ステージ
+	Stage* stage_;
 
 };
 
