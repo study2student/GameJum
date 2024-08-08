@@ -16,9 +16,6 @@ GameScene::~GameScene(void)
 
 void GameScene::Init(void)
 {
-<<<<<<< Updated upstream
-	player_ = std::make_shared<Player>();
-	player_->Init();
 	// 敵の初期化
 	if (enemy_ == nullptr)
 	{
@@ -28,7 +25,7 @@ void GameScene::Init(void)
 
 	bulletGimmick_ = new BulletGimmick();
 	bulletGimmick_->Init();
-=======
+
 	//player_ = new Player();
 	//player_->Init();
 
@@ -46,33 +43,30 @@ void GameScene::Init(void)
 		KEY_INPUT_D, KEY_INPUT_LCONTROL, KEY_INPUT_LSHIFT
 	};
 	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2);
->>>>>>> Stashed changes
 }
 
 void GameScene::Update(void)
 {
-<<<<<<< Updated upstream
+
 	enemy_->Update();
-	player_->Update();
+
 	bulletGimmick_->Update();
-=======
+
 	// プレイヤー達の更新
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
 		// プレイヤー更新
 		player_[i]->Update();
 	}
->>>>>>> Stashed changes
+
 }
 
 void GameScene::Draw(void)
 {
 	enemy_->Draw();
 	DrawFormatString(100, 100, 0xff0000, "Game");
-<<<<<<< Updated upstream
-	player_->Draw();
 	bulletGimmick_->Draw();
-=======
+
 	// プレイヤー達の描画
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
@@ -90,5 +84,5 @@ void GameScene::Release(void)
 		player_[i]->Release();
 		delete player_[i];
 	}
->>>>>>> Stashed changes
+
 }
