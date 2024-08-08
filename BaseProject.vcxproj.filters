@@ -64,9 +64,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
 <<<<<<< HEAD
-    <ClCompile Include="Src\Stage.cpp">
-=======
-<<<<<<< HEAD
     <ClCompile Include="Src\Enemy.cpp">
 =======
 <<<<<<< HEAD
@@ -78,7 +75,6 @@
     <ClCompile Include="Src\SceneBase\GameScene.cpp">
 >>>>>>> abc49a0433bfe0cd9a892062b8f6fdc95a388d4d
 >>>>>>> c26b1b578f9a09947283a349e63aa170886fdf78
->>>>>>> 4f0cbaf958be2e6f339a69fdd37d7d7b51505632
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,9 +85,6 @@
     <ClInclude Include="Src\main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="Src\Stage.h">
-=======
 <<<<<<< HEAD
     <ClInclude Include="Src\Enemy.h">
 =======
@@ -104,7 +97,6 @@
     <ClInclude Include="Src\SceneBase\GameScene.h">
 >>>>>>> abc49a0433bfe0cd9a892062b8f6fdc95a388d4d
 >>>>>>> c26b1b578f9a09947283a349e63aa170886fdf78
->>>>>>> 4f0cbaf958be2e6f339a69fdd37d7d7b51505632
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
