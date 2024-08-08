@@ -71,6 +71,7 @@ void Enemy::Init(void)
 	stateRand_ = false;
 
 	bulletPos_ = { 0,0 };
+	isBullet_ = false;
 }
 
 void Enemy::Update(void)
@@ -127,14 +128,19 @@ void Enemy::Update(void)
 	//	break;
 	//}
 
-	Shot();
+	if (isBullet_ == true)
+	{
+		Shot();
+	}
+
 
 	//çUåÇ(ñ¢é¿ëï)
 	atkState_ = ATK_STATE::NONE;		//äÓñ{ÇÕçUåÇÇµÇƒÇ¢Ç»Ç¢
-	if (CheckHitKey(KEY_INPUT_N))
+	if (isBullet_ == false
+		&& CheckHitKey(KEY_INPUT_N))
 	{
 		atkState_ = ATK_STATE::SHOT;
-
+		isBullet_ = true;
 	}
 }
 
@@ -142,7 +148,7 @@ void Enemy::Draw(void)
 {
 	EnemyDraw();
 
-	if (atkState_ == ATK_STATE::SHOT)
+	if (isBullet_ == true)
 	{
 		BulletDraw();
 	}
@@ -262,6 +268,7 @@ void Enemy::Shot(void)
 		bulletPos_ = { 0,0 };
 		time = 0;
 		atkState_ = ATK_STATE::NONE;
+		isBullet_ = false;
 		return;
 	}
 }
