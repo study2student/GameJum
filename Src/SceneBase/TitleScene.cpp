@@ -14,6 +14,7 @@ TitleScene::~TitleScene(void)
 
 void TitleScene::Init(void)
 {
+	titleImage_ = LoadGraph("Data/Image/UI/Title.png");
 }
 
 void TitleScene::Update(void)
@@ -28,6 +29,8 @@ void TitleScene::Update(void)
 void TitleScene::Draw(void)
 {
 	DrawFormatString(100, 100, 0xff0000, "Title");
+
+	DrawGraph(0, 0, titleImage_, true);
 }
 
 void TitleScene::Release(void)

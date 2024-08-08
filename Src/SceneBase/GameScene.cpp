@@ -125,6 +125,7 @@ void GameScene::GimmickCollision(void)
 			}
 		}
 	}
+
 }
 
 bool GameScene::IsCollisionRect(Vector2 stPos1, Vector2 edPos1, Vector2 stPos2, Vector2 edPos2)

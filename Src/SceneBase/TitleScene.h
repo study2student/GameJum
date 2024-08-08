@@ -18,5 +18,8 @@ public:
 
 private:
 
+	// ƒ^ƒCƒgƒ‹”wŒi
+	int titleImage_;
+
 };
 
