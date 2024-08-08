@@ -1,8 +1,9 @@
-
+#include "Vector2F.h"
+#include "../Utility/AsoUtility.h"
 #include "Vector2.h"
 
-// コンストラクタ
-Vector2::Vector2(void)
+// デフォルトコンストラクタ
+Vector2::Vector2()
 {
 	x = 0;
 	y = 0;
@@ -15,22 +16,17 @@ Vector2::Vector2(int vX, int vY)
 	y = vY;
 }
 
-Vector2::Vector2(float vX, float vY)
+Vector2::Vector2(Vector2F value)
 {
+	x = AsoUtility::Round(value.x);
+	y = AsoUtility::Round(value.y);
 }
 
-Vector2::Vector2(const Vector2F& v)
+Vector2F Vector2::ToVector2F(void)
 {
-	x = static_cast<int>(v.x);
-	y = static_cast<int>(v.y);
-}
-
-//Vector2::Vector2(const Vector2f& v)
-//{
-//
-//}
-
-Vector2::~Vector2(void)
-{
+	Vector2F ret;
+	ret.x = static_cast<float>(x);
+	ret.y = static_cast<float>(y);
+	return ret;
 }
 
