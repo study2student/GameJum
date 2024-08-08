@@ -22,18 +22,37 @@ void BulletGimmick::Init(void)
 
 	animCnt_ = 0;
 
-	pos_ = { 0.0f,(float)Application::SCREEN_SIZE_Y / 2 };
-
+	BulletData data;
+	for (int i = 0; i < 3; i++)
+	{
+		data.pos = { 0.0f,(float)Application::SCREEN_SIZE_Y / 2 };
+		bulletData_.push_back(data);
+	}
 }
 
 void BulletGimmick::Update(void)
 {
 
-	pos_.x -= 1.0f;
-
-	if (pos_.x <= 0.0f)
+	for (auto& bullet : bulletData_)
 	{
-		pos_.x = Application::SCREEN_SIZE_X;
+		if (bullet.isAlive)
+		{
+			bullet.pos.x -= 10.0f;
+		}
+
+		if (bullet.pos.x <= 0.0f)
+		{
+			bullet.pos.x = Application::SCREEN_SIZE_X;
+			bullet.isAlive = false;
+		}
+
+		int rand = GetRand(100);
+
+		if (rand == 0 && !bullet.isAlive)
+		{
+			bullet.pos.y = GetRand(Application::SCREEN_SIZE_Y);
+			bullet.isAlive = true;
+		}
 	}
 
 }
@@ -43,10 +62,14 @@ void BulletGimmick::Draw(void)
 
 	animCnt_++;
 
-	DrawGraph(pos_.x, pos_.y, image_[(animCnt_ / 10) % IMAGE_NUM - 1][1], true);
+	for (auto& bullet : bulletData_)
+	{
+		DrawGraph(bullet.pos.x, bullet.pos.y, image_[(animCnt_ / 10) % IMAGE_NUM - 1][1], true);
+	}
 
 }
 
 void BulletGimmick::Release(void)
 {
+	DeleteGraph(image_[IMAGE_X_NUM][IMAGE_Y_NUM]);
 }

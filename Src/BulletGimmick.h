@@ -1,10 +1,22 @@
 #pragma once
+#include <vector>
 #include "Common/Vector2F.h"
 
 class BulletGimmick
 {
 
 public:
+
+	struct BulletData
+	{
+
+		// 座標
+		Vector2F pos;
+
+		// 生存フラグ
+		bool isAlive;
+
+	};
 
 	static constexpr int IMAGE_NUM = 4;
 
@@ -30,13 +42,13 @@ public:
 
 private:
 
-	// 座標
-	Vector2F pos_;
-
-	// 画像
-	int image_[IMAGE_X_NUM][IMAGE_Y_NUM];
+	// 弾のデータ
+	std::vector<BulletData> bulletData_;
 
 	// アニメーションカウンタ
 	int animCnt_;
+
+	// 画像
+	int image_[IMAGE_X_NUM][IMAGE_Y_NUM];
 
 };
