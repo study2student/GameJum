@@ -21,5 +21,14 @@ private:
 	// タイトル背景
 	int titleImage_;
 
+	// ゲームスタート
+	int gameStartImage_;
+
+	// Bボタン
+	int bBottonImage_[4][1];
+
+	// アニメーションカウンタ
+	int animCnt_;
+
 };
 
