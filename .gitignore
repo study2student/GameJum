@@ -2,6 +2,11 @@
 # この .gitignore ファイルは Microsoft(R) Visual Studio によって自動的に作成されました。
 ################################################################################
 
+<<<<<<< HEAD
 /.vs
 /x64/Debug
 /Log.txt
+=======
+/.vs/BaseProject
+/.vs/BaseProject
+>>>>>>> c26b1b578f9a09947283a349e63aa170886fdf78
