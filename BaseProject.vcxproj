@@ -33,6 +33,7 @@
     <ClCompile Include="Src\SceneBase\SceneBase.cpp" />
     <ClCompile Include="Src\SceneBase\TitleScene.cpp" />
     <ClCompile Include="Src\Stage.cpp" />
+    <ClCompile Include="Src\Utility\AsoUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Common\Fader.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="Src\SceneBase\SceneBase.h" />
     <ClInclude Include="Src\Stage.h" />
     <ClInclude Include="Src\SceneBase\TitleScene.h" />
+    <ClInclude Include="Src\Utility\AsoUtility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
