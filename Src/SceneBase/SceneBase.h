@@ -21,6 +21,8 @@ public:
 	// •`‰æˆ—
 	virtual void Draw(void) = 0;
 
+	// ‰ğ•úˆ—
+	virtual void Release(void);
 protected:
 
 };

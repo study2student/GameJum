@@ -1,5 +1,6 @@
 #pragma once
-#include "Vector2f.h"
+
+class Vector2F;
 
 class Vector2
 {
@@ -8,16 +9,16 @@ public:
 	int x;
 	int y;
 
-	// コンストラクタ
+	// デフォルトコンストラクタ
 	Vector2(void);
 
 	// コンストラクタ
 	Vector2(int vX, int vY);
-	Vector2(float vX, float vY);
-	Vector2(const Vector2F& v);
 
-	// デストラクタ
-	~Vector2(void);
+	// コンストラクタ
+	Vector2(Vector2F value);
 
+	// Vector2F へ変換
+	Vector2F ToVector2F(void);
 };
 
