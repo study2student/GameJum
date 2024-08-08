@@ -21,12 +21,6 @@ GameScene::~GameScene(void)
 
 void GameScene::Init(void)
 {
-	// 敵の初期化
-	if (enemy_ == nullptr)
-	{
-		enemy_ = new Enemy();
-	}
-	enemy_->Init();
 
 	bulletGimmick_ = new BulletGimmick();
 	bulletGimmick_->Init();
@@ -34,12 +28,23 @@ void GameScene::Init(void)
 	//player_ = new Player();
 	//player_->Init();
 
+	// 敵の初期化
+	if (enemy_ == nullptr)
+	{
+		enemy_ = new Enemy();
+	}
+	enemy_->Init(this);
+
 	player_[0] = new Player();
 	Player::KEY_CONFIG keyP1 = {
 		KEY_INPUT_UP, KEY_INPUT_DOWN, KEY_INPUT_LEFT,
 		KEY_INPUT_RIGHT, KEY_INPUT_N, KEY_INPUT_M
 	};
-	player_[0]->Init(this, Player::TYPE::PLAYER_1, keyP1);
+	Player::PAD_CONFIG padP1 = {
+	PAD_INPUT_UP, PAD_INPUT_DOWN, PAD_INPUT_LEFT,
+	PAD_INPUT_RIGHT, PAD_INPUT_5, PAD_INPUT_3
+	};
+	player_[0]->Init(this, Player::TYPE::PLAYER_1, keyP1, padP1, InputManager::JOYPAD_NO::PAD1);
 
 	// プレイヤー2
 	player_[1] = new Player();
@@ -47,12 +52,20 @@ void GameScene::Init(void)
 		KEY_INPUT_W, KEY_INPUT_S, KEY_INPUT_A,
 		KEY_INPUT_D, KEY_INPUT_LCONTROL, KEY_INPUT_LSHIFT
 	};
-	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2);
 
 	//ステージの読み込み
 	stage_ = new Stage();
 	stage_->Init();
+
+	Player::PAD_CONFIG padP2 = {
+	PAD_INPUT_UP, PAD_INPUT_DOWN, PAD_INPUT_6,
+	PAD_INPUT_A, PAD_INPUT_5, PAD_INPUT_A
+	};
+	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2, padP2, InputManager::JOYPAD_NO::PAD2);
+
 }
+}
+
 
 void GameScene::Update(void)
 {
@@ -82,6 +95,9 @@ void GameScene::Update(void)
 
 	// 飛んでくる弾との衝突判定
 	GimmickCollision();
+
+	EnemyCollision();
+	ShotCollision();
 
 	// ステージとの衝突判定
 	StageCollision();
@@ -137,6 +153,60 @@ void GameScene::GimmickCollision(void)
 			{
 				player_[i]->Damage(1);
 			}
+		}
+	}
+}
+
+void GameScene::EnemyCollision(void)
+{
+	// 敵の位置をVector2に
+	Vector2 enemyPos = enemy_->GetEnemyPos().ToVector2();
+	Vector2 eHitBox = { enemy_->HITBOX_X,enemy_->HITBOX_Y };
+
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		Vector2 playerPos = player_[i]->GetPos().ToVector2();
+		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+
+		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
+		{
+			player_[i]->Damage(1);
+		}
+	}
+}
+
+void GameScene::ShotCollision(void)
+{
+	// 敵の位置をVector2に
+	Vector2 enemyPos = enemy_->GetEnemyPos().ToVector2();
+	Vector2 eHitBox = { enemy_->BULETTBOX_X,enemy_->BULETTBOX_Y };
+
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		Vector2 playerPos = player_[i]->GetPos().ToVector2();
+		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+
+		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
+		{
+			enemy_->ShotActive();
+		}
+	}
+}
+
+void GameScene::BulletCollision(void)
+{
+	// 敵の位置をVector2に
+	Vector2 bulletPos = enemy_->GetEnemyPos().ToVector2();
+	Vector2 eHitBox = { enemy_->BULETTBOX_X,enemy_->BULETTBOX_Y };
+
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		Vector2 playerPos = player_[i]->GetPos().ToVector2();
+		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+
+		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
+		{
+			enemy_->ShotActive();
 		}
 	}
 }

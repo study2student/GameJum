@@ -43,6 +43,13 @@ private:
 	// ステージとの衝突判定
 	void StageCollision(void);
 
+	// 敵本体の当たり判定
+	void EnemyCollision(void);
+	// 近づいたら弾を発射する用の当たり判定
+	void ShotCollision(void);
+	// 弾の当たり判定
+	void BulletCollision(void);
+
 	// 衝突判定
 	bool IsCollisionRect(Vector2 stPos1, Vector2 edPos1, Vector2 stPos2, Vector2 edPos2);
 

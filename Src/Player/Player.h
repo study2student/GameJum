@@ -17,7 +17,7 @@ public:
 	static constexpr int SPEED_DEFAULT = 5;
 
 	// アニメーションスピード
-	static constexpr float ANIM_SPEED = 0.1f;
+	static constexpr float ANIM_SPEED = 0.3f;
 
 	// 移動速度の最大値
 	static constexpr float MAX_MOVE_SPEED = 3.5f;
@@ -95,22 +95,15 @@ public:
 		int JUMP;
 	};
 
-	enum class JoypadButton {
-		UP = PAD_INPUT_UP,
-		DOWN = PAD_INPUT_DOWN,
-		LEFT = PAD_INPUT_LEFT,
-		RIGHT = PAD_INPUT_RIGHT,
-		ACTION = PAD_INPUT_6
-	};
-
-	// プレイヤーごとの入力マッピング
-	struct PlayerInput {
-		int padId;
-		JoypadButton up;
-		JoypadButton down;
-		JoypadButton left;
-		JoypadButton right;
-		JoypadButton action;
+	// パッドコンフィグ
+	struct PAD_CONFIG
+	{
+		int UP;
+		int DOWN;
+		int LEFT;
+		int RIGHT;
+		int ATTAK;
+		int JUMP;
 	};
 
 	// コンストラクタ
@@ -119,7 +112,7 @@ public:
 	// デストラクタ
 	~Player(void);
 
-	void Init(GameScene* scene_, TYPE type, KEY_CONFIG config);
+	void Init(GameScene* scene_, TYPE type, KEY_CONFIG config, PAD_CONFIG padConfig, InputManager::JOYPAD_NO padID);
 	void Update(void);
 	void Draw(void);
 	void Release(void);
@@ -161,6 +154,9 @@ private:
 	// アニメーションカウンタ
 	float stepAnim_;
 
+	//パッド番号
+	InputManager::JOYPAD_NO padID_;
+
 	// プレイヤーの向き
 	AsoUtility::DIR dir_;
 
@@ -196,6 +192,9 @@ private:
 
 	// キー設定
 	KEY_CONFIG keyConfig_;
+
+	// パッド設定
+	PAD_CONFIG padConfig_;
 
 	// 弾画像
 	int imgShot_;
