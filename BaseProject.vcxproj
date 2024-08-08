@@ -28,7 +28,7 @@
     <ClCompile Include="Src\Manager\InputManager.cpp" />
     <ClCompile Include="Src\SceneBase\GameScene.cpp" />
     <ClCompile Include="Src\SceneBase\SceneBase.cpp" />
-    <ClCompile Include="Src\Stage.cpp" />
+    <ClCompile Include="Src\Stage\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Common\Vector2.h" />
@@ -40,7 +40,7 @@
     <ClInclude Include="Src\Manager\InputManager.h" />
     <ClInclude Include="Src\SceneBase\GameScene.h" />
     <ClInclude Include="Src\SceneBase\SceneBase.h" />
-    <ClInclude Include="Src\Stage.h" />
+    <ClInclude Include="Src\Stage\Stage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
