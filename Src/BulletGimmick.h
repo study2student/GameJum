@@ -1,4 +1,6 @@
 #pragma once
+#include "Common/Vector2F.h"
+
 class BulletGimmick
 {
 
@@ -17,5 +19,7 @@ public:
 	void Release(void);
 
 private:
+
+	Vector2F pos_;
 
 };
