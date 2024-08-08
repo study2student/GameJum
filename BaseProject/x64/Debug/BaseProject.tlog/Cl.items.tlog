@@ -1,0 +1,16 @@
+C:\Users\kakik\Desktop\GameJum\Src\Common\Fader.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\Fader.obj
+C:\Users\kakik\Desktop\GameJum\Src\Common\Vector2.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\Vector2.obj
+C:\Users\kakik\Desktop\GameJum\Src\Common\Vector2F.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\Vector2F.obj
+C:\Users\kakik\Desktop\GameJum\Src\Enemy.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\Enemy.obj
+C:\Users\kakik\Desktop\GameJum\Src\Application.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\Application.obj
+C:\Users\kakik\Desktop\GameJum\Src\BulletGimmick.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\BulletGimmick.obj
+C:\Users\kakik\Desktop\GameJum\Src\main.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\main.obj
+C:\Users\kakik\Desktop\GameJum\Src\Manager\InputManager.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\InputManager.obj
+C:\Users\kakik\Desktop\GameJum\Src\Manager\SceneManager.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\SceneManager.obj
+C:\Users\kakik\Desktop\GameJum\Src\Player\Player.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\Player.obj
+C:\Users\kakik\Desktop\GameJum\Src\SceneBase\GameScene.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\GameScene.obj
+C:\Users\kakik\Desktop\GameJum\Src\SceneBase\GameOverScene.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\GameOverScene.obj
+C:\Users\kakik\Desktop\GameJum\Src\SceneBase\SceneBase.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\SceneBase.obj
+C:\Users\kakik\Desktop\GameJum\Src\SceneBase\TitleScene.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\TitleScene.obj
+C:\Users\kakik\Desktop\GameJum\Src\Stage.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\Stage.obj
+C:\Users\kakik\Desktop\GameJum\Src\Utility\AsoUtility.cpp;C:\Users\kakik\Desktop\GameJum\BaseProject\x64\Debug\AsoUtility.obj
