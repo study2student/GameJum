@@ -138,9 +138,18 @@ void Player::Draw(void)
 	switch (animState_)
 	{
 	case ANIM_STATE::IDLE:
+	{
+		stepAnim_ += ANIM_SPEED;
+		int animIdxIdle = AsoUtility::Round(stepAnim_) % MAX_NUM_ANIM;
+		DrawPlayer(images_[animState][atkState][animIdxIdle]);
+	}
 	case ANIM_STATE::JUMP:
-		DrawPlayer(images_[animState][atkState][0]);
-		break;
+	{
+		stepAnim_ += ANIM_SPEED;
+		int animIdx = AsoUtility::Round(stepAnim_) % MAX_NUM_ANIM;
+		DrawPlayer(images_[animState][atkState][animIdx]);
+	}
+	break;
 	case ANIM_STATE::RUN:
 	{
 		stepAnim_ += ANIM_SPEED;
@@ -193,12 +202,27 @@ void Player::LoadImages(void)
 	// 待機モーション
 	anim = static_cast<int>(ANIM_STATE::IDLE);
 
-	images_[anim][atkNone][0] = LoadGraph((basePath + "Player/Idle.png").c_str());
+	//images_[anim][atkNone][0] = LoadGraph((basePath + "Player/Idle.png").c_str());
+	LoadDivGraph(
+		(basePath + "Player/Idle.png").c_str(),
+		MAX_NUM_ANIM,
+		MAX_NUM_ANIM, 1,
+		SIZE_X, SIZE_Y,
+		&images_[anim][atkNone][0],
+		false);
+
 	images_[anim][atkShot][0] = LoadGraph((basePath + "Player/IdleShot.png").c_str());
 
 	// ジャンプ
 	anim = static_cast<int>(ANIM_STATE::JUMP);
 	images_[anim][atkNone][0] = LoadGraph((basePath + "Player/Jump.png").c_str());
+	LoadDivGraph(
+		(basePath + "Player/Jump.png").c_str(),
+		MAX_NUM_ANIM,
+		MAX_NUM_ANIM, 1,
+		SIZE_X, SIZE_Y,
+		&images_[anim][atkNone][0],
+		false);
 	images_[anim][atkShot][0] = LoadGraph((basePath + "Player/JumpShot.png").c_str());
 
 	// 被ダメージ
