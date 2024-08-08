@@ -53,7 +53,11 @@ public:
 	static constexpr int STAGE_SIZE_Y = 4;
 
 	//穴(末尾から次の地面描画までの幅)
-	static constexpr int HOLE_SIZE_X_ = 10;
+	static constexpr int HOLE_SIZE_X_ = 20;
+#pragma endregion 
+
+#pragma region スクロール関連
+	static constexpr float SCROLL_SPEED = 1.5f;
 #pragma endregion 
 
 	Stage();

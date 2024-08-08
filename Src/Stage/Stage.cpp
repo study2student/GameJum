@@ -29,19 +29,29 @@ void Stage::Init()
 
 void Stage::Update()
 {
-	//if()
+	for (auto& ground : grounds_)
+	{
+		//スクロール処理
+		ground.pos_.x -= SCROLL_SPEED;
+
+		//地形の末尾が画面外に出たら三個目の初期位置に座標を戻す
+		if (ground.pos_.x < -(SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X)
+		{
+			ground.pos_.x = ((CREATE_MAX - 1) * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X);
+		}
+	}
 }
 
 void Stage::Draw()
 {
-	for (int i = 0; i < CREATE_MAX; i++)
+	for (auto& ground : grounds_)
 	{
 		for (int y = 0; y < row_; y++)
 		{
 			for (int x = 0; x < col_; x++)
 			{
-				DrawGraph(grounds_[i].pos_.x + SIZE_X * x,
-					grounds_[i].pos_.y + SIZE_Y * y,
+				DrawGraph(ground.pos_.x + SIZE_X * x,
+					ground.pos_.y + SIZE_Y * y,
 					imgStageChip_[stageChips_[y][x]],
 					true);
 			}
@@ -69,11 +79,6 @@ void Stage::Load()
 		SIZE_X,
 		SIZE_Y,
 		&(imgStageChip_[0]));
-
-	if (ret == -1)
-	{
-		return;
-	}
 }
 
 void Stage::Reset()
@@ -88,7 +93,7 @@ void Stage::Reset()
 	col_ = STAGE_SIZE_X_LONG;
 
 	Ground ground;
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < CREATE_MAX; i++)
 	{
 		//座標
 		ground.pos_ = {static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X),
