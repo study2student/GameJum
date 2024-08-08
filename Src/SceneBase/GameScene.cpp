@@ -19,12 +19,6 @@ GameScene::~GameScene(void)
 
 void GameScene::Init(void)
 {
-	// “G‚Ì‰Šú‰»
-	if (enemy_ == nullptr)
-	{
-		enemy_ = new Enemy();
-	}
-	enemy_->Init();
 
 	bulletGimmick_ = new BulletGimmick();
 	bulletGimmick_->Init();
@@ -46,6 +40,13 @@ void GameScene::Init(void)
 		KEY_INPUT_D, KEY_INPUT_LCONTROL, KEY_INPUT_LSHIFT
 	};
 	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2);
+
+	// “G‚Ì‰Šú‰»
+	if (enemy_ == nullptr)
+	{
+		enemy_ = new Enemy();
+	}
+	enemy_->Init(this, player_[0], player_[1]);
 }
 
 void GameScene::Update(void)
@@ -74,6 +75,9 @@ void GameScene::Update(void)
 
 	// ”ò‚ñ‚Å‚­‚é’e‚Æ‚ÌÕ“Ë”»’è
 	GimmickCollision();
+
+	EnemyCollision();
+	ShotCollision();
 
 	InputManager& ins = InputManager::GetInstance();
 	if (ins.IsTrgDown(KEY_INPUT_SPACE))
@@ -123,6 +127,60 @@ void GameScene::GimmickCollision(void)
 			{
 				player_[i]->Damage(1);
 			}
+		}
+	}
+}
+
+void GameScene::EnemyCollision(void)
+{
+	// “G‚ÌˆÊ’u‚ðVector2‚É
+	Vector2 enemyPos = enemy_->GetEnemyPos().ToVector2();
+	Vector2 eHitBox = { enemy_->HITBOX_X,enemy_->HITBOX_Y };
+
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		Vector2 playerPos = player_[i]->GetPos().ToVector2();
+		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+
+		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
+		{
+			player_[i]->Damage(1);
+		}
+	}
+}
+
+void GameScene::ShotCollision(void)
+{
+	// “G‚ÌˆÊ’u‚ðVector2‚É
+	Vector2 enemyPos = enemy_->GetEnemyPos().ToVector2();
+	Vector2 eHitBox = { enemy_->BULETTBOX_X,enemy_->BULETTBOX_Y };
+
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		Vector2 playerPos = player_[i]->GetPos().ToVector2();
+		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+
+		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
+		{
+			enemy_->ShotActive();
+		}
+	}
+}
+
+void GameScene::BulletCollision(void)
+{
+	// “G‚ÌˆÊ’u‚ðVector2‚É
+	Vector2 bulletPos = enemy_->GetEnemyPos().ToVector2();
+	Vector2 eHitBox = { enemy_->BULETTBOX_X,enemy_->BULETTBOX_Y };
+
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		Vector2 playerPos = player_[i]->GetPos().ToVector2();
+		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+
+		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
+		{
+			enemy_->ShotActive();
 		}
 	}
 }

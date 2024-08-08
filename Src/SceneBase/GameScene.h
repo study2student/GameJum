@@ -39,6 +39,13 @@ private:
 	// Õ“Ë”»’è
 	void GimmickCollision(void);
 
+	// “G–{‘Ì‚Ì“–‚½‚è”»’è
+	void EnemyCollision(void);
+	// ‹ß‚Ã‚¢‚½‚ç’e‚ğ”­Ë‚·‚é—p‚Ì“–‚½‚è”»’è
+	void ShotCollision(void);
+	// ’e‚Ì“–‚½‚è”»’è
+	void BulletCollision(void);
+
 	// Õ“Ë”»’è
 	bool IsCollisionRect(Vector2 stPos1, Vector2 edPos1, Vector2 stPos2, Vector2 edPos2);
 
