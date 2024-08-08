@@ -63,7 +63,14 @@
     <ClCompile Include="Src\main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Src\BulletGimmick.cpp">
+=======
+    <ClCompile Include="Src\SceneBase\SceneBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SceneBase\GameScene.cpp">
+>>>>>>> abc49a0433bfe0cd9a892062b8f6fdc95a388d4d
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +81,14 @@
     <ClInclude Include="Src\main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Src\BulletGimmick.h">
+=======
+    <ClInclude Include="Src\SceneBase\SceneBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\SceneBase\GameScene.h">
+>>>>>>> abc49a0433bfe0cd9a892062b8f6fdc95a388d4d
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
