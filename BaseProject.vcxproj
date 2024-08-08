@@ -19,14 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Enemy.cpp" />
     <ClCompile Include="Src\Application.cpp" />
+    <ClCompile Include="Src\BulletGimmick.cpp" />
     <ClCompile Include="Src\main.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Src\Stage.cpp" />
+=======
+    <ClCompile Include="Src\SceneBase\GameScene.cpp" />
+    <ClCompile Include="Src\SceneBase\SceneBase.cpp" />
+>>>>>>> 4f0cbaf958be2e6f339a69fdd37d7d7b51505632
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Enemy.h" />
     <ClInclude Include="Src\Application.h" />
+    <ClInclude Include="Src\BulletGimmick.h" />
     <ClInclude Include="Src\main.h" />
+<<<<<<< HEAD
     <ClInclude Include="Src\Stage.h" />
+=======
+    <ClInclude Include="Src\SceneBase\GameScene.h" />
+    <ClInclude Include="Src\SceneBase\SceneBase.h" />
+>>>>>>> 4f0cbaf958be2e6f339a69fdd37d7d7b51505632
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
