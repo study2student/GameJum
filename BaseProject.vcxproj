@@ -21,10 +21,14 @@
   <ItemGroup>
     <ClCompile Include="Src\Application.cpp" />
     <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\SceneBase\GameScene.cpp" />
+    <ClCompile Include="Src\SceneBase\SceneBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Application.h" />
     <ClInclude Include="Src\main.h" />
+    <ClInclude Include="Src\SceneBase\GameScene.h" />
+    <ClInclude Include="Src\SceneBase\SceneBase.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
