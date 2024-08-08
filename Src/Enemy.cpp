@@ -3,6 +3,8 @@
 #include "Manager/InputManager.h"
 #include "Common/Vector2.h"
 #include "Application.h"
+#include "SceneBase/GameScene.h"
+#include "Player/Player.h"
 #include "Enemy.h"
 
 Enemy::Enemy(void)
@@ -13,8 +15,11 @@ Enemy::~Enemy(void)
 {
 }
 
-void Enemy::Init(void)
+void Enemy::Init(GameScene* scene_)
 {
+	gameScene_ = scene_;
+
+
 	std::string basePath = Application::PATH_IMAGE;
 
 	// 弾画像の読み込み
@@ -59,10 +64,10 @@ void Enemy::Init(void)
 	movePow_ = 0.5f;
 
 	// 衝突判定用：中心座標（pos_からの相対座標）
-	hitPos_ = { 3, 3};
+	hitPos_ = { 0, 0};
 
 	// 衝突判定用：範囲
-	hitBox_ = { 72, 72 };
+	hitBox_ = { 34, 34 };
 
 	// ランダム用
 	blink_ = 0;
@@ -70,6 +75,7 @@ void Enemy::Init(void)
 
 	stateRand_ = false;
 
+	bulletPow_ = { 0,0 };
 	bulletPos_ = { 0,0 };
 	isBullet_ = false;
 }
@@ -133,7 +139,6 @@ void Enemy::Update(void)
 		Shot();
 	}
 
-
 	//攻撃(未実装)
 	atkState_ = ATK_STATE::NONE;		//基本は攻撃していない
 	if (isBullet_ == false
@@ -179,7 +184,7 @@ void Enemy::EnemyDraw(void)
 		DrawRotaGraph(
 			pos.x,
 			pos.y,
-			5.0f,		// 拡大
+			4.0f,		// 拡大
 			0.0f,		// 回転
 			imgsDino_[static_cast<int>(state_)][animNum_],
 			true,
@@ -191,7 +196,7 @@ void Enemy::EnemyDraw(void)
 		DrawRotaGraph(
 			pos.x,
 			pos.y,
-			5.0f,		// 拡大
+			4.0f,		// 拡大
 			0.0f,		// 回転
 			imgsDino_[static_cast<int>(state_)][animNum_],
 			true,
@@ -255,6 +260,12 @@ void Enemy::Move(void)
 	}
 }
 
+void Enemy::ShotActive(void)
+{
+	atkState_ = ATK_STATE::SHOT;
+	isBullet_ = true;
+}
+
 // 発射処理
 void Enemy::Shot(void)
 {
@@ -271,6 +282,25 @@ void Enemy::Shot(void)
 		isBullet_ = false;
 		return;
 	}
+}
+
+Vector2F Enemy::GetEnemyPos(void)
+{
+	return pos_;
+}
+
+void Enemy::SetEnemyPos(Vector2F value)
+{
+	pos_ = value;
+}
+
+Vector2F Enemy::GetBulletPos(void)
+{
+	return Vector2F();
+}
+
+void Enemy::SetBulletPos(Vector2F value)
+{
 }
 
 // キーを押下すると状態切り替え
@@ -309,86 +339,6 @@ void Enemy::Debug(void)
 	{
 		dir_ = DIR::LEFT;
 	}
-}
-
-void Enemy::CollisionHead(void)
-{
-	// 頭の衝突判定（足元の衝突判定）
-
-	// 頭の座標座標
-	Vector2 headPosC = GetColPos(COL_LR::C, COL_TD::T);
-
-
-	// 頭の座標（左）
-	Vector2 headPosL = GetColPos(COL_LR::L, COL_TD::T);
-
-
-	// 頭の座標（右）
-	Vector2 headPosR = GetColPos(COL_LR::R, COL_TD::T);
-
-
-	//if (gameScene_->IsCollisionStage(headPosC)
-	//	|| gameScene_->IsCollisionStage(headPosL)
-	//	|| gameScene_->IsCollisionStage(headPosR)
-	//	)
-	//{
-	//	Vector2 mapPos = gameScene_->World2MapPos(headPosC);
-	//	pos_.y = static_cast<float>(mapPos.y * Stage::CHIP_SIZE_Y + Stage::CHIP_SIZE_Y + SIZE_Y / 2 + hitPos_.y - hitBox_.y);
-
-	//	SetJumpPow(0.0f);
-	//}
-
-}
-
-void Enemy::CollisionSide(void)
-{
-	// 左右の衝突判定（左右の衝突判定）
-
-	// 左の座標
-	Vector2 headPosL = GetColPos(COL_LR::L, COL_TD::T);
-	// 左の座標
-	Vector2 corePosL = GetColPos(COL_LR::L, COL_TD::C);
-	// 足元座標（左）
-	Vector2 footPosL = GetColPos(COL_LR::L, COL_TD::D);
-
-	/*if (gameScene_->IsCollisionStage(headPosL)
-		|| gameScene_->IsCollisionStage(footPosL)
-		|| gameScene_->IsCollisionStage(corePosL)
-		)
-	{
-		Vector2 mapPos = gameScene_->World2MapPos(headPosL);
-		pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
-			+ Stage::CHIP_SIZE_X + hitBox_.x);
-
-	}
-
-	if (pos_.x > pos_.x + SIZE_X)
-	{
-		Vector2 mapPos = gameScene_->World2MapPos(headPosL);
-		pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
-			+ Stage::CHIP_SIZE_X + hitBox_.x);
-
-	}*/
-
-
-	// 右の座標
-	Vector2 headPosR = GetColPos(COL_LR::R, COL_TD::T);
-	// 右の座標
-	Vector2 corePosR = GetColPos(COL_LR::R, COL_TD::C);
-	// 足元座標（右）
-	Vector2 footPosR = GetColPos(COL_LR::R, COL_TD::D);
-
-	//if (gameScene_->IsCollisionStage(headPosR)
-	//	|| gameScene_->IsCollisionStage(footPosR)
-	//	|| gameScene_->IsCollisionStage(corePosR)
-	//	)
-	//{
-	//	Vector2 mapPos = gameScene_->World2MapPos(headPosR);
-	//	pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
-	//		- 1 - hitBox_.x);
-
-	//}
-
 }
 
 Vector2 Enemy::GetColPos(COL_LR lr, COL_TD td)
@@ -432,7 +382,8 @@ void Enemy::DrawDebug(void)
 
 	Vector2 pos = pos.ToVector2F();
 
-	DrawBox(pos_.x - SIZE_X - 20, pos_.y - SIZE_Y - 20, pos_.x + SIZE_X + 20, pos_.y + SIZE_Y + 20, 0xff0000, false);
+	DrawBox(pos_.x - SIZE_X - 10, pos_.y - SIZE_Y - 10, pos_.x + SIZE_X + 10, pos_.y + SIZE_Y + 10, 0xff0000, false);
+	//DrawBox(pos_.x - SIZE_X - 80, pos_.y - SIZE_Y - 80, pos_.x + SIZE_X + 80, pos_.y + SIZE_Y + 80, 0xff00ff, false);
 
 }
 

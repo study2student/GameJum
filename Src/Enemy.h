@@ -3,12 +3,23 @@
 #include "Common/Vector2.h"
 #include "Common/Vector2F.h"
 
+class Player;
+class GameScene;
+
 class Enemy
 {
 public:
 	// 画像サイズ
 	static constexpr int SIZE_X = 24;
 	static constexpr int SIZE_Y = 24;
+
+	// 当たり判定用サイズ
+	static constexpr int HITBOX_X = 24;
+	static constexpr int HITBOX_Y = 24;	
+	
+	// 弾用の当たり判定サイズ
+	static constexpr int BULETTBOX_X = 34;
+	static constexpr int BULETTBOX_Y = 34;
 
 	// アニメーション数
 	// IDLE
@@ -72,7 +83,7 @@ public:
 
 	~Enemy(void);
 
-	void Init(void);		// 初期化処理
+	void Init(GameScene* scene_);		// 初期化処理
 
 	void Update(void);		// 更新処理
 
@@ -88,18 +99,27 @@ public:
 	void Walk(void);		// 移動処理（歩く）
 	void Run(void);			// 移動処理（走る）
 
-	//当たり判定
-	void CollisionRight(void);
-	void CollisionLeft(void);
-
+	
 	// 発射処理
+	void ShotActive(void);
 	void Shot(void);
+
+	// 敵のPos
+	Vector2F GetEnemyPos(void);
+	void SetEnemyPos(Vector2F value);	
+	
+	// 弾のPos
+	Vector2F GetBulletPos(void);
+	void SetBulletPos(Vector2F value);
 
 	// デバッグ用
 	void Debug(void);		// キーを押下すると状態切り替え
 	void DrawDebug(void);	// DrawStringまとめ
 
 private:
+	GameScene* gameScene_;
+	Player* player1_;
+	Player* player2_;
 
 	// キャラ用-------------------------------------------------------------------
 	
@@ -141,6 +161,9 @@ private:
 	// 弾の半径
 	float bulletRadius;
 
+	// 弾の移動量
+	Vector2 bulletPow_;
+
 	// 弾の座標
 	Vector2 bulletPos_;
 
@@ -156,12 +179,6 @@ private:
 
 	// 衝突判定用：範囲
 	Vector2 hitBox_;
-
-	// 頭の衝突判定
-	void CollisionHead(void);
-
-	// 左右の衝突判定
-	void CollisionSide(void);
 
 	// 衝突座標を取得する
 	Vector2 GetColPos(COL_LR lr, COL_TD td);
