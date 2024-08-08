@@ -8,6 +8,7 @@ public:
 
 	void Init();
 	void Update();
-	void 
+	void Draw();
+	void Release();
 };
 
