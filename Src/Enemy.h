@@ -68,6 +68,15 @@ public:
 		D  // â∫
 	};
 
+	// íe
+	struct Bullet {
+		Vector2 pos;		// ç¿ïW
+		float angle;
+		Vector2 vel;		// ë¨ìx
+		Vector2 accel;		// ë¨ìx
+		bool isbullet;		// ë∂ç›ÇµÇƒÇ¢ÇÈÇ©
+	};
+
 	Enemy(void);
 
 	~Enemy(void);
@@ -131,6 +140,7 @@ private:
 	float speedAnim_;
 
 	// íe--------------------------------------------------------------
+	Bullet bullets[256];
 
 	// íeÇÃâÊëú
 	int imgBullet_;

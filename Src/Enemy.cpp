@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include <cmath> 
+#include "Manager/InputManager.h"
 #include "Common/Vector2.h"
 #include "Application.h"
 #include "Enemy.h"
@@ -68,10 +69,14 @@ void Enemy::Init(void)
 	rand_ = 0;
 
 	stateRand_ = false;
+
+	bulletPos_ = { 0,0 };
 }
 
 void Enemy::Update(void)
 {
+	auto& ins = InputManager::GetInstance();
+
 	cntAnim_++;
 
 	// 移動処理
@@ -122,13 +127,14 @@ void Enemy::Update(void)
 	//	break;
 	//}
 
+	Shot();
 
 	//攻撃(未実装)
 	atkState_ = ATK_STATE::NONE;		//基本は攻撃していない
 	if (CheckHitKey(KEY_INPUT_N))
 	{
 		atkState_ = ATK_STATE::SHOT;
-		Shot();
+
 	}
 }
 
@@ -195,53 +201,15 @@ void Enemy::BulletDraw(void)
 
 	for (int i = 0; i < circle_num; i++)
 	{
-		double angle = i * angleStep;
+		double angleC = i * angleStep;
 
-		int x = pos_.x + static_cast<int>(40 * cos(angle));
-		int y = pos_.y + static_cast<int>(40 * sin(angle));
+		int x = pos_.x + static_cast<int>(bulletPos_.x * cos(angleC));
+		int y = pos_.y + static_cast<int>(bulletPos_.y * sin(angleC));
 
 		DrawCircle(x, y, 6, 0x0000ff, true);
 		DrawCircle(pos_.x, pos_.y, 40, 0xff0000, false);
 	}
 
-	////弾の更新および表示
-	//for (auto& b : bullets) {
-	//	if (!b.isbullet) {
-	//		continue;
-	//	}
-
-	//	//弾の現在座標に弾の現在速度を加算してください
-	//	b.pos.x += b.vel.x;
-	//	b.pos.y += b.vel.y;
-	//	b.vel.x += b.accel.x;
-	//	b.vel.y += b.accel.y;
-
-	//	float angle = atan2f(b.vel.y, b.vel.x);
-	//	//弾の角度をatan2で計算してください。angleに値を入れるんだよオゥ
-	//	DrawRotaGraph(b.pos.x, b.pos.y, 1.0f, angle, imgBullet_, true);
-	//	DrawRotaGraph(pos_.x, pos_.y, 1.0f, 0.0f, imgBullet_, true);
-
-	//	//if (isDebugMode) {
-	//	//	//弾の本体(当たり判定)
-	//	//	DrawCircle(b.pos.x, b.pos.y, bulletRadius, 0x0000ff, false, 3);
-	//	//}
-	//	//弾を殺す
-	//	if (b.pos.x + 16 < 0 || b.pos.x - 16 > 640 ||
-	//		b.pos.y + 24 < 0 || b.pos.y - 24 > 480) {
-	//		b.isbullet = false;
-	//	}
-
-	//	//if (explosionFrame == 0) {
-	//	//	//あたり！
-	//	//	//↓のIsHitは実装を書いてません。自分で書いてください。
-	//	//	if (IsHit(b.pos, bulletRadius, playerpos, playerRadius)) {
-	//	//		//当たった反応を書いてください。
-	//	//		b.isActive = false;
-	//	//		explosionFrame = 64;
-	//	//		hp_--;
-	//	//	}
-	//	//}
-	//}
 }
 
 // 移動処理（歩く）
@@ -284,26 +252,18 @@ void Enemy::Move(void)
 // 発射処理
 void Enemy::Shot(void)
 {
-	////放射状弾
-	//float angle = 0.0f;
-	//constexpr int dir_count = 8;
-	//int count = dir_count;
-	//for (auto& b : bullets) {
-	//	if (!b.isbullet) {
-	//		b.pos = pos_;
-	//		angle += (2.0f * DX_PI_F) / (float)dir_count;
-	//		b.vel = { cos(angle),sin(angle) };
-	//		b.vel.x *= speed;
-	//		b.vel.y *= speed;
-	//		b.accel = { 0.0f,0.0f };
-	//		b.isbullet = true;
-	//		--count;
-	//		if (count == 0) {
-	//			break;
-	//		}
-	//	}
-	//}
+	int time = GetTime(); 
 
+	++bulletPos_.x;
+	++bulletPos_.y;
+
+	if ((time / 1000) % 5 == 0)
+	{
+		bulletPos_ = { 0,0 };
+		time = 0;
+		atkState_ = ATK_STATE::NONE;
+		return;
+	}
 }
 
 // キーを押下すると状態切り替え
