@@ -1,6 +1,9 @@
 #pragma once
 #include "SceneBase.h"
 
+class Enemy;
+
+
 class Player;
 class BulletGimmick;
 
@@ -24,5 +27,10 @@ private:
 	// 弾のギミック
 	BulletGimmick* bulletGimmick_;
 
+
+private:
+
+	// Enemy用ポインタ
+	Enemy* enemy_;
 };
 
