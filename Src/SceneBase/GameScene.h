@@ -1,5 +1,8 @@
 #pragma once
 #include "SceneBase.h"
+
+class Enemy;
+
 class GameScene : public SceneBase
 {
 public:
@@ -12,5 +15,10 @@ public:
 	void Init(void) override;
 	void Update(void) override;
 	void Draw(void) override;
+
+private:
+
+	// Enemy用ポインタ
+	Enemy* enemy_;
 };
 
