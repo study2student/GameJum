@@ -40,7 +40,7 @@ void BulletGimmick::Update(void)
 			bullet.pos.x -= 10.0f;
 		}
 
-		if (bullet.pos.x <= 0.0f)
+		if (bullet.pos.x <= -500.0f)
 		{
 			bullet.pos.x = Application::SCREEN_SIZE_X;
 			bullet.isAlive = false;
@@ -64,7 +64,7 @@ void BulletGimmick::Draw(void)
 
 	for (auto& bullet : bulletData_)
 	{
-		DrawGraph(bullet.pos.x, bullet.pos.y, image_[(animCnt_ / 10) % IMAGE_NUM - 1][1], true);
+		DrawRotaGraph(bullet.pos.x + IMAGE_X_SIZE * 3, bullet.pos.y, 3.0f, 0.0f, image_[(animCnt_ / 10) % IMAGE_NUM - 1][1], true);
 	}
 
 }
@@ -72,4 +72,9 @@ void BulletGimmick::Draw(void)
 void BulletGimmick::Release(void)
 {
 	DeleteGraph(image_[IMAGE_X_NUM][IMAGE_Y_NUM]);
+}
+
+std::vector<BulletGimmick::BulletData> BulletGimmick::GetBulletData(void)
+{
+	return bulletData_;
 }

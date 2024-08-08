@@ -40,6 +40,9 @@ public:
 
 	void Release(void);
 
+	// 弾のデータの取得
+	std::vector<BulletData> GetBulletData(void);
+
 private:
 
 	// 弾のデータ

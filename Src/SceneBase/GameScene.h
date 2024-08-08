@@ -1,9 +1,7 @@
 #pragma once
 #include "SceneBase.h"
-
 class Enemy;
-
-
+class Vector2;
 class Player;
 class BulletGimmick;
 
@@ -22,6 +20,7 @@ public:
 	void Update(void) override;
 	void Draw(void) override;
 	void Release(void) override;
+
 private:
 
 	// 弾のギミック
@@ -32,6 +31,11 @@ private:
 
 	// プレイヤークラスのポインタ
 	Player* player_[GAME_PLAYER_NUM];
+
+	// 生存時間
+	float aliveTimeP1_;
+	float aliveTimeP2_;
+
 	// 衝突判定
 	void GimmickCollision(void);
 

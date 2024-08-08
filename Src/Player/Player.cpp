@@ -169,6 +169,7 @@ void Player::Draw(void)
 
 void Player::Release(void)
 {
+
 	int animMax = static_cast<int>(ANIM_STATE::MAX);
 	int atkMax = static_cast<int>(ATK_STATE::MAX);
 	int animNumMax = MAX_NUM_ANIM;
@@ -185,15 +186,22 @@ void Player::Release(void)
 
 	// ’e‰æ‘œ‚Ì‰ð•ú
 	DeleteGraph(imgShot_);
+
 }
 
 void Player::Damage(int damage)
 {
+	hp_ -= damage;
 }
 
 int Player::GetHp_(void)
 {
 	return hp_;
+}
+
+Vector2F Player::GetPos(void)
+{
+	return pos_;
 }
 
 bool Player::IsAlive_(void)

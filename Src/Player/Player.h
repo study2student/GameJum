@@ -112,6 +112,9 @@ public:
 	// HPの取得（ゲッター）
 	int GetHp_(void);
 
+	// 座標の取得(ゲッター)
+	Vector2F GetPos(void);
+
 	// 生存判定（ゲッター）
 	bool IsAlive_(void);
 

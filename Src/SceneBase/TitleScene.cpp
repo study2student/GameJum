@@ -29,3 +29,8 @@ void TitleScene::Draw(void)
 {
 	DrawFormatString(100, 100, 0xff0000, "Title");
 }
+
+void TitleScene::Release(void)
+{
+
+}

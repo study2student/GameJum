@@ -1,4 +1,6 @@
 #include <DxLib.h>
+#include "../Manager/SceneManager.h"
+#include "../Manager/InputManager.h"
 #include "../Player/Player.h"
 #include "../Enemy.h"
 #include "GameScene.h"
@@ -59,6 +61,22 @@ void GameScene::Update(void)
 		player_[i]->Update();
 	}
 
+	if (player_[0]->GetHp_() <= 0)
+	{
+		SceneManager::GetInstance().SetAliveTimeP1(aliveTimeP1_);
+	}
+
+	if (player_[1]->GetHp_() <= 0)
+	{
+		SceneManager::GetInstance().SetAliveTimeP2(aliveTimeP2_);
+	}
+
+	InputManager& ins = InputManager::GetInstance();
+	if (ins.IsTrgDown(KEY_INPUT_SPACE))
+	{
+		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
+	}
+
 }
 
 void GameScene::Draw(void)
@@ -91,14 +109,17 @@ void GameScene::Release(void)
 void GameScene::GimmickCollision(void)
 {
 
-	//if (IsCollisionRectCenter(player_)
-	//{
-	//	// 爆発エフェクトを発生させる
-	//	shot->ShotBlast();
-	//	shot->Blast(shotPos);
-	//	enemy->SetHP(10);
-	//}
-
+	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	{
+		for (auto bullet : bulletGimmick_->GetBulletData())
+		{
+			if (IsCollisionRectCenter(player_[i]->GetPos(), { player_[i]->SIZE_X,player_[i]->SIZE_Y },
+				bullet.pos, { bulletGimmick_->IMAGE_X_SIZE,bulletGimmick_->IMAGE_Y_SIZE }))
+			{
+				player_[i]->Damage(1);
+			}
+		}
+	}
 }
 
 bool GameScene::IsCollisionRect(Vector2 stPos1, Vector2 edPos1, Vector2 stPos2, Vector2 edPos2)
