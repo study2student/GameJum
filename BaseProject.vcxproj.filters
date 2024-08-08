@@ -8,6 +8,9 @@
     <ClCompile Include="Src\SceneBase\GameScene.cpp" />
     <ClCompile Include="Src\SceneBase\SceneBase.cpp" />
     <ClCompile Include="Src\Stage.cpp" />
+    <ClCompile Include="Src\Common\Vector2.cpp" />
+    <ClCompile Include="Src\Common\Vector2F.cpp" />
+    <ClCompile Include="Src\Manager\InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Enemy.h" />
@@ -17,5 +20,8 @@
     <ClInclude Include="Src\SceneBase\GameScene.h" />
     <ClInclude Include="Src\SceneBase\SceneBase.h" />
     <ClInclude Include="Src\Stage.h" />
+    <ClInclude Include="Src\Common\Vector2.h" />
+    <ClInclude Include="Src\Common\Vector2F.h" />
+    <ClInclude Include="Src\Manager\InputManager.h" />
   </ItemGroup>
 </Project>
