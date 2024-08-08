@@ -78,6 +78,8 @@ void Player::Init(GameScene* scene_, TYPE type, KEY_CONFIG config)
 	// ショットの硬直時間
 	stepShotDelay_ = 0.0f;
 
+	//体力
+	hp_ = MAX_HP;
 }
 
 void Player::Update(void)
@@ -119,7 +121,7 @@ void Player::Update(void)
 
 void Player::Draw(void)
 {
-	//Player::DrawDebug();
+	Player::DrawDebug();
 
 	// 座標変換
 	Vector2 pos = pos_.ToVector2();
@@ -162,7 +164,7 @@ void Player::Draw(void)
 		break;
 	}
 
-
+	DrawHP();
 }
 
 void Player::Release(void)
@@ -183,6 +185,20 @@ void Player::Release(void)
 
 	// 弾画像の解放
 	DeleteGraph(imgShot_);
+}
+
+void Player::Damage(int damage)
+{
+}
+
+int Player::GetHp_(void)
+{
+	return hp_;
+}
+
+bool Player::IsAlive_(void)
+{
+	return false;
 }
 
 void Player::LoadImages(void)
@@ -251,6 +267,9 @@ void Player::LoadImages(void)
 
 	// 弾画像
 	imgShot_ = LoadGraph((basePath + "Shot.png").c_str());
+
+	// 体力画像
+	imgHp_ = LoadGraph((basePath + "Player/Heart.png").c_str());
 }
 
 void Player::DrawPlayer(int handleId)
@@ -276,41 +295,52 @@ void Player::DrawPlayer(int handleId)
 
 void Player::DrawDebug(void)
 {
-	//DrawFormatString(0, 0, 0x000000, "プレイヤー座標(%.2f, %.f)", pos_.x, pos_.y);
+	DrawFormatString(0, 0, 0x000000, "プレイヤー座標(%.2f, %.f)", pos_.x, pos_.y);
 
-	//DrawFormatString(0, 20, 0x000000, "移動速度(%.2f)", moveSpeed_);
+	DrawFormatString(0, 20, 0x000000, "移動速度(%.2f)", moveSpeed_);
 
-	//DrawFormatString(0, 40, 0x000000, "ジャンプ力(%.2f)", jumpPow_);
+	DrawFormatString(0, 40, 0x000000, "ジャンプ力(%.2f)", jumpPow_);
 
-	////Vector2 pos = pos.ToVector2F();
+	Vector2 pos = pos.ToVector2F();
 
-	//DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
 
-	//DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
+	DrawBox(pos_.x - SIZE_X / 2, pos_.y - SIZE_Y / 2, pos_.x + SIZE_X / 2, pos_.y + SIZE_Y / 2, 0x000000, false);
 
-	//DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
 
-	//// オレンジ
-	//int color = 0xff8c00;
+	// オレンジ
+	int color = 0xff8c00;
 
-	//// デバッグ用：足元衝突判定
-	//Vector2 footPos = pos;
-	//footPos.y += (8 + 24);
+	// デバッグ用：足元衝突判定
+	Vector2 footPos = pos;
+	footPos.y += (8 + 24);
 
-	//// 足元：中央
-	//DrawBox(footPos.x - 3, footPos.y - 3, footPos.x + 3, footPos.y + 3, color, true);
+	// 足元：中央
+	DrawBox(footPos.x - 3, footPos.y - 3, footPos.x + 3, footPos.y + 3, color, true);
 
 
-	//DrawBox(footPos.x - 3 - 16, footPos.y - 3, footPos.x + 3 - 16, footPos.y + 3, color, true);
+	DrawBox(footPos.x - 3 - 16, footPos.y - 3, footPos.x + 3 - 16, footPos.y + 3, color, true);
 
-	//// デバッグ用：頭の衝突判定
-	//Vector2 headPos = pos;
-	//headPos.y += (8 - 24);
+	// デバッグ用：頭の衝突判定
+	Vector2 headPos = pos;
+	headPos.y += (8 - 24);
 
-	//// 頭：中央
-	//DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
-	//DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
-	//DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
+	// 頭：中央
+	DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
+	DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
+	DrawBox(headPos.x - 3, headPos.y - 3, headPos.x + 3, headPos.y + 3, color, true);
+}
+
+void Player::DrawHP(void)
+{
+	int scX = Application::SCREEN_SIZE_X;
+	int scY = Application::SCREEN_SIZE_Y;
+	for (int i = 0; i < 240; i += 80)
+	{
+		DrawRotaGraphFastF(0 + 35 + i, 35, 0.1f, 0.0f, imgHp_, true);
+	}
+
 }
 
 void Player::ProcessMove(void)

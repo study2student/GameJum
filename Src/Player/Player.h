@@ -31,6 +31,9 @@ public:
 	// 最大ジャンプ力
 	static constexpr float MAX_JUMP_POW = 8.5f;
 
+	// 最大体力
+	static constexpr int MAX_HP = 3;
+
 	// 重力
 	static constexpr float GRAVITY = 0.25f;
 
@@ -152,6 +155,12 @@ private:
 	// ジャンプキー入力カウンタ
 	int cntJumpInput_;
 
+	// 体力
+	int hp_;
+
+	// 体力画像
+	int imgHp_;
+
 	// 衝突判定用：中心座標（pos_からの相対座標）
 	Vector2 hitPos_;
 
@@ -178,6 +187,9 @@ private:
 
 	// デバッグ用の描画
 	void DrawDebug(void);
+
+	// 体力描画
+	void DrawHP(void);
 
 	// プレイヤーの移動操作
 	void ProcessMove(void);
