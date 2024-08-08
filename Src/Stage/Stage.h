@@ -7,6 +7,22 @@ class Stage
 {
 public:
 
+#pragma region 地面用構造体
+	enum class GROUND_SIZE
+	{
+		LONG,
+		MIDDLE,
+		NORMAL,
+		MAX
+	};
+
+	struct Ground
+	{
+		//始点座標
+		Vector2F pos_;
+	};
+#pragma endregion 
+
 #pragma region 画像関連
 	//画像サイズ
 	static constexpr int IMG_SIZE_X = 384;
@@ -26,7 +42,7 @@ public:
 
 #pragma region ステージサイズ関連
 	//地面生成数
-	static constexpr int CREATE_MAX = 2;
+	static constexpr int CREATE_MAX = static_cast<int>(GROUND_SIZE::MAX);
 
 	//幅
 	static constexpr int STAGE_SIZE_X_LONG = 24;
@@ -38,34 +54,6 @@ public:
 
 	//穴(末尾から次の地面描画までの幅)
 	static constexpr int HOLE_SIZE_X_ = 10;
-#pragma endregion 
-	
-#pragma region 地面用構造体
-	enum class GROUND_SIZE
-	{
-		LONG,
-		MIDDLE,
-		NORMAL,
-		MAX
-	};
-
-	struct Ground
-	{
-		//列(縦幅)
-		int row_;
-
-		//行(横幅)
-		int col_;
-
-		//地面サイズ
-		GROUND_SIZE type_;
-
-		//ステージ配列
-		std::vector<std::vector<int>> stageChips_;
-
-		//始点
-		Vector2F pos_;
-	};
 #pragma endregion 
 
 	Stage();
@@ -79,28 +67,33 @@ public:
 	void Load();
 	void Reset();
 
-
-	//足場の幅の設定
-	GROUND_SIZE RandGroundType();
-
-	int SetCol(GROUND_SIZE type);
-
-	//CSVデータの読み込み
-	void LoadCsvData(int cnt);
-
+	//CSVデの読み込み
+	void LoadCsvData();
+	
 	//初期化処理
 	void ClearUsedGround(int cnt);
+
+	//ポインタの取得
+	std::vector<Ground> GetGround();
 
 private:
 
 	//画像格納
 	int imgStageChip_[DIVISION_ALL_NUM];
+
+	//列(縦幅)
+	int row_;
+
+	//行(横幅)
+	int col_;
+
+	//ステージマップチップ配列
+	int stageChips_[STAGE_SIZE_Y][STAGE_SIZE_X_LONG];
+
+	//CSVデータ
+	std::string csvData_;
 	
 	//地面
-	Ground grounds_[CREATE_MAX];
-
-	//地面CSVデータ
-	std::string groundCsv_[static_cast<int>(GROUND_SIZE::MAX)];
-
+	std::vector<Ground> grounds_;
 };
 

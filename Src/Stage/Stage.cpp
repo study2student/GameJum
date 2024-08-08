@@ -23,10 +23,8 @@ void Stage::Init()
 	
 	Load();
 
-	for (int i = 0; i < CREATE_MAX; i++)
-	{
-		LoadCsvData(i);
-	}
+	LoadCsvData();
+
 }
 
 void Stage::Update()
@@ -38,13 +36,13 @@ void Stage::Draw()
 {
 	for (int i = 0; i < CREATE_MAX; i++)
 	{
-		for (int y = 0; y < grounds_[i].row_; y++)
+		for (int y = 0; y < row_; y++)
 		{
-			for (int x = 0; x < grounds_[i].col_; x++)
+			for (int x = 0; x < col_; x++)
 			{
 				DrawGraph(grounds_[i].pos_.x + SIZE_X * x,
 					grounds_[i].pos_.y + SIZE_Y * y,
-					imgStageChip_[grounds_[i].stageChips_[y][x]],
+					imgStageChip_[stageChips_[y][x]],
 					true);
 			}
 		}
@@ -81,72 +79,56 @@ void Stage::Load()
 void Stage::Reset()
 {
 	//CSVデータ
-	groundCsv_[static_cast<int>(GROUND_SIZE::MIDDLE)] = "Data/StageCsv/MiddleGroundCsvData.csv";
-	groundCsv_[static_cast<int>(GROUND_SIZE::NORMAL)] = "Data/StageCsv/NormalGroundCsvData.csv";
-	groundCsv_[static_cast<int>(GROUND_SIZE::LONG)] = "Data/StageCsv/LongGroundCsvData.csv";
+	csvData_ = "Data/StageCsv/LongGroundCsvData.csv";
 
-	for (int i = 0; i < CREATE_MAX; i++)
+	//列
+	row_ = STAGE_SIZE_Y;
+
+	//行
+	col_ = STAGE_SIZE_X_LONG;
+
+	Ground ground;
+	for (int i = 0; i < 2; i++)
 	{
-		//地面サイズの種類
-		grounds_[i].type_ = RandGroundType();
-
-		//列
-		grounds_[i].row_ = STAGE_SIZE_Y;
-
-		//行
-		grounds_[i].col_ = SetCol(grounds_[i].type_);
-
 		//座標
-		grounds_[i].pos_ = { static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X),
-							static_cast<float>(Application::SCREEN_SIZE_Y - (SIZE_Y * grounds_[i].row_)) };
-
-		//ステージチップの設定
-		//要素の定義
-		grounds_[i].stageChips_.resize(grounds_[i].row_, std::vector<int>(grounds_[i].col_, 0));
+		ground.pos_ = {static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X),
+							static_cast<float>(Application::SCREEN_SIZE_Y - (SIZE_Y * row_)) };
+		grounds_.push_back(ground);
 	}
 }
 
-Stage::GROUND_SIZE Stage::RandGroundType()
+//Stage::GROUND_SIZE Stage::RandGroundType()
+//{
+//	int num = rand() % static_cast<int>(GROUND_SIZE::MAX);
+//	GROUND_SIZE type;
+//
+//	if (num == 0) { type = GROUND_SIZE::LONG; }
+//	else if (num == 1) { type = GROUND_SIZE::MIDDLE; }
+//	else if (num == 2) { type = GROUND_SIZE::NORMAL; }
+//
+//	return type;
+//}
+
+void Stage::ClearUsedGround(int cnt)
 {
-	int num = rand() % static_cast<int>(GROUND_SIZE::MAX);
-	GROUND_SIZE type;
-
-	if (num == 0) { type = GROUND_SIZE::LONG; }
-	else if (num == 1) { type = GROUND_SIZE::MIDDLE; }
-	else if (num == 2) { type = GROUND_SIZE::NORMAL; }
-
-	return type;
-}
-
-int Stage::SetCol(GROUND_SIZE type)
-{
-	int col;
-
-	switch (type)
+	for (int y = 0; y < row_; y++)
 	{
-	case GROUND_SIZE::LONG:
-		col = STAGE_SIZE_X_LONG;
-		break;
-
-	case GROUND_SIZE::MIDDLE:
-		col = STAGE_SIZE_X_MIDDLE;
-		break;
-
-	case GROUND_SIZE::NORMAL:
-		col = STAGE_SIZE_X_NORMAL;
-		break;
-
-	default:
-		break;
+		for (int x = 0; x < col_; x++)
+		{
+			stageChips_[y][x] = -1;
+		}
 	}
-
-	return col;
 }
 
-void Stage::LoadCsvData(int cnt)
+std::vector<Stage::Ground> Stage::GetGround()
+{
+	return grounds_;
+}
+
+void Stage::LoadCsvData()
 {
 	//ファイルの準備
-	std::ifstream ifs = std::ifstream(groundCsv_[static_cast<int>(grounds_->type_)]);
+	std::ifstream ifs = std::ifstream(csvData_);
 	if (!ifs)
 	{
 		OutputDebugString("ステージのifstream準備失敗\n");
@@ -170,22 +152,8 @@ void Stage::LoadCsvData(int cnt)
 		for (int x = 0; x < strSplit.size(); x++)
 		{
 			chipNo = stoi(strSplit[x]);
-			grounds_[cnt].stageChips_[y][x] = chipNo;
+			stageChips_[y][x] = chipNo;
 		}
 		y++;
-	}
-}
-
-void Stage::ClearUsedGround(int cnt)
-{
-	int row = grounds_[cnt].row_;
-	int col = grounds_[cnt].col_;
-
-	for (int y = 0; y < row; y++)
-	{
-		for (int x = 0; x < col; x++)
-		{
-			grounds_[cnt].stageChips_[y][x] = -1;
-		}
 	}
 }

@@ -69,7 +69,6 @@ void GameScene::Update(void)
 
 	stage_->Update();
 
-}
 	if (player_[0]->GetHp_() <= 0)
 	{
 		SceneManager::GetInstance().SetAliveTimeP1(aliveTimeP1_);
