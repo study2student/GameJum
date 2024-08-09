@@ -8,7 +8,7 @@ public:
 
 	// スクリーンサイズ
 	static constexpr int SCREEN_SIZE_X = 960;
-	static constexpr int SCREEN_SIZE_Y = 540;
+	static constexpr int SCREEN_SIZE_Y = 544;
 
 	// データパス関連
 	//-------------------------------------------

@@ -72,11 +72,37 @@ void Stage::Draw()
 					ground.pos_.y + SIZE_Y * y,
 					imgStageChip_[stageChips_[y][x]],
 					true);
+
+				// デバッグ用
+				if (y == 12)
+				{
+					int tmpX = (x * SIZE_X);
+					int tmpY = (y * SIZE_Y);
+					DrawBox(
+						tmpX - 3, tmpY - 3,
+						tmpX + 3, tmpY + 3,
+						0xff0000, true
+					);
+				}
 			}
 		}
 	}
 
+<<<<<<< Updated upstream
 	DebagDraw();
+=======
+	for (auto& ground : grounds_)
+	{
+
+		//DrawBox(
+		//	ground.pos_.x, ground.pos_.y,
+		//	ground.pos_.x + SIZE_X * 16,
+		//	ground.pos_.y + SIZE_Y * 4, 0xff0000, true);
+
+	}
+
+	
+>>>>>>> Stashed changes
 }
 
 void Stage::Release()
@@ -149,6 +175,11 @@ void Stage::DebagDraw()
 std::vector<Stage::Ground> Stage::GetGround()
 {
 	return grounds_;
+}
+
+int Stage::GetChipNo(Vector2 mapPos)
+{
+	return stageChips_[mapPos.y][mapPos.x];
 }
 
 void Stage::LoadCsvData()

@@ -87,6 +87,9 @@ public:
 	//ポインタの取得
 	std::vector<Ground> GetGround();
 
+	// マップチップ番号を取得する
+	int GetChipNo(Vector2 mapPos);
+
 private:
 
 	//画像格納

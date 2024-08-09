@@ -27,6 +27,12 @@ public:
 	void Draw(void) override;
 	void Release(void) override;
 
+	// ワールド座標にマップ座標に変換する
+	Vector2 World2MapPos(Vector2 worldPos);
+
+	// マップチップを使用した衝突判定
+	bool IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos);
+
 private:
 
 	// 弾のギミック

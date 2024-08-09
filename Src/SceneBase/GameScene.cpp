@@ -348,6 +348,7 @@ bool GameScene::IsCollisionRectCenter(Vector2 centerPos1, Vector2 size1, Vector2
 	return false;
 
 }
+<<<<<<< Updated upstream
 
 // 読み込んだ音を再生する用
 void GameScene::PlaySounds(int SoundName, int Vol)
@@ -386,3 +387,74 @@ bool GameScene::CheckSounds(int SoundName)
 		return true;
 	}
 }
+=======
+Vector2 GameScene::World2MapPos(Vector2 worldPos)
+{
+	Vector2 ret;
+
+	int mapX = worldPos.x / Stage::SIZE_X;
+	int mapY = worldPos.y / Stage::SIZE_Y;
+
+	ret.x = mapX;
+	ret.y = mapY;
+
+	return ret;
+}
+
+bool GameScene::IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos)
+{
+
+	for (auto& ground : stage_->GetGround())
+	{
+		
+		int sx = ground.pos_.x;
+		int sy = ground.pos_.y;
+		int ex = ground.pos_.x + Stage::SIZE_X * 16;
+		int ey = ground.pos_.y + Stage::SIZE_Y * 4;
+
+		if (IsCollisionRect(Vector2(sx, sy), Vector2(ex, ey), worldSPos, worldEPos))
+		{
+			return true;
+
+		}
+
+
+	}
+
+
+	return false;
+
+	// ワールド座標からマップ座標に変換する
+	//Vector2 mapPos = World2MapPos(worldPos);
+
+	////マップ調整
+	//mapPos.y -= 13;
+	//if (mapPos.y < 0)
+	//{
+	//	return false;
+	//}
+
+
+
+	////for (auto& ground : stage_->GetGround())
+	////{
+	////	//スクロール処理
+	////	ground.pos_.x -=  SCROLL_SPEED;
+	////}
+
+
+	//
+
+
+	//// マップチップが8以上の場合は、衝突する
+	//// マップ座標からマップチップ番号を取得する
+	//int chipNo = stage_->GetChipNo(mapPos);
+
+	//if (chipNo >= 8)
+	//{
+	//	return true;
+	//}
+
+	//return false;
+}
+>>>>>>> Stashed changes
