@@ -52,7 +52,7 @@ public:
 	static constexpr int CREATE_MAX = static_cast<int>(GROUND_SIZE::MAX);
 
 	//幅
-	static constexpr int STAGE_SIZE_X_LONG = 16;
+	static constexpr int STAGE_SIZE_X_LONG = 24;
 	static constexpr int STAGE_SIZE_X_NORMAL = 12;
 	static constexpr int STAGE_SIZE_X_MIDDLE = 8;
 
@@ -60,7 +60,7 @@ public:
 	static constexpr int STAGE_SIZE_Y = 4;
 
 	//穴(末尾から次の地面描画までの幅)
-	static constexpr int HOLE_SIZE_X_ = 20;
+	static constexpr int HOLE_SIZE_X_ = 8;
 #pragma endregion 
 
 #pragma region スクロール関連

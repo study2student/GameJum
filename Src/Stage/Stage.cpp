@@ -38,7 +38,7 @@ void Stage::Update()
 		ground.pos_.x -= SCROLL_SPEED;
 
 		//地形の末尾が画面外に出たら三個目の初期位置に座標を戻す
-		if (ground.pos_.x < -(SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X)
+		if (ground.pos_.x < -(SIZE_X + HOLE_SIZE_X_) * col_)
 		{
 			ground.pos_.x = ((CREATE_MAX - 1) * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X);
 		}
@@ -109,7 +109,7 @@ void Stage::Reset()
 	for (int i = 0; i < CREATE_MAX; i++)
 	{
 		//座標
-		ground.pos_ = {static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X),
+		ground.pos_ = {static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * col_),
 							static_cast<float>(Application::SCREEN_SIZE_Y - (SIZE_Y * row_)) };
 
 		//大きさ
