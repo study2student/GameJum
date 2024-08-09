@@ -148,8 +148,18 @@ void GameScene::Update(void)
 		StopSoundMem(bgm_);
 	}
 
-	if (static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B)||
-		static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD2) & PAD_INPUT_B) )
+	if (
+		ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1,InputManager::JOYPAD_BTN::RIGHT)&&
+		(player_[0]->GetHp_() > 0)
+		 )
+	{
+		PlaySounds(playerJumpSound_, SOUNDS_VOLUME);
+	}
+	
+	if (
+		ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD2,InputManager::JOYPAD_BTN::RIGHT) &&
+		(player_[1]->GetHp_() > 0)
+		 )
 	{
 		PlaySounds(playerJumpSound_, SOUNDS_VOLUME);
 	}
