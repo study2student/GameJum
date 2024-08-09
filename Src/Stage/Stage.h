@@ -41,6 +41,10 @@ public:
 
 	//分割総数
 	static constexpr int DIVISION_ALL_NUM = DIVISION_NUM_X * DIVISION_NUM_Y;
+
+	//背景画像サイズ
+	static constexpr int IMG_BACK_SIZE_X = 256;
+	static constexpr int IMG_BACK_SIZE_Y = 128;
 #pragma endregion 
 
 #pragma region ステージサイズ関連
@@ -87,6 +91,7 @@ private:
 
 	//画像格納
 	int imgStageChip_[DIVISION_ALL_NUM];
+	int imgBack_;
 
 	//列(縦幅)
 	int row_;

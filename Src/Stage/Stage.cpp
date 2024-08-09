@@ -7,6 +7,9 @@
 
 Stage::Stage()
 {
+	col_ = 0;
+	row_ = 0;
+	imgBack_ = 0;
 	for (int i = 0; i < DIVISION_ALL_NUM; i++)
 	{
 		imgStageChip_[i] = 0;
@@ -44,6 +47,13 @@ void Stage::Update()
 
 void Stage::Draw()
 {
+	//”wŒi‚ÌŽR‚Ì•`‰æ
+	DrawGraph(0,0,
+		imgBack_,
+		true);
+
+
+	//’n–Ê‚Ì•`‰æ
 	for (auto& ground : grounds_)
 	{
 		for (int y = 0; y < row_; y++)
@@ -67,14 +77,15 @@ void Stage::Release()
 	{
 		DeleteGraph(imgStageChip_[i]);
 	}
+	DeleteGraph(imgBack_);
 }
 
 void Stage::Load()
 {
-	int ret;
-
 	//‰æ‘œ“Ç‚Ýž‚Ý
-	ret = LoadDivGraph("Data/Stage/tileset.png",
+	imgBack_ = LoadGraph("Data/Image/Stage/trees.png", true);
+
+	LoadDivGraph("Data/Image/Stage/tileset.png",
 		DIVISION_ALL_NUM,
 		DIVISION_NUM_X,
 		DIVISION_NUM_Y,
