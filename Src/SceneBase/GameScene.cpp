@@ -219,13 +219,14 @@ void GameScene::GimmickCollision(void)
 		for (auto& bullet : bulletGimmick_->GetBulletData())
 		{
 			auto data = bullet->GetBulletData();
-			if (IsCollisionRectCenter(player_[i]->GetPos(), {64,64 },
+			if (IsCollisionRectCenter(player_[i]->GetPos(), {128,128 },
 				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE })
 				&& bullet->GetState() == Bullet::STATE::SHOT)
 			{
 				player_[i]->Damage(1);
 				bullet->ChangeState(Bullet::STATE::BLAST);
 				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
+				StartJoypadVibration(i, 1000, 60);
 			}
 		}
 	}

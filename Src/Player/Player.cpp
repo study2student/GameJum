@@ -390,9 +390,11 @@ void Player::DrawHP(int playerNum)
 void Player::ProcessMove(void)
 {
 	auto& ins = InputManager::GetInstance();
+	int stickX = ins.GetJPadInputState(padID_).AKeyLX;
 
 	// ç∂ï˚å¸
-	if (ins.IsNew(keyConfig_.LEFT))
+	if (ins.IsNew(keyConfig_.LEFT) ||
+		stickX < 0)
 	{
 		animState_ = ANIM_STATE::RUN;
 
@@ -401,15 +403,16 @@ void Player::ProcessMove(void)
 		Accele(-MOVE_ACC);
 	}
 
-	if (ins.InputManager::GetJPadInputState(padID_).AKeyLX) {
-		animState_ = ANIM_STATE::RUN;
-		dir_ = AsoUtility::DIR::LEFT;
-		Accele(-MOVE_ACC);
-	}
+	//if (ins.InputManager::GetJPadInputState(padID_).AKeyLX) {
+	//	animState_ = ANIM_STATE::RUN;
+	//	dir_ = AsoUtility::DIR::LEFT;
+	//	Accele(-MOVE_ACC);
+	//}
 
 
 	// âEï˚å¸
-	if (ins.IsNew(keyConfig_.RIGHT))
+	if (ins.IsNew(keyConfig_.RIGHT) ||
+		stickX > 0)
 	{
 		animState_ = ANIM_STATE::RUN;
 
@@ -418,9 +421,9 @@ void Player::ProcessMove(void)
 		Accele(MOVE_ACC);
 	}
 
-	if (ins.InputManager::GetJPadInputState(padID_).AKeyRX)
-	{
-		animState_ = ANIM_STATE::RUN;
+	//if (ins.InputManager::GetJPadInputState(padID_).AKeyRX)
+	//{
+	//	animState_ = ANIM_STATE::RUN;
 
 		dir_ = AsoUtility::DIR::RIGHT;
 		// â¡ë¨
