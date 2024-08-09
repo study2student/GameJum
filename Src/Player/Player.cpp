@@ -342,7 +342,6 @@ void Player::DrawHP(int playerNum)
 	for (int i = 0; i <  80 * hp_; i += 80)
 	{
 		DrawRotaGraphFastF(0 + 35 + i, 35 + 70 * playerNum, 0.1f, 0.0f, imgHp_, true);
-
 	}
 
 }
@@ -452,7 +451,9 @@ void Player::ProcessJump(void)
 	auto& ins = InputManager::GetInstance();
 
 	// 接地してないと、ジャンプを開始できないようにする
-	if (ins.IsTrgDown(keyConfig_.JUMP) && !isJump_)
+	if ((ins.IsTrgDown(keyConfig_.JUMP) 
+		|| ins.IsPadBtnTrgDown(padID_, InputManager::JOYPAD_BTN::RIGHT))
+		&& !isJump_)
 	{
 		isJump_ = true;
 		isPutJumpKey_ = true;
@@ -463,7 +464,8 @@ void Player::ProcessJump(void)
 		isPutJumpKey_ = true;
 	}
 	// 入力時間に応じてジャンプ量を変更する
-	if (ins.IsNew(keyConfig_.JUMP)
+	if (ins.IsNew(keyConfig_.JUMP) 
+		&& ins.IsPadBtnNew(padID_, InputManager::JOYPAD_BTN::RIGHT)
 		&& cntJumpInput_ < INPUT_JUMP_FRAME
 		&& isPutJumpKey_)
 	{
