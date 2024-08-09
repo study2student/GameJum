@@ -22,6 +22,12 @@ GameScene::~GameScene(void)
 
 void GameScene::Init(void)
 {
+	// 音の読み込み
+	LoadSounds();
+
+	// bgmだけ別で再生
+	PlaySoundMem(bgm_, DX_PLAYTYPE_LOOP);
+	ChangeVolumeSoundMem(170, bgm_);
 
 	bulletGimmick_ = new BulletGimmick();
 	bulletGimmick_->Init();
@@ -216,6 +222,7 @@ void GameScene::ShotCollision(void)
 		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
 		{
 			enemy_->ShotActive();
+			PlaySounds(enemyShotSound_, 200);
 		}
 	}
 }
@@ -321,4 +328,40 @@ bool GameScene::IsCollisionRectCenter(Vector2 centerPos1, Vector2 size1, Vector2
 	}
 	return false;
 
+}
+
+// 読み込んだ音を再生する用
+void GameScene::PlaySounds(int SoundName, int Vol)
+{
+	// 音が再生中でなければ再生開始
+	if (!(CheckSounds(SoundName)))
+	{
+		ChangeVolumeSoundMem(Vol, SoundName);
+		PlaySoundMem(SoundName, DX_PLAYTYPE_BACK);
+	}// 再生が終わったか確認する
+}
+
+// 読み込み用
+bool GameScene::LoadSounds(void)
+{
+	std::string basePath = Application::PATH_SOUNDS;
+
+	bgm_ = LoadSoundMem((basePath + "bgm.mp3").c_str());
+	enemyShotSound_ = LoadSoundMem((basePath + "Enemy/shot.mp3").c_str());
+
+	return true;
+}
+
+// 音を再生中かどうか判断する用
+bool GameScene::CheckSounds(int SoundName)
+{
+	// 再生が終わったか確認する
+	if (CheckSoundMem(SoundName) == 0)
+	{
+		return false; // 再生が終わった
+	}
+	else
+	{
+		return true;
+	}
 }

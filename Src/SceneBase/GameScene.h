@@ -58,6 +58,20 @@ private:
 	// 衝突判定
 	bool IsCollisionRectCenter(Vector2 centerPos1, Vector2 size1, Vector2 centerPos2, Vector2 size2);
 
+	// サウンド用関数-----------------------------------------
+	// 読み込んだ音を再生する用
+	void PlaySounds(int SoundName, int Vol);
+
+	// 読み込み用
+	bool LoadSounds(void);			
+
+	// 音を再生中かどうか判断する用
+	bool CheckSounds(int SoundName);
+
+	//サウンド用変数-------------------------------------------
+	int bgm_;
+	int enemyShotSound_;
+
 	//ステージ
 	Stage* stage_;
 
