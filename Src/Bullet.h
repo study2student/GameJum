@@ -54,6 +54,10 @@ public:
 
 	void CreateShot(void);
 
+	void ChangeState(STATE state);
+
+	STATE GetState(void);
+
 private:
 
 	// 弾のデータ
@@ -68,9 +72,12 @@ private:
 	// 爆発画像
 	int blastImage_[BLAST_IMAGE_X_NUM][BLAST_IMAGE_Y_NUM];
 
-	STATE state_;
+	int blastIdxAnim_;
 
-	void ChangeState(STATE state);
+	// 爆発のアニメーション速度
+	int blastSpeedAnim_;
+
+	STATE state_;
 
 	void NoneUpdate(void);
 	void NoneDraw(void);

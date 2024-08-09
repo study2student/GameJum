@@ -11,7 +11,19 @@ Bullet::Bullet(void)
 		BULLET_IMAGE_X_SIZE, BULLET_IMAGE_Y_SIZE,
 		&bulletImage_[0][0]);
 
+	// 爆発画像の読み込み
+	LoadDivGraph("Data/Image/Gimmick/Bullet/BulletBlast.png",
+		BLAST_IMAGE_NUM,
+		BLAST_IMAGE_X_NUM, BLAST_IMAGE_Y_NUM,
+		BLAST_IMAGE_X_SIZE, BLAST_IMAGE_Y_SIZE,
+		&blastImage_[0][0]);
+
 	animCnt_ = 0;
+
+	// 爆発のアニメーション速度
+	blastSpeedAnim_ = 1.0f;
+
+	blastIdxAnim_ = 0;
 
 	state_ = STATE::SHOT;
 }
@@ -77,6 +89,13 @@ Bullet::BulletData Bullet::GetBulletData(void)
 void Bullet::ChangeState(STATE state)
 {
 	state_ = state;
+	animCnt_ = 0;
+	blastIdxAnim_ = 0;
+}
+
+Bullet::STATE Bullet::GetState(void)
+{
+	return state_;
 }
 
 void Bullet::NoneUpdate(void)
@@ -104,15 +123,30 @@ void Bullet::ShotUpdate(void)
 
 void Bullet::ShotDraw(void)
 {
-	DrawRotaGraph(bulletData_.pos.x + BULLET_IMAGE_X_SIZE * 3, bulletData_.pos.y, 3.0f, 0.0f, bulletImage_[(animCnt_ / 10) % BULLET_IMAGE_NUM - 1][1], true);
+	DrawRotaGraph(bulletData_.pos.x + BULLET_IMAGE_X_SIZE * 3, bulletData_.pos.y,
+		3.0f, 0.0f, bulletImage_[(animCnt_ / 10) % BULLET_IMAGE_NUM - 1][1], true);
 }
 
 void Bullet::BlastUpdate(void)
 {
+
+	// 爆発のアニメーションの終了判定
+	if (blastIdxAnim_ + 1 >= BLAST_IMAGE_NUM)
+	{
+		ChangeState(STATE::END);
+		bulletData_.isAlive = false;
+	}
+
 }
 
 void Bullet::BlastDraw(void)
 {
+
+	blastIdxAnim_ = (animCnt_ / 10) % BLAST_IMAGE_NUM;
+
+	DrawRotaGraph(bulletData_.pos.x + BLAST_IMAGE_X_SIZE * 3, bulletData_.pos.y,
+		3.0f, 0.0f, blastImage_[blastIdxAnim_][1], true);
+
 }
 
 void Bullet::EndUpdate(void)
@@ -129,6 +163,7 @@ void Bullet::CreateShot(void)
 
 	if (rand == 0 && !bulletData_.isAlive)
 	{
+		bulletData_.pos.x = Application::SCREEN_SIZE_X;
 		bulletData_.pos.y = GetRand(Application::SCREEN_SIZE_Y);
 		bulletData_.isAlive = true;
 		ChangeState(STATE::SHOT);
