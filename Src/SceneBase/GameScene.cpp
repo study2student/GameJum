@@ -303,8 +303,8 @@ void GameScene::ShotCollision(void)
 		{
 			enemy_->ShotActive();
 			PlaySounds(enemyShotSound_, SOUNDS_VOLUME);
-			isInvincible_ = true;
-			invTime_ = 120.0f;
+			//isInvincible_ = true;
+			//invTime_ = 120.0f;
 		}
 	}
 }
@@ -332,7 +332,7 @@ void GameScene::BulletCollision(void)
 		for (int i = 0; i < GAME_PLAYER_NUM; i++)
 		{
 			Vector2 playerPos = player_[i]->GetPos().ToVector2();
-			Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+			Vector2 pHitBox = { 16, 46 };
 
 			if (IsCollisionRectCenter(bulletPos, bHitBox, playerPos, pHitBox))
 			{
