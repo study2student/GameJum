@@ -452,20 +452,20 @@ void Player::ProcessJump(void)
 
 	// 接地してないと、ジャンプを開始できないようにする
 	if ((ins.IsTrgDown(keyConfig_.JUMP) 
-		|| ins.IsPadBtnTrgDown(padID_, InputManager::JOYPAD_BTN::RIGHT))
+		|| static_cast<bool>(GetJoypadInputState(static_cast<int>(padID_) & PAD_INPUT_B)))
 		&& !isJump_)
 	{
 		isJump_ = true;
 		isPutJumpKey_ = true;
 	}
-	if (static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_A) && !isJump_)
+	if (static_cast<bool>(GetJoypadInputState(static_cast<int>(padID_)) & PAD_INPUT_B) && !isJump_)
 	{
 		isJump_ = true;
 		isPutJumpKey_ = true;
 	}
 	// 入力時間に応じてジャンプ量を変更する
-	if (ins.IsNew(keyConfig_.JUMP) 
-		&& ins.IsPadBtnNew(padID_, InputManager::JOYPAD_BTN::RIGHT)
+	if ((ins.IsNew(keyConfig_.JUMP) 
+		|| ins.IsPadBtnNew(padID_, InputManager::JOYPAD_BTN::RIGHT))
 		&& cntJumpInput_ < INPUT_JUMP_FRAME
 		&& isPutJumpKey_)
 	{
