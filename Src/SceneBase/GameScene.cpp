@@ -197,21 +197,21 @@ void GameScene::Draw(void)
 	// プレイヤー達の描画
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
-<<<<<<< Updated upstream
+
 		if (player_[i]->GetHp_() > 0)
 		{
 			// プレイヤー描画
 			player_[i]->Draw();
 			player_[i]->DrawHP(i);
 		}
-=======
+
 		// プレイヤー描画
 		if (static_cast<int>(invTime_) % 4 == 0)
 		{
 			player_[i]->Draw();
 		}
 		player_[i]->DrawHP(i);
->>>>>>> Stashed changes
+
 	}
 }
 
@@ -256,12 +256,12 @@ void GameScene::GimmickCollision(void)
 				player_[i]->Damage(1);
 				bullet->ChangeState(Bullet::STATE::BLAST);
 				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
-<<<<<<< Updated upstream
+
 				StartJoypadVibration((int)player_[i]->GetPadID(), 1000, 300);
-=======
+
 				isInvincible_ = true;
 				invTime_ = 120.0f;
->>>>>>> Stashed changes
+
 			}
 		}
 	}

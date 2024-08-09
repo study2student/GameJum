@@ -36,7 +36,7 @@ void GameOverScene::Update(void)
 	InputManager& ins = InputManager::GetInstance();
 	if (ins.IsTrgDown(KEY_INPUT_SPACE) || static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B))
 	{
-		StopSoundMem(bgm_, 0);
+		StopSoundMem(bgm_);
 		PlaySounds(selectSound_,200);
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::TITLE);
 	}
