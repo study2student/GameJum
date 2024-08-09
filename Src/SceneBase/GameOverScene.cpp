@@ -53,8 +53,11 @@ void GameOverScene::Draw(void)
 	float p1AliveTime = SceneManager::GetInstance().GetAliveTimeP1();
 	float p2AliveTime = SceneManager::GetInstance().GetAliveTimeP2();
 
-	DrawFormatString(500, 200, 0x000000, "%.2f", SceneManager::GetInstance().GetAliveTimeP1());
-	DrawFormatString(500, 300, 0x000000, "%.2f", SceneManager::GetInstance().GetAliveTimeP2());
+	DrawFormatString(500, 200, 0x000000, "%.2f", p1AliveTime);
+	DrawFormatString(500, 300, 0x000000, "%.2f", p2AliveTime);
+
+	DrawFormatString(700, 200, 0xff0000, "1P");
+	DrawFormatString(700, 300, 0x0000ff, "2P");
 
 	DrawRotaGraph(800, 400, 1.0, 0.0, bBottonImage_[(animCnt_ / 10) % 4 - 1][1], true);
 
