@@ -200,18 +200,14 @@ void GameScene::Draw(void)
 
 		if (player_[i]->GetHp_() > 0)
 		{
+
 			// プレイヤー描画
-			player_[i]->Draw();
+			if (static_cast<int>(invTime_) % 4 == 0)
+			{
+				player_[i]->Draw();
+			}
 			player_[i]->DrawHP(i);
 		}
-
-		// プレイヤー描画
-		if (static_cast<int>(invTime_) % 4 == 0)
-		{
-			player_[i]->Draw();
-		}
-		player_[i]->DrawHP(i);
-
 	}
 }
 
