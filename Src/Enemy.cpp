@@ -282,7 +282,7 @@ void Enemy::Shot(void)
 	if ((time / 1000) % 7 == 0)
 	{
 		bulletPow_ = { 0,0 };
-		time = 0;
+		//time = 0;
 		atkState_ = ATK_STATE::NONE;
 		isBullet_ = false;
 		return;
