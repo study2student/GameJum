@@ -222,9 +222,9 @@ void GameScene::GimmickCollision(void)
 		for (auto& bullet : bulletGimmick_->GetBulletData())
 		{
 			auto data = bullet->GetBulletData();
-			if (IsCollisionRectCenter(player_[i]->GetPos(), {64,64 },
+			if (IsCollisionRectCenter({ (int)player_[i]->GetPos().x - 50,(int)player_[i]->GetPos().y }, { 64,64 },
 				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE })
-				&& bullet->GetState() == Bullet::STATE::SHOT)
+				&& bullet->GetState() == Bullet::STATE::SHOT && player_[i]->GetHp_() > 0)
 			{
 				player_[i]->Damage(1);
 				bullet->ChangeState(Bullet::STATE::BLAST);
@@ -266,6 +266,7 @@ void GameScene::ShotCollision(void)
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
 		Vector2 playerPos = player_[i]->GetPos().ToVector2();
+		playerPos.x = player_[i]->GetPos().x - 50.0f;
 		Vector2 pHitBox = { 64,64 };
 
 		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
