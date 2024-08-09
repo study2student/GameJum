@@ -14,6 +14,14 @@ Stage::Stage()
 	{
 		imgStageChip_[i] = 0;
 	}
+
+	for (int y = 0; y < STAGE_SIZE_Y; y++)
+	{
+		for (int x = 0; x < STAGE_SIZE_X_LONG; x++)
+		{
+			stageChips_[y][x] = 0;
+		}
+	}
 }
 
 Stage::~Stage()

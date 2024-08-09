@@ -53,16 +53,16 @@ void GameScene::Init(void)
 		KEY_INPUT_W, KEY_INPUT_S, KEY_INPUT_A,
 		KEY_INPUT_D, KEY_INPUT_LCONTROL, KEY_INPUT_LSHIFT
 	};
-
-	//ステージの読み込み
-	stage_ = new Stage();
-	stage_->Init();
-
 	Player::PAD_CONFIG padP2 = {
 	PAD_INPUT_UP, PAD_INPUT_DOWN, PAD_INPUT_6,
 	PAD_INPUT_A, PAD_INPUT_5, PAD_INPUT_A
 	};
-	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2, padP2, InputManager::JOYPAD_NO::PAD2);
+	player_[1]->Init(this, Player::TYPE::PLAYER_2, keyP2, padP2, InputManager::JOYPAD_NO::PAD2);	
+	
+
+	//ステージの読み込み
+	stage_ = new Stage();
+	stage_->Init();
 
 
 	// 背景画像
