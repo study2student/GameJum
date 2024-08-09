@@ -425,10 +425,15 @@ void Player::ProcessMove(void)
 	//{
 	//	animState_ = ANIM_STATE::RUN;
 
-	//	dir_ = AsoUtility::DIR::RIGHT;
-	//	// ‰Á‘¬
-	//	Accele(MOVE_ACC);
-	//}
+		dir_ = AsoUtility::DIR::RIGHT;
+		// ‰Á‘¬
+		Accele(MOVE_ACC);
+	}
+
+	if (pos_.y >= Application::SCREEN_SIZE_Y + SIZE_Y)
+	{
+		hp_ = 0;
+	}
 }
 
 void Player::Move(void)
