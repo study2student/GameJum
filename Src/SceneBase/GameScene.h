@@ -83,6 +83,7 @@ private:
 	int playerJumpSound_;
 	int playerDamageSound_;
 
+
 	//ステージ
 	Stage* stage_;
 

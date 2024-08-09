@@ -1,3 +1,4 @@
+#include "../Application.h"
 #include "../Manager/InputManager.h"
 #include "../Manager/SceneManager.h"
 #include "GameOverScene.h"
@@ -22,6 +23,12 @@ void GameOverScene::Init(void)
 
 	animCnt_ = 0;
 	SetFontSize(60);
+
+	LoadSounds();
+
+	// bgmだけ別で再生
+	PlaySoundMem(bgm_, DX_PLAYTYPE_LOOP);
+	ChangeVolumeSoundMem(170, bgm_);
 }
 
 void GameOverScene::Update(void)
@@ -29,6 +36,8 @@ void GameOverScene::Update(void)
 	InputManager& ins = InputManager::GetInstance();
 	if (ins.IsTrgDown(KEY_INPUT_SPACE) || static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B))
 	{
+		StopSoundMem(bgm_, 0);
+		PlaySounds(selectSound_,200);
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::TITLE);
 	}
 
@@ -72,4 +81,42 @@ void GameOverScene::Draw(void)
 
 void GameOverScene::Release(void)
 {
+	DeleteSoundMem(selectSound_);
+	DeleteSoundMem(bgm_);
+}
+
+// 読み込み用
+bool GameOverScene::LoadSounds(void)
+{
+	std::string basePath = Application::PATH_SOUNDS;
+
+	bgm_ = LoadSoundMem((basePath + "Rezalt.mp3").c_str());
+	selectSound_ = LoadSoundMem((basePath + "Select.mp3").c_str());
+
+	return true;
+}
+
+//音の再生
+void GameOverScene::PlaySounds(int SoundName, int Vol)
+{
+	// 音が再生中でなければ再生開始
+	if (!(CheckSounds(SoundName)))
+	{
+		ChangeVolumeSoundMem(Vol, SoundName);
+		PlaySoundMem(SoundName, DX_PLAYTYPE_BACK);
+	}// 再生が終わったか確認する
+}
+
+// 音を再生中かどうか判断する用
+bool GameOverScene::CheckSounds(int SoundName)
+{
+	// 再生が終わったか確認する
+	if (CheckSoundMem(SoundName) == 0)
+	{
+		return false; // 再生が終わった
+	}
+	else
+	{
+		return true;
+	}
 }
