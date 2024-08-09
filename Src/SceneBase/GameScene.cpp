@@ -423,8 +423,9 @@ bool GameScene::IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos)
 		
 		int sx = ground.pos_.x;
 		int sy = ground.pos_.y;
-		int ex = ground.pos_.x + Stage::SIZE_X * 16;
-		int ey = ground.pos_.y + Stage::SIZE_Y * 4;
+		//int ex = ground.pos_.x + Stage::SIZE_X * 16;
+		int ey = ground.pos_.y + Stage::SIZE_Y * 4;	
+		int ex = ground.pos_.x + ground.size_.x;
 
 		if (IsCollisionRect(Vector2(sx, sy), Vector2(ex, ey), worldSPos, worldEPos))
 		{

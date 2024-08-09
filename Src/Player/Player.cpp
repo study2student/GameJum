@@ -621,14 +621,14 @@ void Player::CollisionFoot(void)
 	//footPosC.y += 1;
 	//footPosL.y += 1;
 	//footPosR.y += 1;
-	//if (!(gameScene_->IsCollisionStage(footPosC)
-	//	|| gameScene_->IsCollisionStage(footPosL)
-	//	|| gameScene_->IsCollisionStage(footPosR))
-	//	)
-	//{
-	//	// 接地していないので、ジャンプ判定にする
-	//	isJump_ = true;
-	//}
+	if (!(gameScene_->IsCollisionStage(s, e)
+		|| gameScene_->IsCollisionStage(s, e)
+		|| gameScene_->IsCollisionStage(s, e))
+		)
+	{
+		// 接地していないので、ジャンプ判定にする
+		isJump_ = true;
+	}
 }
 
 void Player::CollisionHead(void)
