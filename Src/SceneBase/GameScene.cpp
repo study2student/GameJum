@@ -83,6 +83,8 @@ void GameScene::Init(void)
 	isInvincible_ = false;
 	//–³“GŽžŠÔ
 	invTime_ = 0.0f;
+
+	SetFontSize(50);
 }
 
 
@@ -205,6 +207,8 @@ void GameScene::Draw(void)
 			if (static_cast<int>(invTime_) % 4 == 0)
 			{
 				player_[i]->Draw();
+				DrawString(player_[0]->GetPos().x + 50, player_[0]->GetPos().y - player_[0]->SIZE_Y + 50, "P1", 0xff0000);
+				DrawString(player_[1]->GetPos().x + 50, player_[1]->GetPos().y - player_[0]->SIZE_Y + 50, "P2", 0xff0000);
 			}
 			player_[i]->DrawHP(i);
 		}
