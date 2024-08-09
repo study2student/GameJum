@@ -426,6 +426,11 @@ void Player::ProcessMove(void)
 		// ‰Á‘¬
 		Accele(MOVE_ACC);
 	}
+
+	if (pos_.y >= Application::SCREEN_SIZE_Y + SIZE_Y)
+	{
+		hp_ = 0;
+	}
 }
 
 void Player::Move(void)

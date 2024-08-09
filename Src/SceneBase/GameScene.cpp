@@ -134,6 +134,7 @@ void GameScene::Update(void)
 	// “G‚Æ“G‚ÌŽü‚è‚Ì“–‚½‚è”»’è
 	EnemyCollision();
 	ShotCollision();
+
 	// ’e‚Æ‚Ì“–‚½‚è”»’è
 	BulletCollision();
 
@@ -141,7 +142,7 @@ void GameScene::Update(void)
 	StageCollision();
 
 	InputManager& ins = InputManager::GetInstance();
-	if (ins.IsTrgDown(KEY_INPUT_SPACE) || (player_[0]->GetHp_() <= 0 && player_[1]->GetHp_()))
+	if (ins.IsTrgDown(KEY_INPUT_SPACE) || (player_[0]->GetHp_() <= 0 && player_[1]->GetHp_() <= 0))
 	{
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
 		StopSoundMem(bgm_);
@@ -208,7 +209,7 @@ void GameScene::GimmickCollision(void)
 		for (auto& bullet : bulletGimmick_->GetBulletData())
 		{
 			auto data = bullet->GetBulletData();
-			if (IsCollisionRectCenter(player_[i]->GetPos(), { player_[i]->SIZE_X,player_[i]->SIZE_Y },
+			if (IsCollisionRectCenter(player_[i]->GetPos(), {64,64 },
 				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE })
 				&& bullet->GetState() == Bullet::STATE::SHOT)
 			{
@@ -474,4 +475,3 @@ bool GameScene::IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos)
 
 	//return false;
 }
-
