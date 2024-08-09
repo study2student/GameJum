@@ -7,6 +7,9 @@
 
 Stage::Stage()
 {
+	col_ = 0;
+	row_ = 0;
+	imgBack_ = 0;
 	for (int i = 0; i < DIVISION_ALL_NUM; i++)
 	{
 		imgStageChip_[i] = 0;
@@ -35,7 +38,7 @@ void Stage::Update()
 		ground.pos_.x -= SCROLL_SPEED;
 
 		//地形の末尾が画面外に出たら三個目の初期位置に座標を戻す
-		if (ground.pos_.x < -(SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X)
+		if (ground.pos_.x < -(SIZE_X + HOLE_SIZE_X_) * col_)
 		{
 			ground.pos_.x = ((CREATE_MAX - 1) * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X);
 		}
@@ -44,6 +47,13 @@ void Stage::Update()
 
 void Stage::Draw()
 {
+	//背景の山の描画
+	DrawGraph(0,0,
+		imgBack_,
+		true);
+
+
+	//地面の描画
 	for (auto& ground : grounds_)
 	{
 		for (int y = 0; y < row_; y++)
@@ -57,6 +67,8 @@ void Stage::Draw()
 			}
 		}
 	}
+
+	DebagDraw();
 }
 
 void Stage::Release()
@@ -65,14 +77,15 @@ void Stage::Release()
 	{
 		DeleteGraph(imgStageChip_[i]);
 	}
+	DeleteGraph(imgBack_);
 }
 
 void Stage::Load()
 {
-	int ret;
-
 	//画像読み込み
-	ret = LoadDivGraph("Data/Stage/tileset.png",
+	imgBack_ = LoadGraph("Data/Image/Stage/trees.png", true);
+
+	LoadDivGraph("Data/Image/Stage/tileset.png",
 		DIVISION_ALL_NUM,
 		DIVISION_NUM_X,
 		DIVISION_NUM_Y,
@@ -96,33 +109,33 @@ void Stage::Reset()
 	for (int i = 0; i < CREATE_MAX; i++)
 	{
 		//座標
-		ground.pos_ = {static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * DIVISION_NUM_X),
+		ground.pos_ = {static_cast<float>(i * (SIZE_X + HOLE_SIZE_X_) * col_),
 							static_cast<float>(Application::SCREEN_SIZE_Y - (SIZE_Y * row_)) };
+
+		//大きさ
+		ground.size_ = { SIZE_X * col_,
+							SIZE_Y * row_ };
+
 		grounds_.push_back(ground);
 	}
 }
 
-//Stage::GROUND_SIZE Stage::RandGroundType()
-//{
-//	int num = rand() % static_cast<int>(GROUND_SIZE::MAX);
-//	GROUND_SIZE type;
-//
-//	if (num == 0) { type = GROUND_SIZE::LONG; }
-//	else if (num == 1) { type = GROUND_SIZE::MIDDLE; }
-//	else if (num == 2) { type = GROUND_SIZE::NORMAL; }
-//
-//	return type;
-//}
-
-void Stage::ClearUsedGround(int cnt)
+void Stage::DebagDraw()
 {
-	for (int y = 0; y < row_; y++)
+	for (auto& ground : grounds_)
 	{
-		for (int x = 0; x < col_; x++)
-		{
-			stageChips_[y][x] = -1;
-		}
+		Vector2 stageCecter = { static_cast<int>(ground.pos_.x + (ground.size_.x / 2)),
+									static_cast<int>(ground.pos_.y + ground.size_.y / 2) };
+
+		DrawBox(ground.pos_.x, ground.pos_.y,
+			ground.pos_.x + ground.size_.x,
+			ground.pos_.y + ground.size_.y,
+			0x00ff00,
+			false);
+
+		DrawCircle(stageCecter.x, stageCecter.y, 10, 0xff00ff, true);
 	}
+
 }
 
 std::vector<Stage::Ground> Stage::GetGround()

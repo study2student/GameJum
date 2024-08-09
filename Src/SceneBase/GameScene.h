@@ -42,6 +42,9 @@ private:
 	// 衝突判定
 	void GimmickCollision(void);
 
+	// ステージとの衝突判定
+	void StageCollision(void);
+
 	// 敵本体の当たり判定
 	void EnemyCollision(void);
 	// 近づいたら弾を発射する用の当たり判定
