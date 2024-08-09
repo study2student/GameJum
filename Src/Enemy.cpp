@@ -160,7 +160,7 @@ void Enemy::Draw(void)
 		BulletDraw();
 	}
 
-	DrawDebug();
+	//DrawDebug();
 	
 }
 
@@ -219,9 +219,9 @@ void Enemy::BulletDraw(void)
 		bulletPos_.x = pos_.x + static_cast<int>(bulletPow_.x * cos(angleC));
 		bulletPos_.y = pos_.y + static_cast<int>(bulletPow_.y * sin(angleC));
 
-		DrawCircle(bulletPos_.x, bulletPos_.y, 6, 0x0000ff, true);
+		DrawCircle(bulletPos_.x, bulletPos_.y, 6, 0x19D9C9, true);
 		//DrawCircle(pos_.x, pos_.y, 40, 0xff0000, false);
-		DrawCircle(bulletPos_.x, bulletPos_.y, 6, 0xff00ff, false);
+		DrawCircle(bulletPos_.x, bulletPos_.y, 6, 0x9D66EC, false);
 	}
 }
 
@@ -272,6 +272,8 @@ void Enemy::ShotActive(void)
 void Enemy::Shot(void)
 {
 	int time = GetTime(); 
+
+	state_ = ANIM_STATE::IDLE;
 
 	++bulletPow_.x;
 	++bulletPow_.y;

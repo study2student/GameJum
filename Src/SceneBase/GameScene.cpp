@@ -27,7 +27,7 @@ void GameScene::Init(void)
 
 	// bgmだけ別で再生
 	PlaySoundMem(bgm_, DX_PLAYTYPE_LOOP);
-	ChangeVolumeSoundMem(170, bgm_);
+	ChangeVolumeSoundMem(BGM_VOLUME, bgm_);
 
 	bulletGimmick_ = new BulletGimmick();
 	bulletGimmick_->Init();
@@ -131,6 +131,12 @@ void GameScene::Update(void)
 	if (ins.IsTrgDown(KEY_INPUT_SPACE))
 	{
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
+		StopSoundMem(bgm_);
+	}
+
+	if (ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1,InputManager::JOYPAD_BTN::R_TRIGGER))
+	{
+		PlaySounds(playerJumpSound_, SOUNDS_VOLUME);
 	}
 
 }
@@ -158,8 +164,18 @@ void GameScene::Release(void)
 {
 	DeleteGraph(bgImage);
 
+	DeleteSoundMem(bgm_);
+	DeleteSoundMem(enemyShotSound_);
+	DeleteSoundMem(playerJumpSound_);
+	DeleteSoundMem(playerDamageSound_);
+
 	//ステージの解放
 	stage_->Release();
+
+	// 敵の解放
+	enemy_->Release();	
+	delete enemy_;		
+	enemy_ = nullptr;	
 
 	// プレイヤー達の解放
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
@@ -182,6 +198,7 @@ void GameScene::GimmickCollision(void)
 				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE }))
 			{
 				player_[i]->Damage(1);
+				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 			}
 		}
 	}
@@ -203,6 +220,7 @@ void GameScene::EnemyCollision(void)
 		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
 		{
 			player_[i]->Damage(1);
+			PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 		}
 	}
 }
@@ -222,7 +240,7 @@ void GameScene::ShotCollision(void)
 		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
 		{
 			enemy_->ShotActive();
-			PlaySounds(enemyShotSound_, 200);
+			PlaySounds(enemyShotSound_, SOUNDS_VOLUME);
 		}
 	}
 }
@@ -255,6 +273,7 @@ void GameScene::BulletCollision(void)
 			if (IsCollisionRectCenter(bulletPos, bHitBox, playerPos, pHitBox))
 			{
 				player_[i]->Damage(1);
+				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 			}
 		}
 	}
@@ -329,6 +348,7 @@ bool GameScene::IsCollisionRectCenter(Vector2 centerPos1, Vector2 size1, Vector2
 	return false;
 
 }
+<<<<<<< Updated upstream
 
 // 読み込んだ音を再生する用
 void GameScene::PlaySounds(int SoundName, int Vol)
@@ -348,6 +368,8 @@ bool GameScene::LoadSounds(void)
 
 	bgm_ = LoadSoundMem((basePath + "bgm.mp3").c_str());
 	enemyShotSound_ = LoadSoundMem((basePath + "Enemy/shot.mp3").c_str());
+	playerJumpSound_ = LoadSoundMem((basePath + "Player/jump.mp3").c_str());
+	playerDamageSound_ = LoadSoundMem((basePath + "Player/damage.mp3").c_str());
 
 	return true;
 }
@@ -365,3 +387,74 @@ bool GameScene::CheckSounds(int SoundName)
 		return true;
 	}
 }
+=======
+Vector2 GameScene::World2MapPos(Vector2 worldPos)
+{
+	Vector2 ret;
+
+	int mapX = worldPos.x / Stage::SIZE_X;
+	int mapY = worldPos.y / Stage::SIZE_Y;
+
+	ret.x = mapX;
+	ret.y = mapY;
+
+	return ret;
+}
+
+bool GameScene::IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos)
+{
+
+	for (auto& ground : stage_->GetGround())
+	{
+		
+		int sx = ground.pos_.x;
+		int sy = ground.pos_.y;
+		int ex = ground.pos_.x + Stage::SIZE_X * 16;
+		int ey = ground.pos_.y + Stage::SIZE_Y * 4;
+
+		if (IsCollisionRect(Vector2(sx, sy), Vector2(ex, ey), worldSPos, worldEPos))
+		{
+			return true;
+
+		}
+
+
+	}
+
+
+	return false;
+
+	// ワールド座標からマップ座標に変換する
+	//Vector2 mapPos = World2MapPos(worldPos);
+
+	////マップ調整
+	//mapPos.y -= 13;
+	//if (mapPos.y < 0)
+	//{
+	//	return false;
+	//}
+
+
+
+	////for (auto& ground : stage_->GetGround())
+	////{
+	////	//スクロール処理
+	////	ground.pos_.x -=  SCROLL_SPEED;
+	////}
+
+
+	//
+
+
+	//// マップチップが8以上の場合は、衝突する
+	//// マップ座標からマップチップ番号を取得する
+	//int chipNo = stage_->GetChipNo(mapPos);
+
+	//if (chipNo >= 8)
+	//{
+	//	return true;
+	//}
+
+	//return false;
+}
+>>>>>>> Stashed changes

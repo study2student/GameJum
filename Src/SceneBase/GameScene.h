@@ -13,6 +13,9 @@ public:
 
 	static constexpr int GAME_PLAYER_NUM = 2;
 
+	static constexpr int BGM_VOLUME = 140;
+	static constexpr int SOUNDS_VOLUME = 150;
+
 	// コンストラクタ
 	GameScene(void);
 
@@ -23,6 +26,12 @@ public:
 	void Update(void) override;
 	void Draw(void) override;
 	void Release(void) override;
+
+	// ワールド座標にマップ座標に変換する
+	Vector2 World2MapPos(Vector2 worldPos);
+
+	// マップチップを使用した衝突判定
+	bool IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos);
 
 private:
 
@@ -71,6 +80,8 @@ private:
 	//サウンド用変数-------------------------------------------
 	int bgm_;
 	int enemyShotSound_;
+	int playerJumpSound_;
+	int playerDamageSound_;
 
 	//ステージ
 	Stage* stage_;

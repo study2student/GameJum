@@ -29,6 +29,7 @@ public:
 	void Init3D(void);
 	void Update(void);
 	void Draw(void);
+	bool Release(void);		// 解放処理
 
 	// リソースの破棄
 	void Destroy(void);
@@ -92,6 +93,12 @@ private:
 
 	// フェード
 	void Fade(void);
+
+	// インスタンスの破棄
+	void Destory(void);
+
+	// 指定したシーンの解放関数
+	void ReleaseScene(SCENE_ID SceneID);		// シーンの解放処理
 
 };
 
