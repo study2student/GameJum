@@ -19,7 +19,7 @@ public:
 	
 	// 弾発射用の当たり判定サイズ
 	static constexpr int BULETTBOX_X = 34;
-	static constexpr int BULETTBOX_Y = SIZE_Y + 275;
+	static constexpr int BULETTBOX_Y = SIZE_Y + 310;
 
 	// アニメーション数
 	// IDLE
