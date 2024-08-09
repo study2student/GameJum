@@ -17,9 +17,9 @@ public:
 	static constexpr int HITBOX_X = 24;
 	static constexpr int HITBOX_Y = 24;	
 	
-	// 弾用の当たり判定サイズ
+	// 弾発射用の当たり判定サイズ
 	static constexpr int BULETTBOX_X = 34;
-	static constexpr int BULETTBOX_Y = 34;
+	static constexpr int BULETTBOX_Y = SIZE_Y + 275;
 
 	// アニメーション数
 	// IDLE
@@ -108,8 +108,11 @@ public:
 	Vector2F GetEnemyPos(void);
 	void SetEnemyPos(Vector2F value);	
 	
+	// 弾のPow
+	Vector2 GetBulletPow(void);
+	
 	// 弾のPos
-	Vector2F GetBulletPos(void);
+	Vector2 GetBulletPos(void);
 	void SetBulletPos(Vector2F value);
 
 	// デバッグ用
@@ -189,11 +192,13 @@ private:
 	// 経過時間を返す
 	int GetTime(void);
 
+	// ランダム用変数
 	int blink_;
 	int rand_;
 
 	bool stateRand_;
 
+	// 経過時間取得用変数
 	int startTime;
 	int elapsedTime;
 };

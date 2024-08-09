@@ -112,8 +112,11 @@ void GameScene::Update(void)
 	// ”ò‚ñ‚Å‚­‚é’e‚Æ‚ÌÕ“Ë”»’è
 	GimmickCollision();
 
+	// “G‚Æ“G‚ÌŽü‚è‚Ì“–‚½‚è”»’è
 	EnemyCollision();
 	ShotCollision();
+	// ’e‚Æ‚Ì“–‚½‚è”»’è
+	BulletCollision();
 
 	InputManager& ins = InputManager::GetInstance();
 	if (ins.IsTrgDown(KEY_INPUT_SPACE))
@@ -176,6 +179,7 @@ void GameScene::GimmickCollision(void)
 
 }
 
+// “G–{‘Ì‚Ì“–‚½‚è”»’è
 void GameScene::EnemyCollision(void)
 {
 	// “G‚ÌˆÊ’u‚ðVector2‚É
@@ -194,6 +198,7 @@ void GameScene::EnemyCollision(void)
 	}
 }
 
+// ‹ß‚Ã‚¢‚½‚ç’e‚ð”­ŽË‚·‚é—p‚Ì“–‚½‚è”»’è
 void GameScene::ShotCollision(void)
 {
 	// “G‚ÌˆÊ’u‚ðVector2‚É
@@ -212,20 +217,35 @@ void GameScene::ShotCollision(void)
 	}
 }
 
+// ’e‚Ì“–‚½‚è”»’è
 void GameScene::BulletCollision(void)
 {
-	// “G‚ÌˆÊ’u‚ðVector2‚É
-	Vector2 bulletPos = enemy_->GetEnemyPos().ToVector2();
-	Vector2 eHitBox = { enemy_->BULETTBOX_X,enemy_->BULETTBOX_Y };
+	double angleStep = 60.0 * DX_PI_F / 180.0;
+	int circle_num = 6;
 
-	for (int i = 0; i < GAME_PLAYER_NUM; i++)
+	for (int i = 0; i < circle_num; i++)
 	{
-		Vector2 playerPos = player_[i]->GetPos().ToVector2();
-		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+		double angleC = i * angleStep;
 
-		if (IsCollisionRectCenter(bulletPos, eHitBox, playerPos, pHitBox))
+		// ’e‚ÌˆÊ’u‚ðVector2‚É
+		Vector2 bulletPos = enemy_->GetBulletPos();
+		Vector2 bulletPow = enemy_->GetBulletPow();
+		// “G‚ÌˆÊ’u‚ðVector2‚É
+		Vector2 enemyPos = enemy_->GetEnemyPos().ToVector2();
+		Vector2 bHitBox = { 10,10 };
+
+		bulletPos.x = enemyPos.x + static_cast<int>(bulletPow.x * cos(angleC));
+		bulletPos.y = enemyPos.y + static_cast<int>(bulletPow.y * sin(angleC));
+
+		for (int i = 0; i < GAME_PLAYER_NUM; i++)
 		{
-			enemy_->ShotActive();
+			Vector2 playerPos = player_[i]->GetPos().ToVector2();
+			Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+
+			if (IsCollisionRectCenter(bulletPos, bHitBox, playerPos, pHitBox))
+			{
+				player_[i]->Damage(1);
+			}
 		}
 	}
 }
