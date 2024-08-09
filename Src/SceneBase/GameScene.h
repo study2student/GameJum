@@ -48,6 +48,11 @@ private:
 	float aliveTimeP1_;
 	float aliveTimeP2_;
 
+	// –³“GŠÔ”»’è
+	bool isInvincible_;
+	//–³“GŠÔ
+	float invTime_;
+
 	// Õ“Ë”»’è
 	void GimmickCollision(void);
 
