@@ -348,7 +348,6 @@ bool GameScene::IsCollisionRectCenter(Vector2 centerPos1, Vector2 size1, Vector2
 	return false;
 
 }
-<<<<<<< Updated upstream
 
 // “Ç‚Ýž‚ñ‚¾‰¹‚ðÄ¶‚·‚é—p
 void GameScene::PlaySounds(int SoundName, int Vol)
@@ -387,7 +386,7 @@ bool GameScene::CheckSounds(int SoundName)
 		return true;
 	}
 }
-=======
+
 Vector2 GameScene::World2MapPos(Vector2 worldPos)
 {
 	Vector2 ret;
@@ -457,4 +456,4 @@ bool GameScene::IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos)
 
 	//return false;
 }
->>>>>>> Stashed changes
+
