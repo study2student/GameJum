@@ -332,7 +332,7 @@ void GameScene::BulletCollision(void)
 		for (int i = 0; i < GAME_PLAYER_NUM; i++)
 		{
 			Vector2 playerPos = player_[i]->GetPos().ToVector2();
-			Vector2 pHitBox = { 16, 46 };
+			Vector2 pHitBox = { 26, 46 };
 
 			if (IsCollisionRectCenter(bulletPos, bHitBox, playerPos, pHitBox))
 			{
