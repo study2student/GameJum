@@ -88,21 +88,8 @@ void Stage::Draw()
 		}
 	}
 
-<<<<<<< Updated upstream
+
 	DebagDraw();
-=======
-	for (auto& ground : grounds_)
-	{
-
-		//DrawBox(
-		//	ground.pos_.x, ground.pos_.y,
-		//	ground.pos_.x + SIZE_X * 16,
-		//	ground.pos_.y + SIZE_Y * 4, 0xff0000, true);
-
-	}
-
-	
->>>>>>> Stashed changes
 }
 
 void Stage::Release()
