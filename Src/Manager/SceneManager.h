@@ -49,6 +49,9 @@ public:
 	void SetAliveTimeP1(float aliveTimeP1);
 	void SetAliveTimeP2(float aliveTimeP2);
 
+	float GetAliveTimeP1(void);
+	float GetAliveTimeP2(void);
+
 private:
 
 	// 静的インスタンス

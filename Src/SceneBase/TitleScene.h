@@ -31,6 +31,9 @@ private:
 	// タイトル背景
 	int titleImage_;
 
+	// タイトルロゴ
+	int titleLogoImage_;
+
 	// ゲームスタート
 	int gameStartImage_;
 

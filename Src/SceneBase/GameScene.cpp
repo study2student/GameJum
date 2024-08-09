@@ -75,6 +75,9 @@ void GameScene::Init(void)
 	bgImage = LoadGraph("Data/Image/UI/sky.jpg");
 	bgPosX1 = 1;
 	bgPosX2 = BG_SIZE;
+
+	aliveTimeP1_ = 0.0f;
+	aliveTimeP2_ = 0.0f;
 }
 
 
@@ -105,6 +108,16 @@ void GameScene::Update(void)
 
 	stage_->Update();
 
+	if (player_[0]->GetHp_() >= 0)
+	{
+		aliveTimeP1_ += SceneManager::GetInstance().GetDeltaTime();
+	}
+
+	if (player_[1]->GetHp_() >= 0)
+	{
+		aliveTimeP2_ += SceneManager::GetInstance().GetDeltaTime();
+	}
+
 	if (player_[0]->GetHp_() <= 0)
 	{
 		SceneManager::GetInstance().SetAliveTimeP1(aliveTimeP1_);
@@ -128,7 +141,7 @@ void GameScene::Update(void)
 	StageCollision();
 
 	InputManager& ins = InputManager::GetInstance();
-	if (ins.IsTrgDown(KEY_INPUT_SPACE))
+	if (ins.IsTrgDown(KEY_INPUT_SPACE) || (player_[0]->GetHp_() <= 0 && player_[1]->GetHp_()))
 	{
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
 		StopSoundMem(bgm_);
@@ -195,9 +208,11 @@ void GameScene::GimmickCollision(void)
 		{
 			auto data = bullet->GetBulletData();
 			if (IsCollisionRectCenter(player_[i]->GetPos(), { player_[i]->SIZE_X,player_[i]->SIZE_Y },
-				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE }))
+				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE })
+				&& bullet->GetState() == Bullet::STATE::SHOT)
 			{
 				player_[i]->Damage(1);
+				bullet->ChangeState(Bullet::STATE::BLAST);
 				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 			}
 		}
@@ -386,7 +401,6 @@ bool GameScene::CheckSounds(int SoundName)
 		return true;
 	}
 }
-
 Vector2 GameScene::World2MapPos(Vector2 worldPos)
 {
 	Vector2 ret;
@@ -408,8 +422,9 @@ bool GameScene::IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos)
 		
 		int sx = ground.pos_.x;
 		int sy = ground.pos_.y;
-		int ex = ground.pos_.x + Stage::SIZE_X * Stage::STAGE_SIZE_X_LONG;
-		int ey = ground.pos_.y + Stage::SIZE_Y * Stage::STAGE_SIZE_Y;
+		//int ex = ground.pos_.x + Stage::SIZE_X * 16;
+		int ey = ground.pos_.y + Stage::SIZE_Y * 4;	
+		int ex = ground.pos_.x + ground.size_.x;
 
 		if (IsCollisionRect(Vector2(sx, sy), Vector2(ex, ey), worldSPos, worldEPos))
 		{
@@ -456,4 +471,3 @@ bool GameScene::IsCollisionStage(Vector2 worldSPos, Vector2 worldEPos)
 
 	//return false;
 }
-

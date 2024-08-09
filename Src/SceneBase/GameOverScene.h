@@ -18,4 +18,19 @@ public:
 
 private:
 
+	// ゲームオーバー背景
+	int gameOverImage_;
+
+	// Bボタン
+	int bBottonImage_[4][1];
+
+	// アニメーションカウンタ
+	int animCnt_;
+
+	// 1位
+	int first_;
+
+	// 2位
+	int second_;
+
 };
