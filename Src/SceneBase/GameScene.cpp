@@ -163,7 +163,7 @@ void GameScene::Draw(void)
 
 	stage_->Draw();
 	enemy_->Draw();
-	DrawFormatString(100, 100, 0xff0000, "Game");
+	//DrawFormatString(100, 100, 0xff0000, "Game");
 	bulletGimmick_->Draw();
 
 	// プレイヤー達の描画

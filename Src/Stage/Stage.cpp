@@ -89,7 +89,7 @@ void Stage::Draw()
 	}
 
 
-	DebagDraw();
+	//DebagDraw();
 
 	for (auto& ground : grounds_)
 	{

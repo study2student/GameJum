@@ -127,7 +127,7 @@ void Player::Update(void)
 
 void Player::Draw(void)
 {
-	DrawDebug();
+	//DrawDebug();
 
 	// À•W•ÏŠ·
 	Vector2 pos = pos_.ToVector2();
@@ -421,14 +421,14 @@ void Player::ProcessMove(void)
 		Accele(MOVE_ACC);
 	}
 
-	//if (ins.InputManager::GetJPadInputState(padID_).AKeyRX)
-	//{
-	//	animState_ = ANIM_STATE::RUN;
-
-		dir_ = AsoUtility::DIR::RIGHT;
-		// ‰Á‘¬
-		Accele(MOVE_ACC);
-	}
+	////if (ins.InputManager::GetJPadInputState(padID_).AKeyRX)
+	////{
+	////	animState_ = ANIM_STATE::RUN;
+	//
+	//		dir_ = AsoUtility::DIR::RIGHT;
+	//		// ‰Á‘¬
+	//		Accele(MOVE_ACC);
+	//}
 
 	if (pos_.y >= Application::SCREEN_SIZE_Y + SIZE_Y)
 	{
