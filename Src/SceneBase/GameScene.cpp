@@ -78,6 +78,11 @@ void GameScene::Init(void)
 
 	aliveTimeP1_ = 0.0f;
 	aliveTimeP2_ = 0.0f;
+	
+	// –³“G”»’è
+	isInvincible_ = false;
+	//–³“GŠÔ
+	invTime_ = 0.0f;
 }
 
 
@@ -128,15 +133,28 @@ void GameScene::Update(void)
 		SceneManager::GetInstance().SetAliveTimeP2(aliveTimeP2_);
 	}
 
-	// ”ò‚ñ‚Å‚­‚é’e‚Æ‚ÌÕ“Ë”»’è
-	GimmickCollision();
+	if (invTime_ == 0)
+	{
+		// ”ò‚ñ‚Å‚­‚é’e‚Æ‚ÌÕ“Ë”»’è
+		GimmickCollision();
 
-	// “G‚Æ“G‚Ìü‚è‚Ì“–‚½‚è”»’è
-	EnemyCollision();
-	ShotCollision();
+		// “G‚Æ“G‚Ìü‚è‚Ì“–‚½‚è”»’è
+		EnemyCollision();
+		ShotCollision();
 
-	// ’e‚Æ‚Ì“–‚½‚è”»’è
-	BulletCollision();
+		// ’e‚Æ‚Ì“–‚½‚è”»’è
+		BulletCollision();
+	}
+	else if (isInvincible_ > 0)
+	{
+		invTime_--;
+	}
+
+	//–³“GŠÔ‚ğ0‚É
+	if (invTime_ <= 0)
+	{
+		invTime_ = 0;
+	}
 
 	// ƒXƒe[ƒW‚Æ‚ÌÕ“Ë”»’è
 	StageCollision();
@@ -179,12 +197,21 @@ void GameScene::Draw(void)
 	// ƒvƒŒƒCƒ„[’B‚Ì•`‰æ
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
+<<<<<<< Updated upstream
 		if (player_[i]->GetHp_() > 0)
 		{
 			// ƒvƒŒƒCƒ„[•`‰æ
 			player_[i]->Draw();
 			player_[i]->DrawHP(i);
 		}
+=======
+		// ƒvƒŒƒCƒ„[•`‰æ
+		if (static_cast<int>(invTime_) % 4 == 0)
+		{
+			player_[i]->Draw();
+		}
+		player_[i]->DrawHP(i);
+>>>>>>> Stashed changes
 	}
 }
 
@@ -229,7 +256,12 @@ void GameScene::GimmickCollision(void)
 				player_[i]->Damage(1);
 				bullet->ChangeState(Bullet::STATE::BLAST);
 				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
+<<<<<<< Updated upstream
 				StartJoypadVibration((int)player_[i]->GetPadID(), 1000, 300);
+=======
+				isInvincible_ = true;
+				invTime_ = 120.0f;
+>>>>>>> Stashed changes
 			}
 		}
 	}
@@ -252,6 +284,8 @@ void GameScene::EnemyCollision(void)
 		{
 			player_[i]->Damage(1);
 			PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
+			isInvincible_ = true;
+			invTime_ = 120.0f;
 		}
 	}
 }
@@ -272,6 +306,8 @@ void GameScene::ShotCollision(void)
 		{
 			enemy_->ShotActive();
 			PlaySounds(enemyShotSound_, SOUNDS_VOLUME);
+			isInvincible_ = true;
+			invTime_ = 120.0f;
 		}
 	}
 }
@@ -306,6 +342,8 @@ void GameScene::BulletCollision(void)
 				player_[i]->Damage(1);
 				enemy_->ClearBullet();
 				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
+				isInvincible_ = true;
+				invTime_ = 120.0f;
 			}
 		}
 	}
