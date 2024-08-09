@@ -16,6 +16,16 @@ public:
 	void Draw(void) override;
 	void Release(void) override;
 
+	// サウンド用関数-----------------------------------------
+	// 読み込んだ音を再生する用
+	void PlaySounds(int SoundName, int Vol);
+
+	// 読み込み用
+	bool LoadSounds(void);
+
+	// 音を再生中かどうか判断する用
+	bool CheckSounds(int SoundName);
+
 private:
 
 	// ゲームオーバー背景
@@ -32,5 +42,9 @@ private:
 
 	// 2位
 	int second_;
+
+	//BGM
+	int bgm_;
+	int selectSound_;
 
 };
