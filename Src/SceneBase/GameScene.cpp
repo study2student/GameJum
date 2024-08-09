@@ -141,7 +141,7 @@ void GameScene::Update(void)
 	StageCollision();
 
 	InputManager& ins = InputManager::GetInstance();
-	if (ins.IsTrgDown(KEY_INPUT_SPACE) || (player_[0]->GetHp_() <= 0 && player_[1]->GetHp_()))
+	if (ins.IsTrgDown(KEY_INPUT_SPACE) || (player_[0]->GetHp_() <= 0 && player_[1]->GetHp_() <= 0))
 	{
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
 		StopSoundMem(bgm_);
