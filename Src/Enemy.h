@@ -103,6 +103,7 @@ public:
 	// ”­Ëˆ—
 	void ShotActive(void);
 	void Shot(void);
+	void ClearBullet(void);
 
 	// “G‚ÌPos
 	Vector2F GetEnemyPos(void);

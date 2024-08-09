@@ -148,7 +148,8 @@ void GameScene::Update(void)
 		StopSoundMem(bgm_);
 	}
 
-	if (ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1,InputManager::JOYPAD_BTN::R_TRIGGER))
+	if (static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B)||
+		static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD2) & PAD_INPUT_B) )
 	{
 		PlaySounds(playerJumpSound_, SOUNDS_VOLUME);
 	}
@@ -289,6 +290,7 @@ void GameScene::BulletCollision(void)
 			if (IsCollisionRectCenter(bulletPos, bHitBox, playerPos, pHitBox))
 			{
 				player_[i]->Damage(1);
+				enemy_->ClearBullet();
 				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 			}
 		}
