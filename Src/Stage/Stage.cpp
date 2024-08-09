@@ -88,9 +88,7 @@ void Stage::Draw()
 		}
 	}
 
-<<<<<<< Updated upstream
 	DebagDraw();
-=======
 	for (auto& ground : grounds_)
 	{
 
@@ -101,8 +99,6 @@ void Stage::Draw()
 
 	}
 
-	
->>>>>>> Stashed changes
 }
 
 void Stage::Release()
