@@ -88,6 +88,7 @@ void Stage::Draw()
 		}
 	}
 
+
 	DebagDraw();
 
 	for (auto& ground : grounds_)
@@ -99,6 +100,8 @@ void Stage::Draw()
 		//	ground.pos_.y + SIZE_Y * 4, 0xff0000, true);
 
 	}
+
+	
 
 }
 
