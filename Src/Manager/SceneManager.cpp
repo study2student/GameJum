@@ -154,6 +154,16 @@ void SceneManager::SetAliveTimeP2(float aliveTimeP2)
 	aliveTimeP2_ = aliveTimeP2;
 }
 
+float SceneManager::GetAliveTimeP1(void)
+{
+	return aliveTimeP1_;
+}
+
+float SceneManager::GetAliveTimeP2(void)
+{
+	return aliveTimeP2_;
+}
+
 SceneManager::SceneManager(void)
 {
 

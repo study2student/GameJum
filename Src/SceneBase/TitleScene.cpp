@@ -22,6 +22,8 @@ void TitleScene::Init(void)
 	LoadDivGraph("Data/Image/UI/BottonB.png",
 		4, 4, 1, 64, 64, &bBottonImage_[0][0], true);
 
+	titleLogoImage_ = LoadGraph("Data/Image/UI/TitleLogo.png");
+
 	animCnt_ = 0;
 
 }
@@ -46,6 +48,7 @@ void TitleScene::Draw(void)
 
 	DrawRotaGraph(670, 400, 1.0, 0.0, bBottonImage_[(animCnt_ / 10) % 4 - 1][1], true);
 
+	DrawRotaGraph(Application::SCREEN_SIZE_X / 2, 200, 1.0, 0.0, titleLogoImage_, true);
 
 }
 

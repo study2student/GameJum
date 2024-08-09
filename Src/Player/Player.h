@@ -10,7 +10,7 @@ public:
 	// 方向ごとのアニメーション数
 	static constexpr int MAX_NUM_ANIM = 15;
 
-	static constexpr int SIZE_X = 153;
+	static constexpr int SIZE_X = 154;
 	static constexpr int SIZE_Y = 142;
 
 	// 移動速度

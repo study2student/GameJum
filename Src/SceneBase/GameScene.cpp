@@ -69,6 +69,9 @@ void GameScene::Init(void)
 	bgImage = LoadGraph("Data/Image/UI/sky.jpg");
 	bgPosX1 = 1;
 	bgPosX2 = BG_SIZE;
+
+	aliveTimeP1_ = 0.0f;
+	aliveTimeP2_ = 0.0f;
 }
 
 
@@ -99,6 +102,16 @@ void GameScene::Update(void)
 
 	stage_->Update();
 
+	if (player_[0]->GetHp_() >= 0)
+	{
+		aliveTimeP1_ += SceneManager::GetInstance().GetDeltaTime();
+	}
+
+	if (player_[1]->GetHp_() >= 0)
+	{
+		aliveTimeP2_ += SceneManager::GetInstance().GetDeltaTime();
+	}
+
 	if (player_[0]->GetHp_() <= 0)
 	{
 		SceneManager::GetInstance().SetAliveTimeP1(aliveTimeP1_);
@@ -116,7 +129,7 @@ void GameScene::Update(void)
 	ShotCollision();
 
 	InputManager& ins = InputManager::GetInstance();
-	if (ins.IsTrgDown(KEY_INPUT_SPACE))
+	if (ins.IsTrgDown(KEY_INPUT_SPACE) || (player_[0]->GetHp_() <= 0 && player_[1]->GetHp_()))
 	{
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
 	}
@@ -167,9 +180,11 @@ void GameScene::GimmickCollision(void)
 		{
 			auto data = bullet->GetBulletData();
 			if (IsCollisionRectCenter(player_[i]->GetPos(), { player_[i]->SIZE_X,player_[i]->SIZE_Y },
-				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE }))
+				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE })
+				&& bullet->GetState() == Bullet::STATE::SHOT)
 			{
 				player_[i]->Damage(1);
+				bullet->ChangeState(Bullet::STATE::BLAST);
 			}
 		}
 	}
