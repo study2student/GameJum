@@ -27,7 +27,7 @@ void GameScene::Init(void)
 
 	// bgmだけ別で再生
 	PlaySoundMem(bgm_, DX_PLAYTYPE_LOOP);
-	ChangeVolumeSoundMem(170, bgm_);
+	ChangeVolumeSoundMem(BGM_VOLUME, bgm_);
 
 	bulletGimmick_ = new BulletGimmick();
 	bulletGimmick_->Init();
@@ -131,6 +131,12 @@ void GameScene::Update(void)
 	if (ins.IsTrgDown(KEY_INPUT_SPACE))
 	{
 		SceneManager::GetInstance().ChangeScene(SceneManager::SCENE_ID::GAMEOVER);
+		StopSoundMem(bgm_);
+	}
+
+	if (ins.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1,InputManager::JOYPAD_BTN::R_TRIGGER))
+	{
+		PlaySounds(playerJumpSound_, SOUNDS_VOLUME);
 	}
 
 }
@@ -158,8 +164,18 @@ void GameScene::Release(void)
 {
 	DeleteGraph(bgImage);
 
+	DeleteSoundMem(bgm_);
+	DeleteSoundMem(enemyShotSound_);
+	DeleteSoundMem(playerJumpSound_);
+	DeleteSoundMem(playerDamageSound_);
+
 	//ステージの解放
 	stage_->Release();
+
+	// 敵の解放
+	enemy_->Release();	
+	delete enemy_;		
+	enemy_ = nullptr;	
 
 	// プレイヤー達の解放
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
@@ -182,6 +198,7 @@ void GameScene::GimmickCollision(void)
 				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE }))
 			{
 				player_[i]->Damage(1);
+				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 			}
 		}
 	}
@@ -203,6 +220,7 @@ void GameScene::EnemyCollision(void)
 		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
 		{
 			player_[i]->Damage(1);
+			PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 		}
 	}
 }
@@ -222,7 +240,7 @@ void GameScene::ShotCollision(void)
 		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
 		{
 			enemy_->ShotActive();
-			PlaySounds(enemyShotSound_, 200);
+			PlaySounds(enemyShotSound_, SOUNDS_VOLUME);
 		}
 	}
 }
@@ -255,6 +273,7 @@ void GameScene::BulletCollision(void)
 			if (IsCollisionRectCenter(bulletPos, bHitBox, playerPos, pHitBox))
 			{
 				player_[i]->Damage(1);
+				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
 			}
 		}
 	}
@@ -348,6 +367,8 @@ bool GameScene::LoadSounds(void)
 
 	bgm_ = LoadSoundMem((basePath + "bgm.mp3").c_str());
 	enemyShotSound_ = LoadSoundMem((basePath + "Enemy/shot.mp3").c_str());
+	playerJumpSound_ = LoadSoundMem((basePath + "Player/jump.mp3").c_str());
+	playerDamageSound_ = LoadSoundMem((basePath + "Player/damage.mp3").c_str());
 
 	return true;
 }

@@ -30,6 +30,9 @@ public:
 	// ゲームループの開始
 	void Run(void);
 
+	// 解放処理
+	bool Release(void);		
+
 	// リソースの破棄
 	void Destroy(void);
 

@@ -13,6 +13,9 @@ public:
 
 	static constexpr int GAME_PLAYER_NUM = 2;
 
+	static constexpr int BGM_VOLUME = 140;
+	static constexpr int SOUNDS_VOLUME = 150;
+
 	// コンストラクタ
 	GameScene(void);
 
@@ -71,6 +74,8 @@ private:
 	//サウンド用変数-------------------------------------------
 	int bgm_;
 	int enemyShotSound_;
+	int playerJumpSound_;
+	int playerDamageSound_;
 
 	//ステージ
 	Stage* stage_;

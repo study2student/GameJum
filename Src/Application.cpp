@@ -74,6 +74,24 @@ void Application::Run(void)
 
 }
 
+bool Application::Release(void)
+{
+	// 管理マネージャーの解放処理
+	// シーン管理用
+	SceneManager::GetInstance().Release();
+
+	// シングルトン化
+	// ------------------------
+	Destroy();
+
+	// システム終了処理
+	// ----------------------
+	DxLib_End();			// DXライブラリの終了処理
+
+
+	return true;			// ゲームの終了
+}
+
 void Application::Destroy(void)
 {
 	InputManager::GetInstance().Destroy();
@@ -88,7 +106,9 @@ void Application::Destroy(void)
 		isReleaseFail_ = true;
 	}
 
-	delete instance_;
+	//delete instance_;
+	delete instance_;		// インスタンスを削除
+	instance_ = nullptr;	// インスタンス格納領域を初期化
 
 }
 
