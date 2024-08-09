@@ -289,6 +289,13 @@ void Enemy::Shot(void)
 	}
 }
 
+void Enemy::ClearBullet(void)
+{
+	bulletPow_ = { 0,0 };
+	atkState_ = ATK_STATE::NONE;
+	isBullet_ = false;
+}
+
 Vector2F Enemy::GetEnemyPos(void)
 {
 	return pos_;
