@@ -214,6 +214,11 @@ bool Player::IsAlive_(void)
 	return false;
 }
 
+InputManager::JOYPAD_NO Player::GetPadID(void)
+{
+	return padID_;
+}
+
 void Player::LoadImages(void)
 {
 	std::string basePath = Application::PATH_IMAGE;

@@ -133,6 +133,8 @@ public:
 	// 生存判定（ゲッター）
 	bool IsAlive_(void);
 
+	InputManager::JOYPAD_NO GetPadID(void);
+
 private:
 
 

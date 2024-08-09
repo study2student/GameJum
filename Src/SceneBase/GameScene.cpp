@@ -108,12 +108,12 @@ void GameScene::Update(void)
 
 	stage_->Update();
 
-	if (player_[0]->GetHp_() >= 0)
+	if (player_[0]->GetHp_() > 0)
 	{
 		aliveTimeP1_ += SceneManager::GetInstance().GetDeltaTime();
 	}
 
-	if (player_[1]->GetHp_() >= 0)
+	if (player_[1]->GetHp_() > 0)
 	{
 		aliveTimeP2_ += SceneManager::GetInstance().GetDeltaTime();
 	}
@@ -169,9 +169,12 @@ void GameScene::Draw(void)
 	// プレイヤー達の描画
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
-		// プレイヤー描画
-		player_[i]->Draw();
-		player_[i]->DrawHP(i);
+		if (player_[i]->GetHp_() > 0)
+		{
+			// プレイヤー描画
+			player_[i]->Draw();
+			player_[i]->DrawHP(i);
+		}
 	}
 }
 
@@ -209,14 +212,14 @@ void GameScene::GimmickCollision(void)
 		for (auto& bullet : bulletGimmick_->GetBulletData())
 		{
 			auto data = bullet->GetBulletData();
-			if (IsCollisionRectCenter(player_[i]->GetPos(), {128,128 },
+			if (IsCollisionRectCenter(player_[i]->GetPos(), {64,64 },
 				data.pos, { bullet->BULLET_IMAGE_X_SIZE,bullet->BULLET_IMAGE_Y_SIZE })
 				&& bullet->GetState() == Bullet::STATE::SHOT)
 			{
 				player_[i]->Damage(1);
 				bullet->ChangeState(Bullet::STATE::BLAST);
 				PlaySounds(playerDamageSound_, SOUNDS_VOLUME);
-				StartJoypadVibration(i, 1000, 60);
+				StartJoypadVibration((int)player_[i]->GetPadID(), 1000, 300);
 			}
 		}
 	}
@@ -253,7 +256,7 @@ void GameScene::ShotCollision(void)
 	for (int i = 0; i < GAME_PLAYER_NUM; i++)
 	{
 		Vector2 playerPos = player_[i]->GetPos().ToVector2();
-		Vector2 pHitBox = { player_[i]->SIZE_X,player_[i]->SIZE_Y };
+		Vector2 pHitBox = { 64,64 };
 
 		if (IsCollisionRectCenter(enemyPos, eHitBox, playerPos, pHitBox))
 		{
