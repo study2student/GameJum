@@ -33,7 +33,7 @@ void Enemy::Init(GameScene* scene_)
 	// 画像の読み込み
 	int ret;
 	ret = LoadDivGraph(
-		(basePath + "Enemy/blue_test.png").c_str(),
+		(basePath + "Enemy/cloud.png").c_str(),
 		ANIM_MAX_NUM_X * ANIM_MAX_NUM_Y,
 		ANIM_MAX_NUM_X,
 		ANIM_MAX_NUM_Y,
@@ -50,11 +50,11 @@ void Enemy::Init(GameScene* scene_)
 
 	// アニメーション用
 	cntAnim_ = 0;
-	speedAnim_ = 0.1f;
+	speedAnim_ = 0.05f;
 	animNum_ = 0;
 
 	// 敵の座標
-	pos_ = { Application::SCREEN_SIZE_X /2,Application::SCREEN_SIZE_Y /2};
+	pos_ = { Application::SCREEN_SIZE_X /2,Application::SCREEN_SIZE_Y /2 - 200};
 	// 敵の状態
 	state_ = ANIM_STATE::IDLE;
 	atkState_ = ATK_STATE::NONE;
@@ -133,9 +133,11 @@ void Enemy::Update(void)
 	//default:
 	//	break;
 	//}
+	elapsedTime = 0;
 
 	if (isBullet_ == true)
 	{
+		elapsedTime++;
 		Shot();
 	}
 
@@ -158,7 +160,7 @@ void Enemy::Draw(void)
 		BulletDraw();
 	}
 
-	DrawDebug();
+	//DrawDebug();
 	
 }
 
@@ -207,20 +209,20 @@ void Enemy::EnemyDraw(void)
 // 弾描画
 void Enemy::BulletDraw(void)
 {
-	double angleStep = 30.0 * DX_PI_F / 180.0;
-	int circle_num = 360 / 30;
+	double angleStep = 60.0 * DX_PI_F / 180.0;
+	int circle_num = 6;
 
 	for (int i = 0; i < circle_num; i++)
 	{
 		double angleC = i * angleStep;
 
-		int x = pos_.x + static_cast<int>(bulletPos_.x * cos(angleC));
-		int y = pos_.y + static_cast<int>(bulletPos_.y * sin(angleC));
+		bulletPos_.x = pos_.x + static_cast<int>(bulletPow_.x * cos(angleC));
+		bulletPos_.y = pos_.y + static_cast<int>(bulletPow_.y * sin(angleC));
 
-		DrawCircle(x, y, 6, 0x0000ff, true);
-		DrawCircle(pos_.x, pos_.y, 40, 0xff0000, false);
+		DrawCircle(bulletPos_.x, bulletPos_.y, 6, 0x19D9C9, true);
+		//DrawCircle(pos_.x, pos_.y, 40, 0xff0000, false);
+		DrawCircle(bulletPos_.x, bulletPos_.y, 6, 0x9D66EC, false);
 	}
-
 }
 
 // 移動処理（歩く）
@@ -248,12 +250,12 @@ void Enemy::Move(void)
 	}
 
 	// 移動制御（左右に行ったり来たり）
-	if (pos_.x > Application::SCREEN_SIZE_X / 2 + 30)
+	if (pos_.x > Application::SCREEN_SIZE_X / 2 + 250)
 	{
 		movePow_ *= -1;
 		dir_ = DIR::LEFT;
 	}
-	else if (pos_.x < Application::SCREEN_SIZE_X / 2 - 30)
+	else if (pos_.x < Application::SCREEN_SIZE_X / 2 - 250)
 	{
 		movePow_ *= -1;
 		dir_ = DIR::RIGHT;
@@ -271,12 +273,15 @@ void Enemy::Shot(void)
 {
 	int time = GetTime(); 
 
-	++bulletPos_.x;
-	++bulletPos_.y;
+	state_ = ANIM_STATE::IDLE;
 
-	if ((time / 1000) % 5 == 0)
+	++bulletPow_.x;
+	++bulletPow_.y;
+
+	//7秒経つと消えるように
+	if ((time / 1000) % 7 == 0)
 	{
-		bulletPos_ = { 0,0 };
+		bulletPow_ = { 0,0 };
 		time = 0;
 		atkState_ = ATK_STATE::NONE;
 		isBullet_ = false;
@@ -294,13 +299,21 @@ void Enemy::SetEnemyPos(Vector2F value)
 	pos_ = value;
 }
 
-Vector2F Enemy::GetBulletPos(void)
+Vector2 Enemy::GetBulletPow(void)
 {
-	return Vector2F();
+	return bulletPow_;
+}
+
+
+
+Vector2 Enemy::GetBulletPos(void)
+{
+	return bulletPos_;
 }
 
 void Enemy::SetBulletPos(Vector2F value)
 {
+	bulletPos_ = value;
 }
 
 // キーを押下すると状態切り替え
@@ -376,14 +389,14 @@ Vector2 Enemy::GetColPos(COL_LR lr, COL_TD td)
 
 void Enemy::DrawDebug(void)
 {
-	DrawFormatString(700, 0, 0x000000, "エネミー座標(%.f, %.f)", pos_.x, pos_.y);
+	DrawFormatString(700, 0, 0x000000, "Bullet座標(%d, %d)", bulletPos_.x,bulletPos_.y);
 	DrawFormatString(800, 20, 0x000000, "radom(%d)", rand_);
 
 
 	Vector2 pos = pos.ToVector2F();
 
 	DrawBox(pos_.x - SIZE_X - 10, pos_.y - SIZE_Y - 10, pos_.x + SIZE_X + 10, pos_.y + SIZE_Y + 10, 0xff0000, false);
-	//DrawBox(pos_.x - SIZE_X - 80, pos_.y - SIZE_Y - 80, pos_.x + SIZE_X + 80, pos_.y + SIZE_Y + 80, 0xff00ff, false);
+	DrawBox(pos_.x - SIZE_X - 10, pos_.y + SIZE_Y + 250, pos_.x + SIZE_X + 10, pos_.y + SIZE_Y + 300, 0xff00ff, false);
 
 }
 

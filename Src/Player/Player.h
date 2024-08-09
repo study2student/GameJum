@@ -3,6 +3,7 @@
 #include "../Utility/AsoUtility.h"
 
 class GameScene;
+class Stage;
 
 class Player
 {

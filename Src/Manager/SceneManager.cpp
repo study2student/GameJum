@@ -100,6 +100,22 @@ void SceneManager::Draw(void)
 
 }
 
+bool SceneManager::Release(void)
+{
+	//  /シーンの解放処理
+	ReleaseScene(sceneId_);
+
+	// フェードの解放
+	delete fader_;
+	fader_ = new Fader();
+
+	// シングルトン化
+	// -------------------
+	Destory();
+
+	return true;
+}
+
 void SceneManager::Destroy(void)
 {
 
@@ -248,6 +264,22 @@ void SceneManager::Fade(void)
 		break;
 	}
 
+}
+
+void SceneManager::Destory(void)
+{
+	delete instance_;		// インスタンスを削除
+	instance_ = nullptr;	// インスタンス格納領域を初期化
+}
+
+void SceneManager::ReleaseScene(SCENE_ID SceneID)
+{
+	if (scene_ != nullptr)
+	{
+		scene_->Release();
+		delete scene_;
+		scene_ = nullptr;
+	}
 }
 
 

@@ -8,13 +8,14 @@ public:
 
 	// スクリーンサイズ
 	static constexpr int SCREEN_SIZE_X = 960;
-	static constexpr int SCREEN_SIZE_Y = 540;
+	static constexpr int SCREEN_SIZE_Y = 544;
 
 	// データパス関連
 	//-------------------------------------------
 	static const std::string PATH_IMAGE;
 	static const std::string PATH_MODEL;
 	static const std::string PATH_EFFECT;
+	static const std::string PATH_SOUNDS;
 	//-------------------------------------------
 
 	// 明示的にインステンスを生成する
@@ -28,6 +29,9 @@ public:
 
 	// ゲームループの開始
 	void Run(void);
+
+	// 解放処理
+	bool Release(void);		
 
 	// リソースの破棄
 	void Destroy(void);

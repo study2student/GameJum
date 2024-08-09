@@ -6,6 +6,7 @@
 #include "../Common/Vector2.h"
 #include "../Manager/InputManager.h"
 #include "../SceneBase/GameScene.h"
+#include "../Stage/Stage.h"
 #include "Player.h"
 
 
@@ -78,7 +79,7 @@ void Player::Init(GameScene* scene_, TYPE type, KEY_CONFIG config, PAD_CONFIG pa
 	hitPos_ = { 0, 8 };
 
 	// 衝突判定用：範囲
-	hitBox_ = { 16, 24};
+	hitBox_ = { 16, 46};
 
 	// ショットの硬直時間
 	stepShotDelay_ = 0.0f;
@@ -102,7 +103,7 @@ void Player::Update(void)
 	Move();
 
 	// 左右の衝突判定
-	CollisionSide();
+	//CollisionSide();
 
 	// プレイヤーのジャンプ操作
 	ProcessJump();
@@ -117,7 +118,7 @@ void Player::Update(void)
 	CollisionFoot();
 
 	// 頭の衝突判定
-	CollisionHead();
+	//CollisionHead();
 
 
 	// 攻撃
@@ -126,7 +127,7 @@ void Player::Update(void)
 
 void Player::Draw(void)
 {
-	Player::DrawDebug();
+	DrawDebug();
 
 	// 座標変換
 	Vector2 pos = pos_.ToVector2();
@@ -315,9 +316,49 @@ void Player::DrawDebug(void)
 	// オレンジ
 	int color = 0xff8c00;
 
+	// 左の座標
+	Vector2 headPosL = GetColPos(COL_LR::L, COL_TD::T);
+	// 左の座標
+	Vector2 corePosL = GetColPos(COL_LR::L, COL_TD::C);
+	// 足元座標（左）
+	Vector2 footPosL = GetColPos(COL_LR::L, COL_TD::D);
+
+	pos = headPosL;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+	pos = corePosL;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+	pos = footPosL;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+
+	// 右の座標
+	Vector2 headPosR = GetColPos(COL_LR::R, COL_TD::T);
+	// 右の座標
+	Vector2 corePosR = GetColPos(COL_LR::R, COL_TD::C);
+	// 足元座標（右）
+	Vector2 footPosR = GetColPos(COL_LR::R, COL_TD::D);
+
+	pos = headPosR;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+	pos = corePosR;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+	pos = footPosR;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+
+	// 足元座標
+	Vector2 footPosC = GetColPos(COL_LR::C, COL_TD::D);
+
+	pos = footPosC;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+
+	// 頭の座標座標
+	Vector2 headPosC = GetColPos(COL_LR::C, COL_TD::T);
+
+	pos = headPosC;
+	DrawBox(pos.x - 3, pos.y - 3, pos.x + 3, pos.y + 3, 0xff0000, true);
+
 	// デバッグ用：足元衝突判定
 	Vector2 footPos = pos;
-	footPos.y += (8 + 24);
+	footPos.y += (4 + 24);
 
 	// 足元：中央
 	DrawBox(footPos.x - 3, footPos.y - 3, footPos.x + 3, footPos.y + 3, color, true);
@@ -342,7 +383,6 @@ void Player::DrawHP(int playerNum)
 	for (int i = 0; i <  80 * hp_; i += 80)
 	{
 		DrawRotaGraphFastF(0 + 35 + i, 35 + 70 * playerNum, 0.1f, 0.0f, imgHp_, true);
-
 	}
 
 }
@@ -366,12 +406,7 @@ void Player::ProcessMove(void)
 		dir_ = AsoUtility::DIR::LEFT;
 		Accele(-MOVE_ACC);
 	}
-	
-	//if (p2 & padConfig_.LEFT) {
-	//	animState_ = ANIM_STATE::RUN;
-	//	dir_ = AsoUtility::DIR::LEFT;
-	//	Accele(-MOVE_ACC);
-	//}
+
 
 	// 右方向
 	if (ins.IsNew(keyConfig_.RIGHT))
@@ -452,18 +487,21 @@ void Player::ProcessJump(void)
 	auto& ins = InputManager::GetInstance();
 
 	// 接地してないと、ジャンプを開始できないようにする
-	if (ins.IsTrgDown(keyConfig_.JUMP) && !isJump_)
+	if ((ins.IsTrgDown(keyConfig_.JUMP) 
+		|| static_cast<bool>(GetJoypadInputState(static_cast<int>(padID_) & PAD_INPUT_B)))
+		&& !isJump_)
 	{
 		isJump_ = true;
 		isPutJumpKey_ = true;
 	}
-	if (static_cast<bool>(GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_A) && !isJump_)
+	if (static_cast<bool>(GetJoypadInputState(static_cast<int>(padID_)) & PAD_INPUT_B) && !isJump_)
 	{
 		isJump_ = true;
 		isPutJumpKey_ = true;
 	}
 	// 入力時間に応じてジャンプ量を変更する
-	if (ins.IsNew(keyConfig_.JUMP)
+	if ((ins.IsNew(keyConfig_.JUMP) 
+		|| ins.IsPadBtnNew(padID_, InputManager::JOYPAD_BTN::RIGHT))
 		&& cntJumpInput_ < INPUT_JUMP_FRAME
 		&& isPutJumpKey_)
 	{
@@ -496,18 +534,18 @@ void Player::Jump(void)
 {
 	pos_.y += jumpPow_;
 
-	// 仮の接地（衝突）判定
-	if (pos_.y > 380.0f)
-	{
-		pos_.y = 380.0f;
+	//// 仮の接地（衝突）判定
+	//if (pos_.y > 380.0f)
+	//{
+	//	pos_.y = 380.0f;
 
-		// 地面についたのでジャンプをリセット
-		isJump_ = false;
-		SetJumpPow(0.0f);
+	//	// 地面についたのでジャンプをリセット
+	//	isJump_ = false;
+	//	SetJumpPow(0.0f);
 
-		// 設置したら
-		cntJumpInput_ = 0;
-	}
+	//	// 設置したら
+	//	cntJumpInput_ = 0;
+	//}
 }
 
 void Player::SetJumpPow(float pow)
@@ -525,17 +563,42 @@ void Player::SetJumpPow(float pow)
 
 void Player::CollisionFoot(void)
 {
-	//// 接地判定（足元の衝突判定）
-
-	//// 足元座標
-	//Vector2 footPosC = GetColPos(COL_LR::C, COL_TD::D);
 
 
-	//// 足元座標（左）
-	//Vector2 footPosL = GetColPos(COL_LR::L, COL_TD::D);
+	// 足元座標
+	Vector2 s = GetColPos(COL_LR::L, COL_TD::T);
+	Vector2 e = GetColPos(COL_LR::R, COL_TD::D);
 
-	//// 足元座標（右）
-	//Vector2 footPosR = GetColPos(COL_LR::R, COL_TD::D);
+	if (gameScene_->IsCollisionStage(s, e))
+	{
+		pos_.y = 363;
+		//地面についたらジャンプをリセットする
+		isJump_ = false;
+		SetJumpPow(0.0f);
+		// 接地したらジャンプカウンタを元に戻す
+		cntJumpInput_ = 0;
+
+		// ジャンプキーの押下判定
+		isPutJumpKey_ = false;
+	}
+
+
+
+
+	// 接地判定（足元の衝突判定）
+
+	// 足元座標
+	Vector2 footPosC = GetColPos(COL_LR::C, COL_TD::D);
+
+
+	// 足元座標（左）
+	Vector2 footPosL = GetColPos(COL_LR::L, COL_TD::D);
+
+	// 足元座標（右）
+	Vector2 footPosR = GetColPos(COL_LR::R, COL_TD::D);
+
+
+
 
 	//if (gameScene_->IsCollisionStage(footPosC)
 	//	|| gameScene_->IsCollisionStage(footPosL)
@@ -543,7 +606,7 @@ void Player::CollisionFoot(void)
 	//	)
 	//{
 	//	Vector2 mapPos = gameScene_->World2MapPos(footPosC);
-	//	pos_.y = static_cast<float>(mapPos.y * Stage::CHIP_SIZE_Y - 1 - hitBox_.y - hitPos_.y);
+	//	pos_.y = static_cast<float>(mapPos.y * Stage::SIZE_Y - 1 - hitBox_.y - hitPos_.y);
 	//	// 地面についたのでジャンプをリセットする
 	//	isJump_ = false;
 	//	SetJumpPow(0.0f);
@@ -590,7 +653,7 @@ void Player::CollisionHead(void)
 	//	)
 	//{
 	//	Vector2 mapPos = gameScene_->World2MapPos(headPosC);
-	//	pos_.y = static_cast<float>(mapPos.y * Stage::CHIP_SIZE_Y + Stage::CHIP_SIZE_Y + SIZE_Y / 2 + hitPos_.y - hitBox_.y);
+	//	pos_.y = static_cast<float>(mapPos.y * Stage::SIZE_Y + Stage::SIZE_Y + SIZE_Y / 2 + hitPos_.y - hitBox_.y);
 
 	//	SetJumpPow(0.0f);
 	//}
@@ -599,41 +662,41 @@ void Player::CollisionHead(void)
 
 void Player::CollisionSide(void)
 {
-	// 左右の衝突判定（左右の衝突判定）
+	//// 左右の衝突判定（左右の衝突判定）
 
-	// 左の座標
-	Vector2 headPosL = GetColPos(COL_LR::L, COL_TD::T);
-	// 左の座標
-	Vector2 corePosL = GetColPos(COL_LR::L, COL_TD::C);
-	// 足元座標（左）
-	Vector2 footPosL = GetColPos(COL_LR::L, COL_TD::D);
+	//// 左の座標
+	//Vector2 headPosL = GetColPos(COL_LR::L, COL_TD::T);
+	//// 左の座標
+	//Vector2 corePosL = GetColPos(COL_LR::L, COL_TD::C);
+	//// 足元座標（左）
+	//Vector2 footPosL = GetColPos(COL_LR::L, COL_TD::D);
 
-	/*if (gameScene_->IsCollisionStage(headPosL)
-		|| gameScene_->IsCollisionStage(footPosL)
-		|| gameScene_->IsCollisionStage(corePosL)
-		)
-	{
-		Vector2 mapPos = gameScene_->World2MapPos(headPosL);
-		pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
-			+ Stage::CHIP_SIZE_X + hitBox_.x);
+	//if (gameScene_->IsCollisionStage(headPosL)
+	//	|| gameScene_->IsCollisionStage(footPosL)
+	//	|| gameScene_->IsCollisionStage(corePosL)
+	//	)
+	//{
+	//	Vector2 mapPos = gameScene_->World2MapPos(headPosL);
+	//	pos_.x = static_cast<float>(mapPos.x * Stage::SIZE_X
+	//		+ Stage::SIZE_X + hitBox_.x);
 
-	}
+	//}
 
-	if (pos_.x > pos_.x + SIZE_X)
-	{
-		Vector2 mapPos = gameScene_->World2MapPos(headPosL);
-		pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
-			+ Stage::CHIP_SIZE_X + hitBox_.x);
+	//if (pos_.x > pos_.x + SIZE_X)
+	//{
+	//	Vector2 mapPos = gameScene_->World2MapPos(headPosL);
+	//	pos_.x = static_cast<float>(mapPos.x * Stage::SIZE_X
+	//		+ Stage::SIZE_X + hitBox_.x);
 
-	}*/
+	//}
 
 
-	// 右の座標
-	Vector2 headPosR = GetColPos(COL_LR::R, COL_TD::T);
-	// 右の座標
-	Vector2 corePosR = GetColPos(COL_LR::R, COL_TD::C);
-	// 足元座標（右）
-	Vector2 footPosR = GetColPos(COL_LR::R, COL_TD::D);
+	//// 右の座標
+	//Vector2 headPosR = GetColPos(COL_LR::R, COL_TD::T);
+	//// 右の座標
+	//Vector2 corePosR = GetColPos(COL_LR::R, COL_TD::C);
+	//// 足元座標（右）
+	//Vector2 footPosR = GetColPos(COL_LR::R, COL_TD::D);
 
 	//if (gameScene_->IsCollisionStage(headPosR)
 	//	|| gameScene_->IsCollisionStage(footPosR)
@@ -641,16 +704,16 @@ void Player::CollisionSide(void)
 	//	)
 	//{
 	//	Vector2 mapPos = gameScene_->World2MapPos(headPosR);
-	//	pos_.x = static_cast<float>(mapPos.x * Stage::CHIP_SIZE_X
+	//	pos_.x = static_cast<float>(mapPos.x * Stage::SIZE_X
 	//		- 1 - hitBox_.x);
 
 	//}
 
-	InputManager& ins = InputManager::GetInstance();
-	if (ins.IsTrgDown(KEY_INPUT_Z))
-	{
-		hp_--;
-	}
+	//InputManager& ins = InputManager::GetInstance();
+	//if (ins.IsTrgDown(KEY_INPUT_Z))
+	//{
+	//	hp_--;
+	//}
 }
 
 Vector2 Player::GetColPos(COL_LR lr, COL_TD td)
